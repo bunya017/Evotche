@@ -25,7 +25,7 @@ SECRET_KEY = '-by^ngusobkt$t8as!c$=sp5n*fwqq+cl!9x_+tv@+dwtaypko'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['evotche.herokuapp.com']
 
 
 # Application definition
