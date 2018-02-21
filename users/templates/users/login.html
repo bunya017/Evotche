@@ -1,0 +1,36 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Log In{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-6 offset-md-3">
+      {% if form.errors %}
+        <p class="alert alert-danger">Your username and password did not match. Please try again.</p>
+      {% endif %}
+      <form method="post" class="py-3">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.username.label_tag }}
+          {{ form.username|add_css:'form-control' }}
+          {{ form.username.help_text }}
+        </div> 		
+        <div class="form-group">
+          {{ form.password.label_tag }}
+          {{ form.password|add_css:'form-control' }}
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">Log in</button>
+        <small class="pl-4 "><a href="#">Forgot Password?</a></small>
+        <input type="hidden" name="next" value="{% url 'polls:index' %}">
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

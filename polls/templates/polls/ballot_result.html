@@ -1,0 +1,48 @@
+{% extends "polls/base.html" %}
+
+{% block title %}{{ ballot.ballot_name|title }} Results{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-10">
+        {% if caty_list %}
+          <h2 class="py-3">{{ ballot.ballot_name|title }} Results</h2>
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Category</th>
+                <th scope="col">Choices</th>
+                <th scope="col">Votes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- It works, let it be! I repeat, let it be! -->
+              <tr>
+                {% for caty in caty_list %}
+                  {% with choices=caty.choice_set.all %}
+                    <th rowspan="{{choices.count}}" scope="row">{{forloop.counter}}</th>
+                    <td rowspan="{{choices.count}}">{{ caty|title }}</td>
+                    {% for choice in choices %}
+                      <td>{{ choice.choice|title }}</td>
+                      <td>{{ choice.votes }}</td>
+              </tr>
+                    {% endfor %}
+                  {% endwith %}
+                {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No polls result available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
+

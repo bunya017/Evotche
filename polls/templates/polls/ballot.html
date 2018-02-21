@@ -1,0 +1,35 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Ballot Boxes{% endblock title %}
+
+
+{% block content %}
+
+<section id="ballot">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8">
+        <h2 class="font-3 py-3">Ballot Boxes</h2>
+        <a class="badge badge-dark p-2" href="{% url 'polls:add_new_ballot' %}" role="button">Add a new box</a>
+
+        {% if ballot_list %}
+
+          <ul class="pt-5 list-unstyled">
+          {% for ballot in ballot_list %}
+          <li class="pt-2">
+            <a class="font-1 lead text-dark" href="{% url 'polls:category_view' ballot.id %}">{{ ballot.ballot_name|title }}</a>
+          </li>
+          <a class="badge badge-dark p-2" href="{% url 'polls:delete_ballot' ballot.id %}" role="button">Delete</a>
+          {% endfor %}
+          </ul>
+
+        {% else %}
+          <p class="py-5">No ballots available</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>  
+
+
+{% endblock content %}

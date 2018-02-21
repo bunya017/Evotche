@@ -1,0 +1,36 @@
+{% extends "polls/base.html" %}
+
+{% block title %}New Category{% endblock title %}
+
+{% block content %}
+{% load extras %}
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <a class="badge badge-dark p-2" href="{% url 'polls:category_view' ballot.id %}" role="button">Back</a>
+        <p class="font-3 pb-4 pt-1">Add a new category:</p>
+        <form action="{% url 'polls:add_new_caty' ballot.id %}" method="post">
+          {% csrf_token %}
+          {{ chForms.management_form }}
+          <div class="form-group">
+            {{ form.ballot_paper }}
+            {{ form.category_name.label_tag }}
+            {{ form.category_name|add_css:'form-control' }}
+          </div>
+
+          {% for c in chForms %}
+          <div class="form-group">
+            {{ c.choice.label }} {{ forloop.counter }}:
+            {{ c.choice|add_css:'form-control' }}
+          </div>
+          {% endfor %}
+
+          <button class="badge badge-dark p-2" name="submit">add category</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

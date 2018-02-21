@@ -1,0 +1,42 @@
+{% extends "polls/base.html" %}
+
+{% block title %}{{ display_ballot.ballot_name }} Polls Page{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/display_ballot.css' %}">
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        {% if error_message %}
+          <div class="alert alert-danger text-center">
+            {{ error_message }}
+          </div>
+        {% endif %}
+                
+        <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post">
+        {% csrf_token %}
+          <h1 class="font-3 py-3">{{ display_ballot.ballot_name }} Polls Page</h1>
+          {% for cat in display_ballot.category_set.all %}
+            <h2 class="font-1 py-3">{{ cat|title }}</h2>
+              {% for choice in cat.choice_set.all %}
+                <input class="font-2 lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                <label class="font-2 lead" for="{{ cat }}{{ forloop.counter }}">{{ choice|title }}</label>
+              {% endfor %}
+          {% endfor %}
+          <p class="pb-4"></p>
+          <input class="btn btn-outline-dark" type="submit" value="Vote" />
+          <p class="pb-4"></p>
+        </form>
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}
+
+
+

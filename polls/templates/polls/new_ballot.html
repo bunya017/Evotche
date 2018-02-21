@@ -1,0 +1,29 @@
+{% extends "polls/base.html" %}
+
+{% block title %}New Ballot{% endblock title %}
+
+{% block content %}
+{% load extras %}
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
+        <p class="font-3 pb-4 pt-1">Add a new ballot:</p>
+        <form action="{% url 'polls:add_new_ballot' %}" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.ballot_name.label_tag }}
+            {{ form.ballot_name|add_css:'form-control' }}
+          </div>
+          <button class="badge badge-dark p-2" name="submit">Add box</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+{% endblock content %}
