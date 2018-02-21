@@ -1,0 +1,24 @@
+.fill-viewport {
+	min-height: 85vh
+}
+.text-black-70 {
+	color: rgba(0,0,0,1);
+}
+.font-1 {
+	font-size: 2rem;
+}
+.font-2 {
+	font-size: 1.3rem
+}
+.font-3 {
+	font-size: 2.4rem;
+	font-weight: lighter;
+}
+#introduction {
+	background: white url("images/bg.jpg") no-repeat center center;
+	-webkit-background-size: cover;
+ 	-moz-background-size: cover;
+ 	-o-background-size: cover;
+ 	image-rendering: -webkit-optimize-contrast;
+ 	background-size: cover;
+}
