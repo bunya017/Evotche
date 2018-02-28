@@ -45,7 +45,7 @@ def choice_view(request, cat_id):
 
 def vote(request, ballot_url):
 	display_ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
-	queryset = Category.objects.filter(ballot_paper=display_ballot, created_by=request.user)
+	queryset = Category.objects.filter(ballot_paper=display_ballot)
 	caty = get_list_or_404(queryset)
 
 	for cat in caty:
@@ -70,7 +70,6 @@ def results(request):
 	return render(request, 'polls/results.html', context)
 
 
-@login_required
 def ballot_results(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=ballot)

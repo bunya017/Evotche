@@ -10,7 +10,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-8 mx-auto">
         {% if error_message %}
           <div class="alert alert-danger text-center">
             {{ error_message }}
@@ -19,12 +19,15 @@
                 
         <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post">
         {% csrf_token %}
-          <h1 class="font-3 py-3">{{ display_ballot.ballot_name }} Polls Page</h1>
+          <h1 class="font-3 pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h1>
           {% for cat in display_ballot.category_set.all %}
-            <h2 class="font-1 py-3">{{ cat|title }}</h2>
+            <h2 class="font-1 pt-3">{{ cat|title }}</h2>
               {% for choice in cat.choice_set.all %}
+              <div class="offset-1">
                 <input class="font-2 lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
                 <label class="font-2 lead" for="{{ cat }}{{ forloop.counter }}">{{ choice|title }}</label>
+                <br>
+              </div>
               {% endfor %}
           {% endfor %}
           <p class="pb-4"></p>

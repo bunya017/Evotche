@@ -8,7 +8,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8">
+      <div class="col-12 col-md-8 col-lg-6 mx-auto">
         <h2 class="font-3 text-dark py-3">{{ ballot.ballot_name|title }}</h2>
         <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
         <a class="badge badge-dark p-2" href="{% url 'polls:add_new_caty' ballot.id %}" role="button">Add new category</a>
@@ -16,10 +16,10 @@
           <p class="lead font-2">Share URL: localhost:8000{% url 'users:show_ballot_page' ballot.ballot_url %}</p>
           <a class="badge badge-dark p-2" role="button" href="{% url 'users:show_ballot_page' ballot.ballot_url %}">Show ballot page</a>
           {% for category in ballot.category_set.all %}
-            <li class="pt-4">
-              <a class="lead font-1 text-dark pr-3" href="{% url 'polls:choice_view' category.id %}">{{ category.category_name|title }}</a>
+            <li class="p-1">
+              <a class="lead font-1 text-dark" href="{% url 'polls:choice_view' category.id %}">{{ category.category_name|title }}</a>
             </li>
-            <a class="badge badge-dark p-2" href="{% url 'polls:delete_caty' category.id %}" role="button">Delete</a>
+            <a class="badge badge-dark p-2 py-0" href="{% url 'polls:delete_caty' category.id %}" role="button">Delete</a>
           {% endfor %}
         </ul>
       </div>

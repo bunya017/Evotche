@@ -7,9 +7,9 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-6 mx-auto">
         <a class="badge badge-dark p-2" href="{% url 'polls:category_view' ballot.id %}" role="button">Back</a>
-        <p class="font-3 pb-4 pt-1">Add a new category:</p>
+        <p class="font-3 pb-2 pt-1">Add a new category:</p>
         <form action="{% url 'polls:add_new_caty' ballot.id %}" method="post">
           {% csrf_token %}
           {{ chForms.management_form }}
@@ -20,13 +20,13 @@
           </div>
 
           {% for c in chForms %}
-          <div class="form-group">
+          <div class="form-group offset-1">
             {{ c.choice.label }} {{ forloop.counter }}:
             {{ c.choice|add_css:'form-control' }}
           </div>
           {% endfor %}
 
-          <button class="badge badge-dark p-2" name="submit">add category</button>
+          <button class="badge badge-dark p-2" name="submit">Add category</button>
         </form>
       </div>
     </div>
