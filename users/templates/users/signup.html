@@ -7,7 +7,7 @@
 {% load extras %}
 <div class="container">
   <div class="row">
-    <div class="col-12 col-md-8 col-lg-6 mx-auto">
+    <div class="col-12 col-md-8 col-lg-6 mx-auto mt-5">
       <form method="post" action="{% url 'users:signup' %}">
         {% csrf_token %}
         <div class="form-group">
@@ -26,10 +26,11 @@
           {{ form.password2.label_tag }}
           {{ form.password2|add_css:'form-control' }}
         </div>
-        <button type="submit" class="btn btn-outline-dark">Sign up</button>
-        <input type="hidden" name="next" value="{url '%polls:index'%}" />
-
-      <small class="pl-4">Already have an account? <a href="{% url 'users:login' %}">Log in</a> </small>
+        <div class="mb-5 pb-5">
+          <button type="submit" class="btn btn-outline-dark">Sign up</button>
+          <input type="hidden" name="next" value="{url '%polls:index'%}" />
+          <small class="pl-4">Already have an account? <a href="{% url 'users:login' %}">Log in</a> </small>
+        </div>
     </div>
       </form>
     </div>

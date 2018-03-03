@@ -7,7 +7,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 mx-auto">
+      <div class="col-12 col-md-8 mx-auto py-5">
         <h2 class="font-3 py-3">{{ category.category_name|title }}</h2>
         <a class="badge badge-dark p-2" href="{% url 'polls:category_view' category.ballot_paper_id %}" role="button">Back</a>
         <a class="badge badge-dark p-2" href="{% url 'polls:add_new_choice' category.id %}" role="button">Add new choice</a>
