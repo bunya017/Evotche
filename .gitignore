@@ -1,4 +1,4 @@
-app_env/
+my_env/
 **/bootstrap/
 *.pyc
 *.sqlite3
