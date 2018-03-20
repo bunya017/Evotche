@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from polls.models import Category, Choice, BallotPaper
-from .forms import MyUserCreationForm
+from .forms import MyUserCreationForm, TokenUserForm, TokenForm
 
 
 
@@ -37,6 +37,28 @@ def signup(request):
 def show_ballot_page(request, ballot_url):
 	display_ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=display_ballot)
-	context 	   = {'display_ballot': display_ballot, 'caty_list': caty_list}
+	context = {'display_ballot': display_ballot, 'caty_list': caty_list}
 	return render(request, 'polls/display_ballot.html', context)
+
+
+def new_token(request):
+	if request.method != 'POST':
+		userToken = TokenUserForm()
+		token = TokenForm(request.user)
+	else:
+		userToken = TokenUserForm(request.POST)
+		token = TokenForm(request.user, request.POST)
+
+		if userToken.is_valid() and token.is_valid():
+			user_name = userToken.cleaned_data['token']
+			new_userToken = User.objects.create_user(username=user_name)
+			new_userToken.set_unusable_password()
+
+			newToken = token.save(commit=False)
+			newToken.user = new_userToken
+			newToken.save()
+			return HttpResponseRedirect(reverse('polls:index'))
+
+	context = {'userToken': userToken, 'token': token}
+	return render(request, 'users/new_token.html', context)
 
