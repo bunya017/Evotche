@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
@@ -62,3 +62,26 @@ def new_token(request):
 	context = {'userToken': userToken, 'token': token}
 	return render(request, 'users/new_token.html', context)
 
+
+def token_login(request, ball_url):
+	ballot = get_object_or_404(BallotPaper, ballot_url=ball_url)
+	if request.method != 'POST':
+		form = TokenUserForm()
+	else:
+		form = TokenUserForm(request.POST)
+
+		if form.is_valid():
+			user_name = form.cleaned_data['token']
+			auth_user = get_object_or_404(User, username=user_name)
+			auth_token = authenticate(username=user_name)
+			if auth_user.token.ballot_paper.id == ballot.id:
+				login(request, auth_token)
+				return HttpResponseRedirect(reverse(
+						'users:show_ballot_page', args=[ball_url]))
+			else: 
+				return HttpResponse('You are not allowed to vote on this campaign.')
+		else:
+			return HttpResponse('Token does not exist')
+
+	context = {'form': form}
+	return render(request, 'users/token_login.html', context)

@@ -12,4 +12,5 @@ urlpatterns = [
 	url(r'^signup/$', views.signup, name='signup'),
 	url(r'^page/(?P<ballot_url>[-\w]+)/$', views.show_ballot_page, name='show_ballot_page'),
 	url(r'^new_token/$', views.new_token, name='new_token'),
+	url(r'^token/(?P<ball_url>[-\w]+)/$', views.token_login, name='token_login'),
 ]
