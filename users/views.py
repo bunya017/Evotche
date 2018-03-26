@@ -67,6 +67,7 @@ def new_token(request):
 
 			newToken = token.save(commit=False)
 			newToken.user = new_userToken
+			newToken.is_used = False
 			newToken.save()
 			return HttpResponseRedirect(reverse('polls:index'))
 
