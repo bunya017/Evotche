@@ -8,7 +8,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-10 mx-auto py-5">
-        {% if token_list %}
+        {% if token_list|length > 0 %}
         <h2 class="py-3">{{ ballot.ballot_name|title }} Tokens</h2>
           <table class="table table-bordered table-hover">
             <thead>
