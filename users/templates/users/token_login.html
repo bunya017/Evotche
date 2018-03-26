@@ -1,5 +1,36 @@
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit">Submit</button>
-</form>
+{% extends "polls/base.html" %}
+
+{% block title %}{{ ballot.ballot_name }} Pass Token{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+<section id="token-login">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mx-auto">
+        {% if does_not_exist %}
+          <div class="alert alert-danger text-center">{{ does_not_exist }}</div>
+        {% endif %}
+
+        {% if token_is_used %}
+          <div class="alert alert-danger text-center">{{ token_is_used }}</div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          {{ form.management_form }}
+          <div class="form-group pt-5 pb-3">
+            {{ form.token.label_tag }}
+            {{ form.token|add_css:'form-control' }}
+          </div>
+          <button class="btn btn-outline-dark" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock content %}

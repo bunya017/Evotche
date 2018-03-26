@@ -1,0 +1,29 @@
+{% extends "polls/base.html" %}
+{% block title %}Tokens{% endblock title %}
+{% block content %}
+
+<section id="tokens">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8 mx-auto py-5">
+        <h2 class="font-3 py-2">Tokens</h2>
+        {% if ballot_list %}
+        <ul class="pt-3 list-unstyled">
+          {% for ballot in ballot_list %}
+            <li class="pt-2">
+              <a class="text-dark lead" href="{% url 'users:my_token' ballot.ballot_url %}">{{ ballot.ballot_name|title }} Tokens</a>
+            </li>
+          {% endfor %}
+        </ul>
+
+        {% else %}
+          <p class="py-5 text-dark">No Tokens available</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock content %}

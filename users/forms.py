@@ -33,5 +33,5 @@ class TokenForm(forms.ModelForm):
 
 	class Meta:
 		model = Token
-		fields = ('ballot_paper', 'is_token')
+		fields = ('ballot_paper',)
 

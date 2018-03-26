@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from users.models import Token
 
 
 
@@ -47,6 +48,7 @@ def vote(request, ballot_url):
 	display_ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	queryset = Category.objects.filter(ballot_paper=display_ballot)
 	caty = get_list_or_404(queryset)
+	user = request.user
 
 	for cat in caty:
 		try:
@@ -59,8 +61,10 @@ def vote(request, ballot_url):
 		else:
 			selected_choice.votes += 1
 			selected_choice.save()
+			user.token.is_used = True
+			user.token.save()
 	
-	return HttpResponseRedirect(reverse('polls:index'))
+	return HttpResponseRedirect(reverse('users:logout'))
 
 
 @login_required

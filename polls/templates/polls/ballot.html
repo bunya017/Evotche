@@ -17,7 +17,7 @@
           <ul class="pt-5 list-unstyled">
           {% for ballot in ballot_list %}
           <li class="pt-2">
-            <a class="font-1 lead text-dark" href="{% url 'polls:category_view' ballot.id %}">{{ ballot.ballot_name|title }}</a>
+            <a class="lead text-dark" href="{% url 'polls:category_view' ballot.id %}">{{ ballot.ballot_name|title }}</a>
           </li>
           <a class="badge badge-dark p-2" href="{% url 'polls:delete_ballot' ballot.id %}" role="button">Delete</a>
           {% endfor %}

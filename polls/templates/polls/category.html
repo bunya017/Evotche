@@ -13,8 +13,8 @@
         <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
         <a class="badge badge-dark p-2" href="{% url 'polls:add_new_caty' ballot.id %}" role="button">Add new category</a>
         <ul class="list-unstyled pt-3">
-          <p class="lead font-2">Share URL: https://evotche.herokuapp.com{% url 'users:show_ballot_page' ballot.ballot_url %}</p>
-          <a class="badge badge-dark p-2" role="button" href="{% url 'users:show_ballot_page' ballot.ballot_url %}">Show ballot page</a>
+          <p class="lead font-2">Share URL: https://evotche.herokuapp.com{% url 'users:token_login' ballot.ballot_url %}</p>
+          <a class="badge badge-dark p-2" role="button" href="{% url 'users:showBallotPage' ballot.ballot_url %}">Show ballot page</a>
           {% for category in ballot.category_set.all %}
             <li class="p-1">
               <a class="lead font-1 text-dark" href="{% url 'polls:choice_view' category.id %}">{{ category.category_name|title }}</a>

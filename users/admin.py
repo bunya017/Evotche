@@ -4,4 +4,9 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from .models import Token
 
-admin.site.register(Token)
+
+
+class TokenAdmin(admin.ModelAdmin):
+	list_display = ['user', 'ballot_paper']
+
+admin.site.register(Token, TokenAdmin)
