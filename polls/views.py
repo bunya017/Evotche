@@ -130,7 +130,7 @@ def add_new_choice(request, cat_id):
 	if request.method != 'POST':
 		form = ChoiceForm(request.user, initial=initial_dict)
 	else:
-		form = ChoiceForm(request.user, request.POST, initial=initial_dict)
+		form = ChoiceForm(request.user, request.POST, request.FILES, initial=initial_dict)
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect(reverse('polls:choice_view', 
@@ -162,6 +162,20 @@ def delete_choice(request, ch_id):
 	cat_id = choice.category_id
 	choice.delete()
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
+
+
+def activate_ballot(request, ball_url):
+	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ball_url)
+	ballot.is_active = True
+	ballot.save()
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.ballot_url]))
+
+
+def deactivate_ballot(request, ball_url):
+	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ball_url)
+	ballot.is_active = False
+	ballot.save()
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.ballot_url]))
 
 
 #def max_votes(request cat_id):

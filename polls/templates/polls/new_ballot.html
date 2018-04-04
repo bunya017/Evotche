@@ -13,8 +13,8 @@
         <form action="{% url 'polls:add_new_ballot' %}" method="post">
           {% csrf_token %}
           <div class="form-group">
-            {{ form.ballot_name.label_tag }}
-            {{ form.ballot_name|add_css:'form-control' }}
+            {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
+            {{ form.is_active }}
           </div>
           <button class="badge badge-dark p-2" name="submit">Add box</button>
         </form>

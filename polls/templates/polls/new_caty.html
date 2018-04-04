@@ -15,14 +15,12 @@
           {{ chForms.management_form }}
           <div class="form-group">
             {{ form.ballot_paper }}
-            {{ form.category_name.label_tag }}
-            {{ form.category_name|add_css:'form-control' }}
+            {{ form.category_name|add_css:'class:form-control, placeholder:Category Name' }}
           </div>
 
           {% for c in chForms %}
           <div class="form-group offset-1">
-            {{ c.choice.label }} {{ forloop.counter }}:
-            {{ c.choice|add_css:'form-control' }}
+            {{ c.choice|add_css:'class:form-control, placeholder:Choice' }}
           </div>
           {% endfor %}
 

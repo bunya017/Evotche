@@ -9,11 +9,14 @@
   <div class="container">
     <div class="row fill-viewport align-items-center"> 
       <div class="col-12 col-md-6">
-        <h1 class="f">Welcome to Evotche</h1>
-        <p class="d">Creating online poll campaigns just got easier.
-         Stop killing trees and go green today </p>
-        <a class="btn btn-dark" href="{% url 'users:signup' %}" role="button">Get Started</a>
+        <h1 class="f">Evotche helps you create Simple, Fast and Secure voting campaigns.</h1>
+        <p class="d pt-2">Creating online poll campaigns just got easier.</p>
+        <a href="{% url 'users:signup' %}"><button class="btn btn-outline-dark" >Get Started</button></a>
       </div>
+      <div class="col-12 col-md-3 offset-md-2">
+        <h1 class="f text-center">Are you here to vote?</h1>
+        <a href="{% url 'users:token_login' %}" ><button class="btn btn-outline-dark my-2 col-12">Take me there</button></a>
+      </div> 
     </div>
   </div>
 </section>
@@ -112,6 +115,7 @@
     </div>
   </div>
 </section>
+
 
 <style type="text/css">
 	.d {

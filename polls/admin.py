@@ -26,7 +26,8 @@ class CategoryInline(admin.TabularInline):
 class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
 	fieldsets = [
-		(None, {'fields': ['ballot_name', 'ballot_url', 'created_by']})
+		(None, {'fields': ['ballot_name', 'ballot_url', 'created_by','is_photo_ballot',
+				 'valid_from', 'valid_to']})
 	]
 	list_display = ['ballot_name', 'created_by']
 

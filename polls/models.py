@@ -11,6 +11,10 @@ class BallotPaper(models.Model):
 	ballot_name  = models.CharField(max_length=50, unique=True)
 	created_by   = UserForeignKey(auto_user_add=True)
 	ballot_url   = models.SlugField(unique=True)
+	is_photo_ballot = models.BooleanField(default=False)
+	is_active = models.BooleanField(default=False)
+	valid_from = models.DateTimeField(blank=True, null=True)
+	valid_to = models.DateTimeField(blank=True, null=True)
 
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
@@ -18,7 +22,7 @@ class BallotPaper(models.Model):
 
 	@models.permalink
 	def get_absolute_url(self):
-		return 'users:show_ballot_page', (self.slug_field,)
+		return 'users:show_ballot_page', (self.ballot_url,)
 	
 	def __str__(self):
 		return self.ballot_name
@@ -41,6 +45,7 @@ class Category(models.Model):
 class Choice(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	choice = models.CharField(max_length=250)
+	photo = models.FileField(upload_to='uploads/', blank=True)
 	votes = models.PositiveIntegerField(default=0)
 
 	class Meta:
@@ -50,3 +55,9 @@ class Choice(models.Model):
 	def __str__(self):
 
 		return self.choice
+
+
+#class ImageChoice(models.Model):
+#	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+#	choice_title = models.CharField(max_length=250)
+#	choice_image = models.ImageField()

@@ -13,20 +13,19 @@
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th>Used Tokens</th>
-                <th>Unused Tokens</th>
+                <th>Tokens</th>
               </tr>
             </thead>
             <tbody>
+              {% for token in token_list %}
               <tr>
-                {% for token in token_list %}
-                  {% if token.is_used is True %}
-                    <td>{{ token.user.username }}</td>
-                  {% else %}
-                    <td>{{ token.user.username }}</td>
-                  {% endif %}
-                {% endfor %}
+                {% if token.is_used %}
+                  <td>{{ token.user.username }}  --used</td>
+                {% else %}
+                  <td>{{ token.user.username }}</td>
+                {% endif %}
               </tr>
+              {% endfor %}
             </tbody>
           </table>
         {% else %}

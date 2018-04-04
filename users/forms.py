@@ -23,13 +23,17 @@ class MyUserCreationForm(UserCreationForm):
 
 
 class TokenUserForm(forms.Form):
-		token = forms.CharField(min_length=6, max_length=16)
+	token = forms.CharField(min_length=6, max_length=16)
 
+
+class TokenNumForm(forms.Form):
+	number_of_tokens = forms.IntegerField()
 
 class TokenForm(forms.ModelForm):
 	def __init__(self, user, *args, **kwargs):
 		super(TokenForm, self).__init__(*args, **kwargs)
 		self.fields['ballot_paper'].queryset = BallotPaper.objects.filter(created_by=user)
+		#self.fields['ballot_paper'].widget = forms.HiddenInput()
 
 	class Meta:
 		model = Token

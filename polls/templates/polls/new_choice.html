@@ -11,12 +11,13 @@
         <a class="badge badge-dark p-2" href="{% url 'polls:choice_view' category.id %}"
          role="button">Back</a>
         <p class="font-3 pb-4 pt-1">Add a new choice:</p>
-        <form action="{% url 'polls:add_new_choice' category.id %}" method="post">
+        <form action="{% url 'polls:add_new_choice' category.id %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="form-group">
             {{ form.category }}
-            {{ form.choice.label_tag }}
-            {{ form.choice|add_css:'form-control' }}
+            {{ form.choice|add_css:'class:form-control, placeholder:Choice' }}
+            {{ form.photo.label_tag }}
+            {{ form.photo|add_css:'class:form-control' }}
           </div>
           <button class="badge badge-dark p-2" name="submit">Add Choice</button>
         </form>

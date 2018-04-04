@@ -1,6 +1,6 @@
 {% extends "polls/base.html" %}
 
-{% block title %}{{ ballot.ballot_name }} Pass Token{% endblock title %}
+{% block title %}Pass Token{% endblock title %}
 
 {% block content %}
 {% load extras %}
@@ -21,10 +21,9 @@
           {% csrf_token %}
           {{ form.management_form }}
           <div class="form-group pt-5 pb-3">
-            {{ form.token.label_tag }}
-            {{ form.token|add_css:'form-control' }}
+            {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Pass Token.' }}
           </div>
-          <button class="btn btn-outline-dark" type="submit">Submit</button>
+          <button class="btn btn-outline-success col-12" type="submit">Submit</button>
         </form>
       </div>
     </div>

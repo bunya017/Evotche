@@ -1,12 +1,14 @@
 from django import forms
+from django.contrib.admin import widgets 
+from django.contrib.admin.widgets import AdminSplitDateTime
 from .models import Category, Choice, BallotPaper
 
 
 class BallotForm(forms.ModelForm):
 	class Meta:
 		model = BallotPaper
-		fields = ['ballot_name',]
-		label = {'ballot_name': '',}
+		fields = ['ballot_name']
+		label = {'ballot_name': ''}
 
 
 class CategoryForm(forms.ModelForm):
@@ -30,14 +32,14 @@ class ChoiceForm(forms.ModelForm):
 
 	class Meta:
 		model = Choice
-		fields = ['category', 'choice',]
-		label = {'category': '', 'choice': '',}
+		fields = ['category', 'choice', 'photo']
+		label = {'category': '', 'choice': '', 'photo': ''}
 
 
 class ChForm(forms.ModelForm):
 	class Meta:
 		model = Choice
-		fields = ['category', 'choice']
+		fields = ['category', 'choice', 'photo']
 
 
 

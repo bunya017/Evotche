@@ -7,9 +7,9 @@ from . import views
 app_name = 'polls'
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
-	url(r'^vote/(?P<ballot_url>[-\w]+)$', views.vote, name='vote'),
+	url(r'^vote/(?P<ballot_url>[-\w]+)/$', views.vote, name='vote'),
 	url(r'^results/$', views.results, name='results'),
-	url(r'^results/(?P<ballot_url>[-\w]+)$', views.ballot_results, name='ballot_results'),
+	url(r'^results/(?P<ballot_url>[-\w]+)/$', views.ballot_results, name='ballot_results'),
 	url(r'^new_category/(?P<ball_id>[0-9]+)/$', views.add_new_caty, 
 			name='add_new_caty'),
 	url(r'^new_choice/(?P<cat_id>[0-9]+)/$', views.add_new_choice, 
@@ -21,5 +21,7 @@ urlpatterns = [
 	url(r'^delete/(?P<ball_id>[0-9]+)/$', views.delete_ballot, name='delete_ballot'),
 	url(r'^delete/category/(?P<cat_id>[0-9]+)/$', views.delete_caty, name='delete_caty'),
 	url(r'^delete/choice/(?P<ch_id>[0-9]+)/$', views.delete_choice, name='delete_choice'),
+	url(r'^activate/(?P<ballot_url>[-\w]+)/$', views.activate_ballot, name='activate_ballot'),
+	url(r'^deactivate/(?P<ballot_url>[-\w]+)/$', views.deactivate_ballot, name='deactivate_ballot'),
 
 ]

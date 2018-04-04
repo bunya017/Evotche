@@ -13,18 +13,15 @@
       {% endif %}
       <form method="post" class="py-3">
         {% csrf_token %}
-        <div class="form-group">
-          {{ form.username.label_tag }}
-          {{ form.username|add_css:'form-control' }}
-          {{ form.username.help_text }}
+        <div class="form-group py-2">
+          {{ form.username|add_css:'class:form-control, placeholder:Username' }}
         </div> 		
-        <div class="form-group">
-          {{ form.password.label_tag }}
-          {{ form.password|add_css:'form-control' }}
+        <div class="form-group py-2">
+          {{ form.password|add_css:'class:form-control, placeholder:Password' }}
         </div>
         <div class="mb-5 pb-5">
-          <button type="submit" class="btn btn-outline-dark">Log in</button>
-          <small class="pl-4"><a href="#">Forgot Password?</a></small>
+          <button type="submit" class="btn btn-outline-success col-12"> Log in</button>
+          <a href="#"><span class="btn btn-outline-danger col-12 mt-3"> Forgot Password?</span></a>
           <input type="hidden" name="next" value="{% url 'polls:index' %}">
         </div>
       </form>

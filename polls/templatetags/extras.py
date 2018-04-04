@@ -6,9 +6,14 @@ register = template.Library()
 
 @register.filter(name='add_css')
 def add_css(field, css):
-	class_old = field.field.widget.attrs.get('class', None)
-	class_new = class_old +' '+ css if class_old else css
-	return field.as_widget(attrs={'class': class_new})
+	widgs = field.field.widget.attrs
+	attr_list = css.split(',')
+	for attr in attr_list:
+		css1 = attr.split(':')
+		widgs[css1[0]] = css1[1]
+
+	rendered = str(field)
+	return rendered
 
 
 @register.simple_tag(name='maxvotes')

@@ -8,28 +8,24 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-8 col-lg-6 mx-auto mt-5">
+
       <form method="post" action="{% url 'users:signup' %}">
         {% csrf_token %}
-        <div class="form-group">
-          {{ form.username.label_tag }}
-          {{ form.username|add_css:'form-control' }}
+        <div class="form-group py-2">
+          {{ form.username|add_css:'class:form-control, placeholder:Username' }}
         </div>
-        <div class="form-group">
-          {{ form.email.label_tag }}
-          {{ form.email|add_css:'form-control' }}
+        <div class="form-group py-2">
+          {{ form.email|add_css:'class:form-control, placeholder:Email' }}
         </div>
-        <div class="form-group">
-          {{ form.password1.label_tag }}
-          {{ form.password1|add_css:'form-control' }}
+        <div class="form-group py-2">
+          {{ form.password1|add_css:'class:form-control, placeholder:Password' }}
         </div> 
-        <div class="form-group">
-          {{ form.password2.label_tag }}
-          {{ form.password2|add_css:'form-control' }}
+        <div class="form-group py-2">
+          {{ form.password2|add_css:'class:form-control, placeholder:Password Confirmation' }}
         </div>
         <div class="mb-5 pb-5">
-          <button type="submit" class="btn btn-outline-dark">Sign up</button>
+          <button type="submit" class="btn btn-outline-success col-12"> Sign up</button>
           <input type="hidden" name="next" value="{url '%polls:index'%}" />
-          <small class="pl-4">Already have an account? <a href="{% url 'users:login' %}">Log in</a> </small>
         </div>
     </div>
       </form>
