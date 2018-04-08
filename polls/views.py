@@ -15,7 +15,6 @@ from users.models import Token
 
 
 
-
 def index(request):
 
 	return render(request, 'polls/index.html')
@@ -104,11 +103,11 @@ def add_new_caty(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	initial_dict = {'ballot_paper': ballot}
 	if request.method != 'POST':
-		form 	= CategoryForm(request.user, initial=initial_dict)
+		form 	= CategoryForm(request.user,  initial=initial_dict)
 		chForms = ChFormSet(prefix='ch')
 	else:
 		form 	= CategoryForm(request.user, request.POST, initial=initial_dict)
-		chForms = ChFormSet(request.POST, prefix='ch')
+		chForms = ChFormSet(request.POST, request.FILES, prefix='ch')
 		if form.is_valid():
 			new_caty = form.save(commit=False)
 			new_caty.created_by = request.user
@@ -164,18 +163,18 @@ def delete_choice(request, ch_id):
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
 
 
-def activate_ballot(request, ball_url):
-	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ball_url)
+def activate_ballot(request, ballot_url):
+	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ballot_url)
 	ballot.is_active = True
 	ballot.save()
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.ballot_url]))
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
-def deactivate_ballot(request, ball_url):
-	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ball_url)
+def deactivate_ballot(request, ballot_url):
+	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ballot_url)
 	ballot.is_active = False
 	ballot.save()
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.ballot_url]))
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
 #def max_votes(request cat_id):

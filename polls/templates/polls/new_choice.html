@@ -16,8 +16,12 @@
           <div class="form-group">
             {{ form.category }}
             {{ form.choice|add_css:'class:form-control, placeholder:Choice' }}
-            {{ form.photo.label_tag }}
-            {{ form.photo|add_css:'class:form-control' }}
+            <div class="pt-3">
+            {% if category.ballot_paper.is_photo_ballot %}
+              {{ form.photo.label_tag }}
+              {{ form.photo|add_css:'class:form-control' }}
+            {% endif %}
+            </div>
           </div>
           <button class="badge badge-dark p-2" name="submit">Add Choice</button>
         </form>

@@ -12,6 +12,11 @@
         <h2 class="font-3 text-dark py-3">{{ ballot.ballot_name|title }}</h2>
         <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
         <a class="badge badge-dark p-2" href="{% url 'polls:add_new_caty' ballot.id %}" role="button">Add new category</a>
+        {% if ballot.is_active %}
+          <a href="{% url 'polls:deactivate_ballot' ballot.ballot_url %}" role="button"><button class="btn btn-outline-danger">Deactivate</button></a>
+        {% else %}
+          <a href="{% url 'polls:activate_ballot' ballot.ballot_url %}" role="button"><button class="btn btn-outline-success">Activate</button></a>
+        {% endif %}
         <ul class="list-unstyled pt-3">
           <p class="lead font-2">Share URL: https://evotche.herokuapp.com{% url 'users:token_login' %}</p>
           <a class="badge badge-dark p-2" role="button" href="{% url 'users:showBallotPage' ballot.ballot_url %}">Show ballot page</a>
@@ -23,6 +28,32 @@
           {% endfor %}
         </ul>
       </div>
+    </div>
+
+    <div class="row mb-5">
+      {% for category in ballot.category_set.all %}
+      <div class="col-sm-6 col-md-4 my-2">
+        <div class="card border-dark">
+          <div class="card-body">
+            <div class="card-title">
+              <a class="text-dark" href="{% url 'polls:choice_view' category.id %}">
+                <h4 class="text-center">{{ category.category_name|upper }}</h4>
+              </a>
+            </div>
+            <ul class="list-group list-group-flush">
+            {% for choice in category.choice_set.all%}
+              <li class="list-group-item">{{ choice.choice }}</li>
+            {% endfor %}
+            </ul>
+            <div class="text-right pt-1">
+              <a href="{% url 'polls:delete_caty' category.id %}">
+              <i class="fa fa-2x text-danger">&#xf014;</i>
+            </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
 </section>

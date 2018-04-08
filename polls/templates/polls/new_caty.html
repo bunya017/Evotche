@@ -10,7 +10,7 @@
       <div class="col-12 col-md-6 mx-auto py-5">
         <a class="badge badge-dark p-2" href="{% url 'polls:category_view' ballot.id %}" role="button">Back</a>
         <p class="font-3 pb-2 pt-1">Add a new category:</p>
-        <form action="{% url 'polls:add_new_caty' ballot.id %}" method="post">
+        <form action="{% url 'polls:add_new_caty' ballot.id %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           {{ chForms.management_form }}
           <div class="form-group">
@@ -21,6 +21,12 @@
           {% for c in chForms %}
           <div class="form-group offset-1">
             {{ c.choice|add_css:'class:form-control, placeholder:Choice' }}
+            {% if ballot.is_photo_ballot %}
+            <div class="pt-1 pb-3">
+              {{ c.photo.label_tag }}
+              {{ c.photo|add_css:'class:form-control placeholder:Choice' }}
+            </div>
+            {% endif %}
           </div>
           {% endfor %}
 

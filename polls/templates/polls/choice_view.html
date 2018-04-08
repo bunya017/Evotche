@@ -16,6 +16,9 @@
             {% for choice in category.choice_set.all %}
             <li>
               <a class="lead font-1 text-dark pr-3">{{ choice.choice|title }}</a>
+              {% if category.ballot_paper.is_photo_ballot %}
+                <img src="{{ choice.photo.url }}">
+              {% endif %}
             </li>
             <a class="badge badge-dark p-2" href="{% url 'polls:delete_choice' choice.id %}" role="button">Delete</a>
             {% endfor %}

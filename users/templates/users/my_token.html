@@ -7,34 +7,35 @@
 <section id="my_tokens">
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-10 mx-auto py-5">
-        {% if token_list|length > 0 %}
-        <h2 class="py-3">{{ ballot.ballot_name|title }} Tokens</h2>
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>Tokens</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for token in token_list %}
-              <tr>
-                {% if token.is_used %}
-                  <td>{{ token.user.username }}  --used</td>
-                {% else %}
-                  <td>{{ token.user.username }}</td>
-                {% endif %}
-              </tr>
+      <div class="col-12 col-md-8 col-lg-6 mt-5 mx-auto text-center">
+        <div class="card-columns">
+          <div class="card border-dark mr-5" style="width: 12rem;">
+            <div class="card-header">
+              Unused Tokens
+            </div>
+            <ul class="list-group list-group-flush">
+              {% for token in unused_token %}
+                <li class="list-group-item">{{ token.user.username }}</li>
               {% endfor %}
-            </tbody>
-          </table>
-        {% else %}
-          <p>No tokens available</p>
-        {% endif %}
+            </ul>
+          </div>
+          <div class="card border-dark ml-sm-5" style="width: 12rem;">
+            <div class="card-header">
+              Used Tokens
+            </div>
+            <ul class="list-group list-group-flush">
+              {% for utoken in used_token %}
+                <li class="list-group-item">{{ utoken.user.username }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+
 
 
 

@@ -115,8 +115,10 @@ def tokens_view(request):
 @login_required
 def my_token(request, ball_url):
 	ballot = BallotPaper.objects.get(ballot_url=ball_url)
+	unused_token = get_list_or_404(Token, ballot_paper=ballot, is_used=False)
+	used_token = get_list_or_404(Token, ballot_paper=ballot, is_used=True)
 	token_list = get_list_or_404(Token, ballot_paper=ballot)
-	context = {'token_list': token_list, 'ballot': ballot}
+	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list}
 	return render(request, 'users/my_token.html', context)
 
 
