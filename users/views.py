@@ -32,6 +32,9 @@ def signup(request):
 					   password=request.POST['password1'])
 			login(request, authenticated_user)
 			return HttpResponseRedirect(reverse('polls:index'))
+		#else:
+		#	print form.is_valid()
+		#	print form.errors
 
 	context = {'form': form}
 	return render(request, 'users/signup.html', context)
@@ -45,13 +48,13 @@ def show_ballot_page(request, ball_url):
 	return render(request, 'polls/display_ballot.html', context)
 
 
+@login_required
 def showBallotPage(request, ball_url):
 	"""Displays polls page to user who owns it"""
 	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	caty_list = Category.objects.filter(ballot_paper=display_ballot)
 	context = {'display_ballot': display_ballot, 'caty_list': caty_list}
 	return render(request, 'polls/displayBallot.html', context)
-
 
 @login_required
 def new_token(request):
@@ -115,9 +118,9 @@ def tokens_view(request):
 @login_required
 def my_token(request, ball_url):
 	ballot = BallotPaper.objects.get(ballot_url=ball_url)
-	unused_token = get_list_or_404(Token, ballot_paper=ballot, is_used=False)
-	used_token = get_list_or_404(Token, ballot_paper=ballot, is_used=True)
-	token_list = get_list_or_404(Token, ballot_paper=ballot)
+	unused_token = Token.objects.filter(ballot_paper=ballot, is_used=False)
+	used_token = Token.objects.filter(ballot_paper=ballot, is_used=True)
+	token_list = Token.objects.filter(ballot_paper=ballot)
 	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list}
 	return render(request, 'users/my_token.html', context)
 

@@ -8,16 +8,27 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-6 mx-auto py-5">
-        <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
-        <p class="font-3 pb-4 pt-1">Add a new ballot:</p>
-        <form action="{% url 'polls:add_new_ballot' %}" method="post">
-          {% csrf_token %}
-          <div class="form-group">
-            {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
-            {{ form.is_active }}
-          </div>
-          <button class="badge badge-dark p-2" name="submit">Add box</button>
-        </form>
+      <div class="card border-dark">
+        <div class="card-body">
+          <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+          <h4 class="pt-4">New Box:</h4>
+          <form action="{% url 'polls:add_new_ballot' %}" method="post">
+            {% if messages %}
+              <ul class="messages">
+                {% for message in messages %}
+                  <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+            {% csrf_token %}
+            <div class="form-group">
+              {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
+              {{ form.is_active }}
+            </div>
+            <button class="btn btn-outline-dark" name="submit">Add box</button>
+          </form>
+        </div>
+      </div>
       </div>
     </div>
   </div>

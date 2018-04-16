@@ -5,22 +5,28 @@
 {% block content %}
 <section>
   <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-8 mx-auto mt-5">
-        <h2 class="font-3 py-3">Results</h2>
-        {% if ballot_list %}
-          <ul class="list-unstyled">
-            {% for ballot in ballot_list %}
-              <li class="pt-2">
-                <h3 class="lead font-1 text-dark" href="">{{ ballot.ballot_name|title }}</h3>
-              </li>
-              <a class="badge badge-dark p-2" href="{% url 'polls:ballot_results' ballot.ballot_url %}" role="button">Show Results</a>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>No polls available</p>
-        {% endif %}
+    <h1 class="py-3">Ballot Results</h1>
+    <div class="row mb-5">
+      {% if ballot_list|length > 0 %}
+        {% for ballot in ballot_list %}
+        <div class="col-sm-6 col-lg-4 my-2">
+          <div class="card border-dark" style="height: 12rem;">
+            <div class="card-body">
+              <a class="text-dark" href="{% url 'polls:ballot_results' ballot.ballot_url %}">
+                <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>
+                <div class="text-center">
+                  <i class="fa fa-5x">&#xf0cb;</i>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="col-sm-6 col-lg-4 my-4">
+        <h4 class="text-center">No Ballot Results Available.</h4>
       </div>
+      {% endif %}
     </div>
   </div>
 </section>

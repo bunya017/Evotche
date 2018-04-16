@@ -9,12 +9,12 @@
   <div class="container">
     <div class="row fill-viewport align-items-center"> 
       <div class="col-12 col-md-6">
-        <h1 class="f">Evotche helps you create Simple, Fast and Secure voting campaigns.</h1>
-        <p class="d pt-2">Creating online poll campaigns just got easier.</p>
+        <h1 >Evotche helps you create Simple and Secure voting campaigns.</h1>
+        <h4 class="pt-2">Creating online election campaigns just got easier.</p>
         <a href="{% url 'users:signup' %}"><button class="btn btn-outline-dark" >Get Started</button></a>
       </div>
       <div class="col-12 col-md-3 offset-md-2">
-        <h1 class="f text-center">Are you here to vote?</h1>
+        <h1 class="text-center">Are you here to vote?</h1>
         <a href="{% url 'users:token_login' %}" ><button class="btn btn-outline-dark my-2 col-12">Take me there</button></a>
       </div> 
     </div>
@@ -25,34 +25,34 @@
   <div class="container">
     <div class="row mt-5">
       <div class="col-12 col-md-10">
-        <h2><strong class="text-info">Your Personal Electronic Voting Machine.</strong> Get your poll campaigns up and running with a green process.</h2>
+        <h2><strong class="text-info">Your Personal Electronic Voting Machine.</strong> Get your election campaigns up and running instantly.</h2>
       </div>
     </div>
     <div class="row my-5">
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-4x fa-clock-o mt-3 mx-4"></i>
+        <i class="fa fa-3x mt-3 mx-4">&#xf017;</i>
         <h4 class="text-center text-info">Save Yourself A Lot of Time</h4>
-        <p class="text-center pt-2">Simple user interface ensures a simplified polls campaign creation.</p>
+        <p class="text-center pt-2">Create your election campaign in minutes with our simple user interface.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-4x fa-bullhorn mt-3"></i>
-        <h4 class="text-center text-info">Reach More Audience</h4>
-        <p class="text-center pt-2">Share your ballot box URL with anyone across the globe.</p>
-      </div>
-      <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-4x fa-key mt-3 mx-4"></i>
+        <i class="fa fa-3x mt-3 mx-4">&#xf084;</i>
         <h4 class="text-center text-info">Secured Voting</h4>
         <p class="text-center pt-2">Each voter has a unique "Voter Token" and can only vote once.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-4x fa-cogs mt-3 mx-4"></i>
+        <i class="fa fa-3x mt-3 mx-4">&#xf085;</i>
         <h4 class="text-center text-info">Complete Control</h4>
         <p class="text-center pt-2">How many categories, how many choices, who gets to vote, it's all up to you.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-4x fa-bar-chart mt-3 mx-4"></i>
-        <h4 class="text-center text-info">Results in Real-Time</h4>
-        <p class="text-center pt-2">Don't break a sweat, get your polls campaign results in real-time. No Hassles</p>
+        <i class="fa fa-3x mt-3">&#xf0e0;</i>
+        <h4 class="text-center text-info">Reach More Voters</h4>
+        <p class="text-center pt-2">Provide optional email address for your voters to be reached.</p>
+      </div>
+      <div class="col-12 col-md-4 mx-auto text-center">
+        <i class="fa fa-3x mt-3 mx-4">&#xf200;</i>
+        <h4 class="text-center text-info">Results Tabulation</h4>
+        <p class="text-center pt-2">Elections are automaically calaculated and presented beautifully.</p>
       </div>
     </div>
   </div>
@@ -60,24 +60,24 @@
 
 <section id="how-it-works" class="bg-light">
   <div class="container">
-    <div class="row pt-5 align-items-center">
+    <div class="row align-items-center">
       <div class="col-12 col-md-8 mx-auto mt-5 text-center">
         <h1 class="text-uppercase">How it works</h1>
-        <p class="lead pt-3">Our platform gives you complete control over your ballot creation process. How many categories, how many choices, who gets to vote, its all up to you. <br><strong>Less Paper Usage = More Trees = More Oxygen.</strong></p>
+        <p class="lead pt-3">Our platform gives you complete control over your ballot creation process. How many categories, how many choices, who gets to vote, its all up to you.
       </div>
     </div>
     <div class="row pb-5">
       <div class="col-12 col-md-4 mx-auto mt-5 text-center">
-        <i class="fa fa-4x fa-plus my-3 mx-4"></i>
-        <p class="bigg">Signup and Create a Ballot Box.</p>
+        <i class="fa fa-3x fa-plus my-3 mx-4"></i>
+        <h3>Signup and Create a Ballot Box.</h3>
       </div>
       <div class="col-12 col-md-4 mx-auto mt-5 text-center">
-        <i class="fa fa-4x fa-share-alt my-3 mx-4"></i>
-        <p class="bigg">Publish and Share Your Ballot Box URL with Friends.</p>
+        <i class="fa fa-3x fa-share-alt my-3 mx-4"></i>
+        <h3>Share voter token with voters.</h3>
       </div>
       <div class="col-12 col-md-4 mx-auto mt-5 text-center">
-        <i class="fa fa-4x fa-bar-chart my-3 mx-4"></i>
-        <p class="bigg">Get Polls Results in Real-Time</p>
+        <i class="fa fa-3x fa-bar-chart my-3 mx-4"></i>
+        <h3>Get Election Results in Real-Time</h3>
       </div>
     </div>
   </div>
@@ -88,29 +88,29 @@
     <div class="row">
       <div class="col-12 col-md-8 mx-auto text-center mt-4 pt-4">
         <span>
-          <img src="{% static 'polls/images/logo.png' %}" alt="Site Logo">
+          <img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site Logo">
         </span>
       </div>
     </div>
     <div class="row">
       <div class="col-12 col-md-8 mx-auto text-center">
-        <a href="https://twitter.com/bunyaminu_">
+        <a href="https://twitter.com/bunyaminu_" target="_blank">
           <i class="fa fa-2x fa-twitter my-3 mx-2 text-dark"></i>
         </a>
-        <a href="https://facebook.com/evotche">
+        <a href="https://facebook.com/evotche" target="_blank">
           <i class="fa fa-2x fa-facebook my-3 mx-2 text-dark"></i>
         </a>
-        <a href="https://twitter.com/bunyaminu_">
+        <a href="https://twitter.com/bunyaminu_" target="_blank">
           <i class="fa fa-2x fa-instagram my-3 mx-2 text-dark"></i>
         </a>
-        <a href="https://twitter.com/bunyaminu_">
+        <a href="https://twitter.com/bunyaminu_" target="_blank">
           <i class="fa fa-2x fa-github my-3 mx-2 text-dark"></i>
         </a>
       </div>
     </div>
     <div class="row">
       <div class="col-12 col-md-8 mx-auto text-center mb-5">
-        <p class="pt-2 d">dollabills007@gmail.com <br>+2348112210423</p>
+        <p>dollabills007@gmail.com <br>+2348112210423</p>
       </div>
     </div>
   </div>

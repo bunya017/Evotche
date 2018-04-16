@@ -19,14 +19,13 @@
         {% endif %}       
         <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
         {% csrf_token %}
-          <h1 class="font-3 pt-3 text-center">{{ display_ballot.ballot_name }}</h1>
-          <h2 class="font-3 text-center">Polls Page</h2>
+          <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
           {% for cat in display_ballot.category_set.all %}
-            <h2 class="font-1 pt-3">{{ cat|title }}</h2>
+            <h3 class="pt-3">{{ cat|title }}</h3>
             {% for choice in cat.choice_set.all %}
             <div class="offset-1">
-              <input class="font-2 lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-              <label class="font-2 lead" for="{{ cat }}{{ forloop.counter }}">{{ choice|title }}</label>
+              <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+              <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice|title }}</label>
               <br>
             </div>
             {% endfor %}
@@ -34,11 +33,11 @@
           <div class="mb-5 pt-5">
             <input class="btn btn-outline-dark" type="submit" value="Vote" />
             <p class="pb-4"></p>
-          <div></div>
+          </div>
         </form>
       {% else %}
       <div class="py-5">
-        <h1 class="text-center text-danger">ERROR 404<i class="text-center fa fa-chain-broken my-3 mx-4"></i>
+        <h1 class="text-center">Error 404</h1>
         <h2 class="text-center">Page not found </h2>
         <h2 class="text-center">The link you followed may be broken.</h2>
         <p class="text-center pt-5"><a class="text-dark" href="{% url 'polls:index' %}">Go Back Home</a></p>

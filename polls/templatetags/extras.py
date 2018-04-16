@@ -16,9 +16,6 @@ def add_css(field, css):
 	return rendered
 
 
-@register.simple_tag(name='maxvotes')
-def max_votes(votes, vote):
-	if max([c.votes for c in votes]) == vote:
-		return 'Winner'
-	else:
-		return ''
+@register.simple_tag(name='max_votes')
+def get_max_votes(choices):
+	return max([choice.votes for choice in choices])

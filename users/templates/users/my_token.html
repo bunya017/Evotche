@@ -6,31 +6,44 @@
 
 <section id="my_tokens">
   <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-8 col-lg-6 mt-5 mx-auto text-center">
-        <div class="card-columns">
-          <div class="card border-dark mr-5" style="width: 12rem;">
-            <div class="card-header">
-              Unused Tokens
+    <div class="row my-3">
+      {% if token_list %}
+      <div class="col-lg-6 mx-auto">
+        <h2 class="text-center py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
+        <div class="card card-default card-body border-dark">
+          <!--Nav Tabs-->
+          <ul id="tabsToken" class="nav nav-tabs nav-justified">
+            <li class="nav-item">
+              <a class="nav-link text-dark active show" href="" data-target="#unusedToken" data-toggle="tab">Unused Tokens</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark" href="" data-target="#usedToken" data-toggle="tab">Used Tokens</a>
+            </li>
+          </ul>
+          <!--/tabs-->
+          <div id="tabsTokenContent" class="tab-content">
+            <div id="unusedToken" class="tab-pane active show">
+              <div class="list-group  border-dark">
+                {% for token in unused_token %}
+                <p class="list-group-item">{{ token.user.username }}</p>
+                {% endfor %}
+              </div>
             </div>
-            <ul class="list-group list-group-flush">
-              {% for token in unused_token %}
-                <li class="list-group-item">{{ token.user.username }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div class="card border-dark ml-sm-5" style="width: 12rem;">
-            <div class="card-header">
-              Used Tokens
+            <div id="usedToken" class="tab-pane">
+              <div class="list-group">
+                {% for utoken in used_token %}
+                <p class="list-group-item">{{ utoken.user.username }}</p>
+                {% endfor %}
+              </div>
             </div>
-            <ul class="list-group list-group-flush">
-              {% for utoken in used_token %}
-                <li class="list-group-item">{{ utoken.user.username }}</li>
-              {% endfor %}
-            </ul>
           </div>
         </div>
       </div>
+    {% else %}
+      <div class="col-sm-6 col-lg-4 my-4">
+        <h4 class="text-center">No Pass Tokens Available.</h4>
+      </div>
+    {% endif %}
     </div>
   </div>
 </section>

@@ -7,25 +7,26 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 mx-auto py-5">
-        <h2 class="font-3 py-3">{{ category.category_name|title }}</h2>
-        <a class="badge badge-dark p-2" href="{% url 'polls:category_view' category.ballot_paper_id %}" role="button">Back</a>
-        <a class="badge badge-dark p-2" href="{% url 'polls:add_new_choice' category.id %}" role="button">Add new choice</a>
-        {% if category.choice_set.all %}
-          <ul class="list-unstyled pt-4">
-            {% for choice in category.choice_set.all %}
-            <li>
-              <a class="lead font-1 text-dark pr-3">{{ choice.choice|title }}</a>
-              {% if category.ballot_paper.is_photo_ballot %}
-                <img src="{{ choice.photo.url }}">
-              {% endif %}
-            </li>
-            <a class="badge badge-dark p-2" href="{% url 'polls:delete_choice' choice.id %}" role="button">Delete</a>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p>No choices available.</p>
-        {% endif %}
+      <div class="col-sm-8 col-lg-6 my-5 mx-auto">
+        <a href="{% url 'polls:category_view' category.ballot_paper_id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+        <a class="float-right text-dark" href="{% url 'polls:add_new_choice' category.id %}"><h3><i class="fa">&#xf055;</i> New Choice</h3></a>
+        <div class="card border-dark mt-5">
+          <div class="card-body">
+            <div class="card-title">
+              <h2 class="text-center">{{ category.category_name|upper }}</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+              {% for choice in category.choice_set.all %}
+              <li class="list-group-item">
+                {{ choice.choice|title }}
+                <div class="float-right">
+                  <a href="{% url 'polls:delete_choice' choice.id %}"><i class="fa text-danger">&#xf014;</i></a>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

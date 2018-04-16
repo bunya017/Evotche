@@ -10,13 +10,18 @@ from django.db import transaction
 class MyUserCreationForm(UserCreationForm):
 	email = forms.EmailField(required=True)
 
+	def __init__(self, *args, **kwargs):
+		super(MyUserCreationForm, self).__init__(*args, **kwargs)
+		self.fields['password2'].widget = forms.HiddenInput()
+
 	class Meta:
 		model = User
-		fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
+		fields = ('username', 'email', 'password1', 'password2')
 
 	def save(self, commit=True):
 		user = super(MyUserCreationForm, self).save(commit=False)
 		user.email = self.cleaned_data['email']
+		user.password2 = self.cleaned_data['password1']
 		if commit:
 			user.save()
 		return user

@@ -4,22 +4,42 @@
 
 <section id="tokens">
   <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-8 mx-auto py-5">
-        <h2 class="font-3 py-2">Tokens</h2>
-        {% if ballot_list %}
-        <ul class="pt-3 list-unstyled">
-          {% for ballot in ballot_list %}
-            <li class="pt-2">
-              <a class="text-dark lead" href="{% url 'users:my_token' ballot.ballot_url %}">{{ ballot.ballot_name|title }} Tokens</a>
-            </li>
-          {% endfor %}
-        </ul>
-
-        {% else %}
-          <p class="py-5 text-dark">No Tokens available</p>
-        {% endif %}
+    <h1 class="py-3">Ballot Tokens</h1>
+    <div class="row mb-5">
+      <!--
+      <div class="col-sm-6 col-lg-4 my-2">
+        <div class="card border-dark" style="height: 12rem;">
+            <div class="card-body">
+              <a class="text-dark" href="">
+                <h4 class="text-center">New Box</h4>
+                <div class="text-center">
+                  <i class="fa fa-5x">&#xf055;</i>
+                </div>
+              </a>
+            </div>
+          </div>
       </div>
+    -->
+      {% if ballot_list|length > 0 %}
+        {% for ballot in ballot_list %}
+        <div class="col-sm-6 col-lg-4 my-2">
+          <div class="card border-dark" style="height: 12rem;">
+            <div class="card-body">
+              <a class="text-dark" href="{% url 'users:my_token' ballot.ballot_url %}">
+                <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>
+                <div class="text-center">
+                  <i class="fa fa-5x">&#xf084;</i>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="col-sm-6 col-lg-4 my-4">
+        <h4 class="text-center">No Ballot Tokens Available.</h4>
+      </div>
+      {% endif %}
     </div>
   </div>
 </section>

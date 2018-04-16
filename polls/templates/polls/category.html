@@ -8,31 +8,26 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 mx-auto my-5">
-        <h2 class="font-3 text-dark py-3">{{ ballot.ballot_name|title }}</h2>
-        <a class="badge badge-dark p-2" href="{% url 'polls:ballot' %}" role="button">Back</a>
-        <a class="badge badge-dark p-2" href="{% url 'polls:add_new_caty' ballot.id %}" role="button">Add new category</a>
-        {% if ballot.is_active %}
-          <a href="{% url 'polls:deactivate_ballot' ballot.ballot_url %}" role="button"><button class="btn btn-outline-danger">Deactivate</button></a>
-        {% else %}
-          <a href="{% url 'polls:activate_ballot' ballot.ballot_url %}" role="button"><button class="btn btn-outline-success">Activate</button></a>
-        {% endif %}
+      <div class="col-lg-6 my-3 ml-3 ml-sm-0">
+        <h1 class="text-dark py-3">{{ ballot.ballot_name|title }}</h1>
+        <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+        <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-unstyled pt-3">
-          <p class="lead font-2">Share URL: https://evotche.herokuapp.com{% url 'users:token_login' %}</p>
-          <a class="badge badge-dark p-2" role="button" href="{% url 'users:showBallotPage' ballot.ballot_url %}">Show ballot page</a>
-          {% for category in ballot.category_set.all %}
-            <li class="p-1">
-              <a class="lead font-1 text-dark" href="{% url 'polls:choice_view' category.id %}">{{ category.category_name|title }}</a>
-            </li>
-            <a class="badge badge-dark p-2 py-0" href="{% url 'polls:delete_caty' category.id %}" role="button">Delete</a>
-          {% endfor %}
+          <li class="text-right">
+            {% if ballot.is_active %}
+              <a href="{% url 'polls:deactivate_ballot' ballot.ballot_url %}"><button class="btn btn-outline-danger">Deactivate</button></a>
+            {% else %}
+              <a href="{% url 'polls:activate_ballot' ballot.ballot_url %}"><button class="btn btn-outline-success">Activate</button></a>
+            {% endif %}
+            <a class="px-1" href="{% url 'users:showBallotPage' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
+          </li>
         </ul>
       </div>
     </div>
 
     <div class="row mb-5">
       {% for category in ballot.category_set.all %}
-      <div class="col-sm-6 col-md-4 my-2">
+      <div class="col-md-6 col-lg-4 my-2">
         <div class="card border-dark">
           <div class="card-body">
             <div class="card-title">

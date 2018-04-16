@@ -7,39 +7,48 @@
 
 <section>
   <div class="container">
+    <h2 class="py-3">{{ ballot.ballot_name|title }} Results</h2>
     <div class="row">
+      {% if caty_list|length > 0 %}
       <div class="col-12 col-md-10 mx-auto mt-3">
-        {% if caty_list %}
-          <h2 class="py-3">{{ ballot.ballot_name|title }} Results</h2>
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Category</th>
-                <th scope="col">Choices</th>
-                <th scope="col">Votes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- It works, let it be! I repeat, let it be! -->
-              <tr>
-                {% for caty in caty_list %}
-                  {% with choices=caty.choice_set.all %}
-                    <th rowspan="{{choices.count}}" scope="row">{{forloop.counter}}</th>
-                    <td rowspan="{{choices.count}}">{{ caty|title }}</td>
-                    {% for choice in choices %}
-                      <td>{{ choice.choice|title }}</td>
-                      <td>{{ choice.votes }}</td>
-              </tr>
-                    {% endfor %}
-                  {% endwith %}
-                {% endfor %}
-            </tbody>
-          </table>
-        {% else %}
-          <p>No polls result available.</p>
-        {% endif %}
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Category</th>
+              <th scope="col">Choice</th>
+              <th scope="col">Votes</th>
+              <th scope="col">Winner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- It works, let it be! I repeat, let it be! -->
+            <tr>
+              {% for caty in caty_list %}
+                {% with choices=caty.choice_set.all %}
+                  {% max_votes choices as winner %}
+                  <th rowspan="{{choices.count}}" scope="row">{{forloop.counter}}</th>
+                  <td rowspan="{{choices.count}}">{{ caty|title }}</td>
+                  {% for choice in choices %}
+                    <td>{{ choice.choice|title }}</td>
+                    <td>{{ choice.votes }}</td>
+                    {% if winner == choice.votes %}
+                      <td class="text-center"><i class="fa">&#xf00c;</i></td>
+                    {% else %}
+                      <td></td>
+                    {% endif %}
+            </tr>
+                  {% endfor %}
+                {% endwith %}
+              {% endfor %}
+          </tbody>
+        </table>
       </div>
+      {% else %}
+      <div class="col-sm-6 col-lg-4 my-4">
+        <h4 class="text-center">No Categories Available.</h4>
+      </div>
+      {% endif %}
     </div>
   </div>
 </section>
