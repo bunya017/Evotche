@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.admin import widgets 
+from django.contrib.admin import widgets
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.contrib.admin.widgets import AdminSplitDateTime
 from .models import Category, Choice, BallotPaper
 
@@ -22,6 +23,11 @@ class CategoryForm(forms.ModelForm):
 		model = Category
 		fields = ['ballot_paper', 'category_name']
 		label = {'ballot_paper': '', 'category_name': ''}
+		error_messages = {
+			NON_FIELD_ERRORS: {
+				'unique_together': "Sorry, you have created this category already."
+			}
+		}
 
 
 class ChoiceForm(forms.ModelForm):

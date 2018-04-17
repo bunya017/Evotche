@@ -93,10 +93,6 @@ def add_new_ballot(request):
 			new_ballot.save()
 			return HttpResponseRedirect(reverse('polls:category_view', 
 													args=[new_ballot.id]))
-		else:
-			print form.is_valid()
-			print form.errors
-
 	context = {'form': form}
 	return render(request, 'polls/new_ballot.html', context)
 
