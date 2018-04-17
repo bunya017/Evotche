@@ -36,6 +36,7 @@ class Category(models.Model):
 	class Meta:
 		verbose_name_plural = 'Categories'
 		ordering = ['id']
+		unique_together = ('ballot_paper', 'category_name')
 
 	def __str__(self):
 

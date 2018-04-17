@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_userforeignkey',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +125,6 @@ USE_TZ = True
 
 LOGIN_URL = '/users/login/'
 
-#AUTH_USER_MODEL = 'users.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 

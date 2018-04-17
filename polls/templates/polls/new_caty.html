@@ -12,6 +12,9 @@
           <div class="card-body">
             <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
             <h4 class="pt-4 pb-2">New Category:</h4>
+            {% if form.errors %}
+              {{ form.errors }}
+            {% endif %}
             <form action="{% url 'polls:add_new_caty' ballot.id %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               {{ chForms.management_form }}
