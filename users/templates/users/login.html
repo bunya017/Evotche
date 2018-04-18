@@ -7,24 +7,34 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-12 col-md-8 col-lg-6 mt-5 mx-auto">
-      {% if form.errors %}
-        <p class="alert alert-danger text-center">Your username and password did not match. Please try again.</p>
-      {% endif %}
-      <form method="post" class="py-3">
-        {% csrf_token %}
-        <div class="form-group py-2">
-          {{ form.username|add_css:'class:form-control, placeholder:Username' }}
-        </div> 		
-        <div class="form-group py-2">
-          {{ form.password|add_css:'class:form-control, placeholder:Password' }}
+    <div class="col-12 col-md-8 col-lg-6 mt-2 mx-auto">
+      <div class="card card-body border-dark mb-5">
+        <div class="py-3">
+          <h2>Log in to your account</h2>
         </div>
-        <div class="mb-5 pb-5">
-          <button type="submit" class="btn btn-outline-success col-12"> Log in</button>
-          <a href="#"><span class="btn btn-outline-danger col-12 mt-3"> Forgot Password?</span></a>
-          <input type="hidden" name="next" value="{% url 'polls:ballot' %}">
-        </div>
-      </form>
+        {% if form.errors %}
+          <div class="alert alert-danger text-center">
+            Your username and password did not match. Please try again.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </div>
+        {% endif %}
+        <form method="post" class="py-2">
+          {% csrf_token %}
+          <div class="form-group py-2">
+            {{ form.username|add_css:'class:form-control, placeholder:Username' }}
+          </div> 		
+          <div class="form-group py-2">
+            {{ form.password|add_css:'class:form-control, placeholder:Password' }}
+          </div>
+          <div class="mb-2">
+            <button type="submit" class="btn btn-outline-success col-12"> Log in</button>
+            <input type="hidden" name="next" value="{% url 'polls:ballot' %}">
+          </div>
+        </form>
+        <small><a class="text-dark" href="#">Forgot your password?</a></small>
+        <small class="py-3">Don't have an account? <a href="{% url 'users:signup' %}">Sign up</a></small>
+      </button>
     </div>
   </div>
 </div>

@@ -10,10 +10,6 @@ from django.db import transaction
 class MyUserCreationForm(UserCreationForm):
 	email = forms.EmailField(required=True)
 
-	def __init__(self, *args, **kwargs):
-		super(MyUserCreationForm, self).__init__(*args, **kwargs)
-		self.fields['password2'].widget = forms.HiddenInput()
-
 	class Meta:
 		model = User
 		fields = ('username', 'email', 'password1', 'password2')
@@ -33,6 +29,7 @@ class TokenUserForm(forms.Form):
 
 class TokenNumForm(forms.Form):
 	number_of_tokens = forms.IntegerField()
+
 
 class TokenForm(forms.ModelForm):
 	def __init__(self, user, *args, **kwargs):
