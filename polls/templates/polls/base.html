@@ -19,7 +19,11 @@
 </title>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand bg-faded offset-xl-1" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site logo"></a>
+  {% if user.is_authenticated and user.has_usable_password %}
+    <a class="navbar-brand bg-faded offset-xl-1" href="{% url 'polls:ballot' %}"><img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site logo"></a>
+  {% else %}
+    <a class="navbar-brand bg-faded offset-xl-1" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site logo"></a>
+  {% endif %}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
