@@ -8,7 +8,7 @@ from django_userforeignkey.models.fields import UserForeignKey
 
 
 class BallotPaper(models.Model):
-	ballot_name  = models.CharField(max_length=50, unique=True)
+	ballot_name  = models.CharField(max_length=50)
 	created_by   = UserForeignKey(auto_user_add=True)
 	ballot_url   = models.SlugField(unique=True)
 	is_photo_ballot = models.BooleanField(default=False)
@@ -19,10 +19,14 @@ class BallotPaper(models.Model):
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
 		ordering = ['id']
+		unique_together = ('ballot_name', 'created_by')
+
+	def clean(self):
+		self.ballot_name = self.ballot_name.title()
 
 	@models.permalink
 	def get_absolute_url(self):
-		return 'users:show_ballot_page', (self.ballot_url,)
+		return 'users:show_ballot_page', (self.ballot_url)
 	
 	def __str__(self):
 		return self.ballot_name
@@ -38,6 +42,9 @@ class Category(models.Model):
 		ordering = ['id']
 		unique_together = ('ballot_paper', 'category_name')
 
+	def clean(self):
+		self.category_name = self.category_name.title()
+
 	def __str__(self):
 
 		return self.category_name
@@ -52,6 +59,10 @@ class Choice(models.Model):
 	class Meta:
 		verbose_name_plural = 'Choices'
 		ordering = ['id']
+		unique_together = ('category', 'choice')
+
+	def clean(self):
+		self.choice = self.choice.title()
 
 	def __str__(self):
 

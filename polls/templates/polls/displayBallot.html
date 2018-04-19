@@ -1,6 +1,6 @@
 {% extends "polls/base.html" %}
 
-{% block title %}{{ display_ballot.ballot_name }} Polls Page{% endblock title %}
+{% block title %}{{ display_ballot.ballot_name|title }} Polls Page{% endblock title %}
 
 {% block content %}
 
@@ -18,7 +18,7 @@
         {% endif %}       
         <form class="pb-4">
         {% csrf_token %}
-          <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
+          <h2 class="pt-3 text-center">{{ display_ballot.ballot_name|title }} Polls Page</h2>
           {% for cat in display_ballot.category_set.all %}
             <h3 class="pt-3">{{ cat|title }}</h3>
             {% for choice in cat.choice_set.all %}

@@ -13,13 +13,13 @@
           <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
           <h4 class="pt-4">New Box:</h4>
           <form action="{% url 'polls:add_new_ballot' %}" method="post">
-            {% if messages %}
-              <ul class="messages">
-                {% for message in messages %}
-                  <li class="{{ message.tags }}">{{ message }}</li>
-                {% endfor %}
-              </ul>
-            {% endif %}
+            {% if error_message %}
+            <div class="alert alert-danger text-center">
+              {{ error_message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </div>
+            {% endif %} 
             {% csrf_token %}
             <div class="form-group">
               {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}

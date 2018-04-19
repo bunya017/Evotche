@@ -15,6 +15,20 @@
           <div class="card-body">
             <a href="{% url 'polls:choice_view' category.id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
             <h4 class="pt-4 pb-2">New Choice:</h4>
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-danger text-center" role="alert">
+              {{ error }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </div>
+            {% endfor %}
+            {% if error_message %}
+              <div class="alert alert-danger text-center" role="alert">
+                {{ error_message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </div>
+            {% endif %}
             <form action="{% url 'polls:add_new_choice' category.id %}" method="post" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-group">

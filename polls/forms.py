@@ -40,6 +40,12 @@ class ChoiceForm(forms.ModelForm):
 		model = Choice
 		fields = ['category', 'choice', 'photo']
 		label = {'category': '', 'choice': '', 'photo': ''}
+		error_messages = {
+			NON_FIELD_ERRORS: {
+				'unique_together': "Sorry, you have added this choice already."
+			}
+		}
+
 
 
 class ChForm(forms.ModelForm):

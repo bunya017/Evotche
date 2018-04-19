@@ -23,19 +23,23 @@
         {% csrf_token %}
           <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
           {% for cat in display_ballot.category_set.all %}
-            <h3 class="pt-3">{{ cat|title }}</h3>
+            <h3 class="pt-3">{{ cat }}</h3>
             {% for choice in cat.choice_set.all %}
             <div class="offset-1">
               <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-              <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice|title }}</label>
+              <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
               <br>
             </div>
             {% endfor %}
           {% endfor %}
+          {% if  user.is_authenticated and user.has_usable_password %}
+            <p class="text-danger text-uppercase pt-3 pb-5"><b>Note: This is a Preview Page.</b></p>
+          {% else %}
           <div class="mb-5 pt-5">
             <input class="btn btn-outline-dark" type="submit" value="Vote" />
-            <p class="pb-4"></p>
+            <p class="pb-5"></p>
           </div>
+          {% endif %}
         </form>
       {% else %}
       <div class="py-5">

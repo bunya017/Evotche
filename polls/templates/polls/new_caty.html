@@ -13,7 +13,7 @@
             <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
             <h4 class="pt-4 pb-2">New Category:</h4>
             {% for error in form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger text-center" role="alert">
               {{ error }}
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>

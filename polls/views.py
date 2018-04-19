@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.utils.text import slugify
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.datastructures import MultiValueDictKeyError
+from django.db.utils import IntegrityError
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -43,6 +44,7 @@ def choice_view(request, cat_id):
 	return render(request, 'polls/choice_view.html', context)
 
 
+@login_required(login_url='/users/token')
 def vote(request, ballot_url):
 	display_ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	queryset = Category.objects.filter(ballot_paper=display_ballot)
@@ -87,11 +89,15 @@ def add_new_ballot(request):
 	else:
 		form = BallotForm(request.POST)
 		if form.is_valid():
-			new_ballot = form.save(commit=False)
-			new_ballot.created_by = request.user
-			new_ballot.ballot_url = slugify(new_ballot.ballot_name)
-			new_ballot.save()
-			return HttpResponseRedirect(reverse('polls:category_view', 
+			try:
+				new_ballot = form.save(commit=False)
+				new_ballot.created_by = request.user
+				new_ballot.ballot_url = slugify(request.user.username +' '+ new_ballot.ballot_name)
+				new_ballot.save()
+			except (IntegrityError):
+				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
+			else:
+				return HttpResponseRedirect(reverse('polls:category_view', 
 													args=[new_ballot.id]))
 	context = {'form': form}
 	return render(request, 'polls/new_ballot.html', context)
@@ -102,7 +108,7 @@ def add_new_caty(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	initial_dict = {'ballot_paper': ballot}
 	if request.method != 'POST':
-		form 	= CategoryForm(request.user,  initial=initial_dict)
+		form 	= CategoryForm(request.user, initial=initial_dict)
 		chForms = ChFormSet(prefix='ch')
 	else:
 		form 	= CategoryForm(request.user, request.POST, initial=initial_dict)
@@ -111,7 +117,6 @@ def add_new_caty(request, ball_id):
 			new_caty = form.save(commit=False)
 			new_caty.created_by = request.user
 			new_caty.save()
-
 			chForms.instance = new_caty
 			chForms.save()
 			return HttpResponseRedirect(reverse('polls:category_view', 
@@ -131,8 +136,7 @@ def add_new_choice(request, cat_id):
 		form = ChoiceForm(request.user, request.POST, request.FILES, initial=initial_dict)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect(reverse('polls:choice_view', 
-													args=[cat_id]))
+			return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id]))
 
 	context = {'category': category, 'form': form}
 	return render(request, 'polls/new_choice.html', context)

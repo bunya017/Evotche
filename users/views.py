@@ -32,29 +32,18 @@ def signup(request):
 					   password=request.POST['password1'])
 			login(request, authenticated_user)
 			return HttpResponseRedirect(reverse('polls:index'))
-		#else:
-		#	print form.is_valid()
-		#	print form.errors
 
 	context = {'form': form}
 	return render(request, 'users/signup.html', context)
 
 
-@login_required
+@login_required(login_url='/users/token')
 def show_ballot_page(request, ball_url):
 	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	caty_list = Category.objects.filter(ballot_paper=display_ballot)
 	context = {'display_ballot': display_ballot, 'caty_list': caty_list}
 	return render(request, 'polls/display_ballot.html', context)
 
-
-@login_required
-def showBallotPage(request, ball_url):
-	"""Displays polls page to user who owns it"""
-	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
-	caty_list = Category.objects.filter(ballot_paper=display_ballot)
-	context = {'display_ballot': display_ballot, 'caty_list': caty_list}
-	return render(request, 'polls/displayBallot.html', context)
 
 @login_required
 def new_token(request):
