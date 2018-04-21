@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
-	url(r'', include('polls.urls')),
-	url(r'^users/', include('users.urls', namespace='users')),
+    url(r'^', include('polls.urls')),
+    url(r'^', include('users.urls', namespace='users')),
+    url(r'^', include('django.contrib.auth.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,7 +8,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-8 col-lg-6 mt-2 mx-auto">
-      <div class="card card-body border-dark mb-5">
+      <div class="card card-body mb-5">
         <div class="py-3">
           <h2>Log in to your account</h2>
         </div>
@@ -32,7 +32,7 @@
             <input type="hidden" name="next" value="{% url 'polls:ballot' %}">
           </div>
         </form>
-        <small><a class="text-dark" href="#">Forgot your password?</a></small>
+        <small><a class="text-dark" href="{% url 'users:password_reset' %}">Forgot your password?</a></small>
         <small class="py-3">Don't have an account? <a href="{% url 'users:signup' %}">Sign up</a></small>
       </button>
     </div>

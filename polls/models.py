@@ -53,7 +53,7 @@ class Category(models.Model):
 class Choice(models.Model):
 	category = models.ForeignKey(Category, on_delete=models.CASCADE)
 	choice = models.CharField(max_length=250)
-	photo = models.FileField(upload_to='uploads/', blank=True)
+	photo = models.ImageField(upload_to='uploads/', blank=True)
 	votes = models.PositiveIntegerField(default=0)
 
 	class Meta:

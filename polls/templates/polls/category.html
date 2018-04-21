@@ -28,7 +28,7 @@
     <div class="row mb-5">
       {% for category in ballot.category_set.all %}
       <div class="col-md-6 col-lg-4 my-2">
-        <div class="card border-dark">
+        <div class="card">
           <div class="card-body">
             <div class="card-title">
               <a class="text-dark" href="{% url 'polls:choice_view' category.id %}">

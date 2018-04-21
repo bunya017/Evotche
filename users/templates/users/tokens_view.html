@@ -8,7 +8,7 @@
     <div class="row mb-5">
       <!--
       <div class="col-sm-6 col-lg-4 my-2">
-        <div class="card border-dark" style="height: 12rem;">
+        <div class="card" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="">
                 <h4 class="text-center">New Box</h4>
@@ -23,7 +23,7 @@
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-lg-4 my-2">
-          <div class="card border-dark" style="height: 12rem;">
+          <div class="card" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'users:my_token' ballot.ballot_url %}">
                 <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>

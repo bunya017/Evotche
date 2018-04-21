@@ -9,22 +9,27 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-6 mx-auto">
-        {% if does_not_exist %}
-          <div class="alert alert-danger text-center">{{ does_not_exist }}</div>
-        {% endif %}
+        <div class="card card-body mb-5">
+          <div class="text-center py-3">
+          <h2>Enter a Voter Token</h2>
+        </div>
+          {% if does_not_exist %}
+            <div class="alert alert-danger text-center">{{ does_not_exist }}</div>
+          {% endif %}
 
-        {% if token_is_used %}
-          <div class="alert alert-danger text-center">{{ token_is_used }}</div>
-        {% endif %}
+          {% if token_is_used %}
+            <div class="alert alert-danger text-center">{{ token_is_used }}</div>
+          {% endif %}
 
-        <form method="post">
-          {% csrf_token %}
-          {{ form.management_form }}
-          <div class="form-group pt-5 pb-3">
-            {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Pass Token.' }}
-          </div>
-          <button class="btn btn-outline-success col-12" type="submit">Submit</button>
-        </form>
+          <form class="pb-5" method="post">
+            {% csrf_token %}
+            {{ form.management_form }}
+            <div class="form-group pt-5 pb-3">
+              {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Pass Token.' }}
+            </div>
+            <button class="btn btn-outline-success col-12" type="submit">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

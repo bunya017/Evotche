@@ -10,7 +10,7 @@
     <h1 class="py-3">Ballot Boxes</h1>
     <div class="row mb-5">
       <div class="col-sm-6 col-lg-4 my-2">
-        <div class="card border-dark" style="height: 12rem;">
+        <div class="card" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'polls:add_new_ballot' %}">
                 <h4 class="text-center">New Box</h4>
@@ -24,7 +24,7 @@
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-lg-4 my-2">
-          <div class="card border-dark" style="height: 12rem;">
+          <div class="card" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'polls:category_view' ballot.id %}">
                 <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>
