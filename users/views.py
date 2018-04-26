@@ -27,8 +27,6 @@ def signup(request):
 		email_error = ''
 	else:
 		form = MyUserSignupForm(data=request.POST)
-		username_error = ''
-		email_error = ''
 
 		if form.is_valid():
 			new_user = User.objects.create_user(
@@ -40,11 +38,8 @@ def signup(request):
 					   password=request.POST['password'])
 			login(request, authenticated_user)
 			return HttpResponseRedirect(reverse('polls:index'))
-		elif form.errors:
-			username_error = form.errors['username']
-			email_error = form.errors['email']
 
-	context = {'form': form, 'username_error': username_error, 'email_error': email_error}
+	context = {'form': form}
 	return render(request, 'users/signup.html', context)
 
 
