@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from polls.models import BallotPaper, Category, Choice
-from .forms import MyUserCreationForm, TokenUserForm, TokenForm, TokenNumForm
+from .forms import MyUserCreationForm, MyUserSignupForm, TokenUserForm, TokenForm, TokenNumForm
 from .models import Token
 from .snippets import gen_token
 
@@ -22,18 +22,29 @@ def logout_view(request):
 
 def signup(request):
 	if request.method != 'POST':
-		form = MyUserCreationForm()
+		form = MyUserSignupForm()
+		username_error = ''
+		email_error = ''
 	else:
-		form = MyUserCreationForm(data=request.POST)
+		form = MyUserSignupForm(data=request.POST)
+		username_error = ''
+		email_error = ''
 
 		if form.is_valid():
-			new_user = form.save()
+			new_user = User.objects.create_user(
+				username=form.cleaned_data['username'],
+				email=form.cleaned_data['email'],
+				password=form.cleaned_data['password']
+			)
 			authenticated_user = authenticate(username=new_user.username,
-					   password=request.POST['password1'])
+					   password=request.POST['password'])
 			login(request, authenticated_user)
 			return HttpResponseRedirect(reverse('polls:index'))
+		elif form.errors:
+			username_error = form.errors['username']
+			email_error = form.errors['email']
 
-	context = {'form': form}
+	context = {'form': form, 'username_error': username_error, 'email_error': email_error}
 	return render(request, 'users/signup.html', context)
 
 

@@ -10,7 +10,6 @@ class ChoiceInline(admin.TabularInline):
 	extra = 3
 
 
-
 class CategoryAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None,	{'fields': ['ballot_paper', 'category_name', 'created_by']})
@@ -27,7 +26,7 @@ class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
 	fieldsets = [
 		(None, {'fields': ['ballot_name', 'ballot_url', 'created_by','is_photo_ballot',
-				 'valid_from', 'valid_to']})
+				 'start_date', 'start_time', 'stop_date', 'stop_time']})
 	]
 	list_display = ['ballot_name', 'created_by']
 

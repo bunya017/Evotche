@@ -3,32 +3,123 @@
 {% block title %}{{ category.category_name|title }}{% endblock title %}
 
 {% block content %}
+{% load static %}
 
 <section>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-8 col-lg-6 my-5 mx-auto">
-        <a href="{% url 'polls:category_view' category.ballot_paper_id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
-        <a class="float-right text-dark" href="{% url 'polls:add_new_choice' category.id %}"><h3><i class="fa">&#xf055;</i> New Choice</h3></a>
-        <div class="card mt-5">
-          <div class="card-body">
-            <div class="card-title">
-              <h2 class="text-center">{{ category.category_name|upper }}</h2>
+    {% if category.ballot_paper.is_photo_ballot %}
+      <div class="row">
+        <div class="col-lg-6 my-3 ml-3 ml-sm-0">
+          <h1 class="text-dark py-3">{{ category.category_name|upper }}</h1>
+          <a href="{% url 'polls:category_view' category.ballot_paper_id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+          <a class="text-dark float-right" href="{% url 'polls:add_new_choice' category.id %}"><h4><i class="fa">&#xf055;</i>New Choice</h4></a>
+        </div>
+      </div>
+      <div class="row mb-5">
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
             </div>
-            <ul class="list-group list-group-flush">
-              {% for choice in category.choice_set.all %}
-              <li class="list-group-item">
-                {{ choice.choice|title }}
-                <div class="float-right">
-                  <a href="{% url 'polls:delete_choice' choice.id %}"><i class="fa text-danger">&#xf014;</i></a>
-                </div>
-              </li>
-              {% endfor %}
-            </ul>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4 my-2">
+          <div class="card" style="height: 25rem;">
+            <div class="card-body">
+              <h4 class="text-center">CARD TITLE</h4>
+              <div class="mx-auto">
+                <img class="card-img-bottom" height="294" width="310" src="{% static 'polls/131.jpg' %}" alt="Card image cap">
+              </div>
+              <div class="text-right pt-1">
+                <i class="fa fa-2x text-danger">&#xf014;</i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    {% else %}
+      <div class="row">
+        <div class="col-sm-8 col-lg-6 my-5 mx-auto">
+          <a href="{% url 'polls:category_view' category.ballot_paper_id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+          <a class="float-right text-dark" href="{% url 'polls:add_new_choice' category.id %}"><h3><i class="fa">&#xf055;</i> New Choice</h3></a>
+          <div class="card mt-5">
+            <div class="card-body">
+              <div class="card-title">
+                <h2 class="text-center">{{ category.category_name|upper }}</h2>
+              </div>
+              <ul class="list-group list-group-flush">
+                {% for choice in category.choice_set.all %}
+                <li class="list-group-item">
+                  {{ choice.choice|title }}
+                  <div class="float-right">
+                    <a href="{% url 'polls:delete_choice' choice.id %}"><i class="fa text-danger">&#xf014;</i></a>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
 </section>
 

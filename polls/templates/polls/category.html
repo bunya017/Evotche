@@ -14,12 +14,11 @@
         <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-unstyled pt-3">
           <li class="text-right">
-            {% if ballot.is_active %}
-              <a href="{% url 'polls:deactivate_ballot' ballot.ballot_url %}"><button class="btn btn-outline-danger">Deactivate</button></a>
-            {% else %}
-              <a href="{% url 'polls:activate_ballot' ballot.ballot_url %}"><button class="btn btn-outline-success">Activate</button></a>
-            {% endif %}
             <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
+          </li>
+          <li>
+            <h5>Open for voting from: {{ ballot.start_date }}, {{ ballot.start_time }}</h5>
+            <h5>Closed for voting on: {{ ballot.stop_date }}, {{ ballot.stop_time }}</h5>
           </li>
         </ul>
       </div>

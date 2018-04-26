@@ -10,6 +10,7 @@ from django.db.utils import IntegrityError
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from PIL import Image
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
 from users.models import Token
@@ -17,7 +18,6 @@ from users.models import Token
 
 
 def index(request):
-
 	return render(request, 'polls/index.html')
 
 
@@ -97,8 +97,7 @@ def add_new_ballot(request):
 			except (IntegrityError):
 				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
 			else:
-				return HttpResponseRedirect(reverse('polls:category_view', 
-													args=[new_ballot.id]))
+				return HttpResponseRedirect(reverse('polls:category_view', args=[new_ballot.id]))
 	context = {'form': form}
 	return render(request, 'polls/new_ballot.html', context)
 
@@ -119,8 +118,7 @@ def add_new_caty(request, ball_id):
 			new_caty.save()
 			chForms.instance = new_caty
 			chForms.save()
-			return HttpResponseRedirect(reverse('polls:category_view', 
-											args=[ball_id]))
+			return HttpResponseRedirect(reverse('polls:category_view', args=[ball_id]))
 
 	context = {'ballot': ballot, 'form': form, 'chForms': chForms}
 	return render(request, 'polls/new_caty.html', context)
@@ -144,7 +142,6 @@ def add_new_choice(request, cat_id):
 
 @login_required
 def delete_ballot(request, ball_id):
-
 	BallotPaper.objects.filter(created_by=request.user, pk=ball_id).delete()
 	return HttpResponseRedirect(reverse('polls:ballot'))
 
@@ -159,7 +156,6 @@ def delete_caty(request, cat_id):
 
 @login_required
 def delete_choice(request, ch_id):
-
 	choice = get_object_or_404(Choice, pk=ch_id)
 	cat_id = choice.category_id
 	choice.delete()
@@ -180,7 +176,3 @@ def deactivate_ballot(request, ballot_url):
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
-#def max_votes(request cat_id):
-#	choices = Choice.objects.filter(category_id=cat_id)
-#	winner = choices.aggregate(Max('votes'))
-#	return winner

@@ -12,9 +12,10 @@ class BallotPaper(models.Model):
 	created_by   = UserForeignKey(auto_user_add=True)
 	ballot_url   = models.SlugField(unique=True)
 	is_photo_ballot = models.BooleanField(default=False)
-	is_active = models.BooleanField(default=False)
-	valid_from = models.DateTimeField(blank=True, null=True)
-	valid_to = models.DateTimeField(blank=True, null=True)
+	start_date = models.DateField(blank=True, null=True)
+	start_time = models.TimeField(blank=True, null=True)
+	stop_date = models.DateField(blank=True, null=True)
+	stop_time = models.TimeField(blank=True, null=True)
 
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
@@ -27,6 +28,8 @@ class BallotPaper(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		return 'users:show_ballot_page', (self.ballot_url)
+
+	#def start_voting(self):
 	
 	def __str__(self):
 		return self.ballot_name

@@ -10,25 +10,27 @@
   <div class="row">
     <div class="col-12 col-md-8 col-lg-6 mx-auto mt-2">
       <div class="card card-body mb-5">
-        <div class="text-center pb-3 pt-2">
+        <div class="text-center pb-5 pt-2">
           <h2>Create a new account</h2>
         </div>
         <form method="post" action="{% url 'users:signup' %}">
           {% csrf_token %}
-          {{ form.errors }}
-          <div class="form-group py-2">
+          <div class="form-group">
             {{ form.username|add_css:'class:form-control, placeholder:Username' }}
+            {% if username_error %}
+              <h5 class="text-danger pb-0">{{ username_error }}</h5>
+            {% endif %}
           </div> 
-          <div class="form-group py-2">
+          <div class="form-group">
             {{ form.email|add_css:'class:form-control, placeholder:Enter a valid email address' }}
+            {% if email_error %}
+              <h5 class="text-danger pb-0">{{ email_error }}</h5>
+            {% endif %}
           </div> 
-          <div class="form-group py-2">
-            {{ form.password1|add_css:'class:form-control, placeholder:Password' }}
-          </div> 
-          <div class="form-group py-2">
-            {{ form.password2|add_css:'class:form-control, placeholder:Re-enter password' }}
-          </div> 
-          <div class="mb-3 pb-3">
+          <div class="form-group">
+            {{ form.password|add_css:'class:form-control, placeholder:Password' }}
+          </div>
+          <div class="mb-3 py-3">
             <button type="submit" class="btn btn-outline-success col-12">Sign up</button>
             <input type="hidden" name="next" value="{% url 'polls:index' %}">
           </div>

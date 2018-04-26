@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Token
 from polls.models import BallotPaper
@@ -17,10 +18,33 @@ class MyUserCreationForm(UserCreationForm):
 	def save(self, commit=True):
 		user = super(MyUserCreationForm, self).save(commit=False)
 		user.email = self.cleaned_data['email']
-		user.password2 = self.cleaned_data['password1']
 		if commit:
 			user.save()
 		return user
+
+
+class MyUserSignupForm(forms.Form):
+	username = forms.CharField(max_length=30, required=True)
+	email = forms.EmailField(required=True)
+	password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
+	def clean_username(self):
+		username = self.cleaned_data['username']
+		try:
+			User.objects.get(username=username)
+		except ObjectDoesNotExist:
+			return username
+		else:
+			raise forms.ValidationError('Username is already taken.')
+
+	def clean_email(self):
+		email = self.cleaned_data['email']
+		try:
+			User.objects.get(email=email)
+		except ObjectDoesNotExist:
+			return email
+		else:
+			raise forms.ValidationError('Email is already taken.')
 
 
 class TokenUserForm(forms.Form):

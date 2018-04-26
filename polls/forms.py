@@ -1,15 +1,24 @@
 from django import forms
 from django.contrib.admin import widgets
-from django.core.exceptions import NON_FIELD_ERRORS
 from django.contrib.admin.widgets import AdminSplitDateTime
+from django.core.exceptions import NON_FIELD_ERRORS
+from PIL import Image
+from django.core.files import File
 from .models import Category, Choice, BallotPaper
 
 
 class BallotForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		super(BallotForm, self).__init__(*args, **kwargs)
+		self.fields['start_date'].widget = forms.TextInput(attrs={'type': 'date'})
+		self.fields['start_time'].widget = forms.TextInput(attrs={'type': 'time'})
+		self.fields['stop_date'].widget = forms.TextInput(attrs={'type': 'date'})
+		self.fields['stop_time'].widget = forms.TextInput(attrs={'type': 'time'})
+
 	class Meta:
 		model = BallotPaper
-		fields = ['ballot_name']
-		label = {'ballot_name': ''}
+		fields = ['ballot_name', 'start_date', 'start_time', 'stop_date', 'stop_time']
+		label = {'ballot_name': '', 'start_date': '', 'start_time': '', 'stop_date': '', 'stop_time': ''}
 
 
 class CategoryForm(forms.ModelForm):
@@ -45,6 +54,18 @@ class ChoiceForm(forms.ModelForm):
 				'unique_together': "Sorry, you have added this choice already."
 			}
 		}
+
+
+	#def save(self, commit=True):
+	#	photo = self.cleaned_data['image']
+	#	cropped_photo = Image.open(photo)
+	#	cropped_photo = cropped_photo.resize((356, 336), Image.ANTIALIAS)
+	#	cropped_photo.save(self.cleaned_data['choice']+'.jpg', quality=45)
+	#	choice = super(ChoiceForm, self).save(commit=False)
+	#	choice.photo = cropped_photo
+	#	if commit:
+	#		choice.save()
+	#	return choice
 
 
 
