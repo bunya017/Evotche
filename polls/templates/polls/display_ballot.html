@@ -32,12 +32,16 @@
             {% endfor %}
           {% endfor %}
           {% if  user.is_authenticated and user.has_usable_password %}
-            <p class="text-danger text-uppercase pt-3 pb-5"><b>Note: This is a Preview Page.</b></p>
+            <div class="pt-3 pb-5">
+              <p class="text-danger text-uppercase"><b>Note: This is a Preview Page.</b></p>
+              <h5>Voting opens on: {{ display_ballot.start_date }}, {{ display_ballot.start_time }}.</h5>
+              <h5>Voting closes on: {{ display_ballot.stop_date }}, {{ display_ballot.stop_time }}.</h5>
+            </div>
           {% else %}
-          <div class="mb-5 pt-5">
-            <input class="btn btn-outline-dark" type="submit" value="Vote" />
-            <p class="pb-5"></p>
-          </div>
+            <div class="mb-5 pt-5">
+              <input class="btn btn-outline-dark" type="submit" value="Vote" />
+              <p class="pb-5"></p>
+            </div>
           {% endif %}
         </form>
       <!--

@@ -23,6 +23,7 @@
             {% csrf_token %}
             <div class="form-group">
               {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
+              <div class="py-1">Make Picture Ballot: {{ form.is_photo_ballot }}</div>
               <div class="card card-body py-2 mt-2">
                 Start voting on:
                 <div class="list-inline">
