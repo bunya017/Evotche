@@ -148,14 +148,25 @@ def add_new_choice(request, cat_id):
 
 @login_required
 def delete_ballot(request, ball_id):
-	BallotPaper.objects.filter(created_by=request.user, pk=ball_id).delete()
+	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
+	categories = ballot.category_set.all()
+	for category in categories:
+		choices = category.choice_set.all()
+		for choice in choices:
+			if choice.photo:
+				choice.photo.delete(save=False)
+	ballot.delete()
 	return HttpResponseRedirect(reverse('polls:ballot'))
 
 
 @login_required
 def delete_caty(request, cat_id):
 	category = get_object_or_404(Category, pk=cat_id)
-	ball_id  = category.ballot_paper_id 
+	ball_id  = category.ballot_paper_id
+	choices = category.choice_set.all()
+	for choice in choices:
+		if choice.photo:
+			choice.photo.delete(save=False)
 	category.delete()
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ball_id,]))
 
@@ -164,6 +175,8 @@ def delete_caty(request, cat_id):
 def delete_choice(request, ch_id):
 	choice = get_object_or_404(Choice, pk=ch_id)
 	cat_id = choice.category_id
+	if choice.photo:
+		choice.photo.delete(save=False)
 	choice.delete()
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
 
