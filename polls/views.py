@@ -168,17 +168,6 @@ def delete_choice(request, ch_id):
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
 
 
-def activate_ballot(request, ballot_url):
-	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ballot_url)
-	ballot.is_active = True
-	ballot.save()
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
-
-def deactivate_ballot(request, ballot_url):
-	ballot = BallotPaper.objects.get(created_by=request.user, ballot_url=ballot_url)
-	ballot.is_active = False
-	ballot.save()
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
