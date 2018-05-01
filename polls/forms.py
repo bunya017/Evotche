@@ -56,19 +56,6 @@ class ChoiceForm(forms.ModelForm):
 		}
 
 
-	#def save(self, commit=True):
-	#	photo = self.cleaned_data['image']
-	#	cropped_photo = Image.open(photo)
-	#	cropped_photo = cropped_photo.resize((356, 336), Image.ANTIALIAS)
-	#	cropped_photo.save(self.cleaned_data['choice']+'.jpg', quality=45)
-	#	choice = super(ChoiceForm, self).save(commit=False)
-	#	choice.photo = cropped_photo
-	#	if commit:
-	#		choice.save()
-	#	return choice
-
-
-
 class ChForm(forms.ModelForm):
 	class Meta:
 		model = Choice

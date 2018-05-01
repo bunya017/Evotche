@@ -80,8 +80,3 @@ class Choice(models.Model):
 
 		return self.choice
 
-
-#class ImageChoice(models.Model):
-#	category = models.ForeignKey(Category, on_delete=models.CASCADE)
-#	choice_title = models.CharField(max_length=250)
-#	choice_image = models.ImageField()
