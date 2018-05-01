@@ -9,6 +9,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.db.utils import IntegrityError
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from PIL import Image
 from .models import BallotPaper, Category, Choice
@@ -64,8 +65,13 @@ def vote(request, ballot_url):
 			selected_choice.save()
 			user.token.is_used = True
 			user.token.save()
+			logout(request)
 	
-	return HttpResponseRedirect(reverse('users:logout'))
+	return HttpResponseRedirect(reverse('polls:vote_success'))
+
+
+def vote_success(request):
+	return render(request, 'polls/vote_success.html')
 
 
 @login_required

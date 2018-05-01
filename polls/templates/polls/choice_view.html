@@ -23,7 +23,7 @@
               <div class="card-body">
                 <h4 class="text-center">{{ choice.choice|title }}</h4>
                 <div class="mx-auto">
-                  <img class="card-img-bottom" height="294" width="310" src="{{ MEDIA_URL }}{{ choice.photo }}" alt="Card image cap">
+                  <img class="card-img-bottom" height="294" width="310" src="{{ choice.photo.url }}" alt="{{ choice.choice }} photo">
                 </div>
                 <div class="text-right pt-1">
                   <i class="fa fa-2x text-danger">&#xf014;</i>

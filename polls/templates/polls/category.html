@@ -17,8 +17,8 @@
             <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
           </li>
           <li>
-            <h5>Open for voting from: {{ ballot.start_date }}, {{ ballot.start_time }}</h5>
-            <h5>Closed for voting on: {{ ballot.stop_date }}, {{ ballot.stop_time }}</h5>
+            <h5>Open for voting from: {{ ballot.start_date }}, {{ ballot.start_time|time:'h:i A' }}</h5>
+            <h5>Closed for voting on: {{ ballot.stop_date }}, {{ ballot.stop_time|time:'h:i A' }}</h5>
           </li>
         </ul>
       </div>
