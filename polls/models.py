@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import StringIO
+from PIL import Image
 
 from django.db import models
 from django.utils import timezone
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django_userforeignkey.models.fields import UserForeignKey
 
 
@@ -66,6 +69,12 @@ class Choice(models.Model):
 
 	def clean(self):
 		self.choice = self.choice.title()
+		if self.photo:
+			image = Image.open(StringIO.StringIO(self.photo.read()))
+			image.thumbnail((360, 360), Image.ANTIALIAS)
+			output = StringIO.StringIO()
+			image.save(output, format='JPEG', optimize=True, quality=60)
+			self.photo = InMemoryUploadedFile(output, 'ImageField', '%s.jpg' %self.photo.name, 'image/jpeg', output.len, None)
 
 	def __str__(self):
 
