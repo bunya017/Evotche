@@ -1,0 +1,25 @@
+{% extends "polls/base.html" %}
+{% block content %}
+{% load extras %}
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mx-auto py-5">
+        <div class="card card-body border-dark">
+          <div class="py-3">
+            <div class="text-center text-success"><i class="fa fa-3x">&#xf00c;</i></div>
+            <h2 class="text-uppercase text-center">success!</h2>
+          </div>
+          <div class="mb-3">
+            <p>Your email has been submitted successfully! Thank you for getting in touch</p>
+            <p>We aim to get back to you as quickly as possible.</p>
+            <p>Thank you for using evotvhe.</p>
+            <a class="text-dark" href="{% url 'polls:index' %}"><i class="fa fa-2x">&#xf015;</i> Home</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

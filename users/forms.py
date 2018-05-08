@@ -8,20 +8,6 @@ from polls.models import BallotPaper
 from django.db import transaction
 
 
-class MyUserCreationForm(UserCreationForm):
-	email = forms.EmailField(required=True)
-
-	class Meta:
-		model = User
-		fields = ('username', 'email', 'password1', 'password2')
-
-	def save(self, commit=True):
-		user = super(MyUserCreationForm, self).save(commit=False)
-		user.email = self.cleaned_data['email']
-		if commit:
-			user.save()
-		return user
-
 
 class MyUserSignupForm(forms.Form):
 	username = forms.CharField(max_length=30, required=True)
@@ -65,3 +51,8 @@ class TokenForm(forms.ModelForm):
 		model = Token
 		fields = ('ballot_paper',)
 
+class ContactForm(forms.Form):
+	contact_name = forms.CharField(max_length=60, required=True, strip=True)
+	contact_email = forms.EmailField(required=True)
+	subject = forms.CharField(max_length=50, required=True)
+	content = forms.CharField(required=True, widget=forms.Textarea)

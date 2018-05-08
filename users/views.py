@@ -7,9 +7,11 @@ from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.contrib.auth import login, logout, authenticate
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
 from polls.models import BallotPaper, Category, Choice
-from .forms import MyUserCreationForm, MyUserSignupForm, TokenUserForm, TokenForm, TokenNumForm
+from .forms import MyUserSignupForm, TokenUserForm, TokenForm, TokenNumForm, ContactForm 
 from .models import Token
 from .snippets import gen_token
 
@@ -143,3 +145,38 @@ def num_token(request):
 	return render(request, 'users/num_token.html', context)
 
 
+def contact_us(request):
+	if request.method != 'POST':
+		form = ContactForm()
+	else:
+		form = ContactForm(request.POST)
+
+		if form.is_valid():
+			contact_name = form.cleaned_data['contact_name']
+			contact_email = form.cleaned_data['contact_email']
+			subject = form.cleaned_data['subject']
+			form_content = form.cleaned_data['content']
+			email_context = {
+				'contact_name': contact_name,
+				'contact_email': contact_email,
+				'subject': subject,
+				'form_content': form_content,
+			}
+			template = get_template('users/contact_template.txt')
+			content = template.render(email_context)
+			email = EmailMessage(
+				'New Contact Form Submission',
+				content,
+				'Evotche <no-reply@evotche.com>',
+				['dollabills007@gmail.com',],
+				reply_to=[contact_email],
+			)
+			email.send(fail_silently=False)
+			return HttpResponseRedirect(reverse('users:contact_success'))
+
+	context = {'form': form}
+	return render(request, 'users/contact.html', context)
+
+
+def contact_success(request):
+	return render(request, 'users/contact_success.html')

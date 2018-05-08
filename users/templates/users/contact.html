@@ -1,0 +1,48 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Contact Us{% endblock title %}
+
+
+{% block content %}
+{% load extras %}
+{% load static %}
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-8 col-lg-6 mx-auto mt-2">
+      <div class="card card-body mb-3">
+        <div class="text-center py-1">
+          <h2><i class="fa">&#xf1cd;</i>    Support</h2>
+          <p>Contact us, we'll only talk to you.</p>
+        </div>
+        <form method="post" action="{% url 'users:contact_us' %}">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.contact_name|add_css:'class:form-control, placeholder:Name' }}
+            {% if form.contact_name.errors %}
+              <h5 class="text-danger pb-0">{{ form.contact_name.errors }}</h5>
+            {% endif %}
+          </div> 
+          <div class="form-group">
+            {{ form.contact_email|add_css:'class:form-control, placeholder:Email' }}
+            {% if form.contact_email.errors %}
+              <h5 class="text-danger pb-0">{{ form.contact_email.errors }}</h5>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            {{ form.subject|add_css:'class:form-control, placeholder:Subject' }}
+          </div>
+          <div class="form-group">
+            {{ form.content|add_css:'class:form-control, placeholder:How can we help you?, rows:6' }}
+          </div>
+          <div class="py-2">
+            <button type="submit" class="btn btn-outline-success col-12">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

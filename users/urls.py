@@ -10,6 +10,8 @@ urlpatterns = [
 	url(r'^login/$', login, {'template_name': 'users/login.html'}, name='login'),
 	url(r'^logout/$', views.logout_view, name='logout'),
 	url(r'^signup/$', views.signup, name='signup'),
+	url(r'^contact-us/$', views.contact_us, name='contact_us'),
+	url(r'^contact-success/$', views.contact_success, name='contact_success'),
     url(r'^password_reset/$', auth_views.password_reset, {'template_name': 'users/registration/password_reset_form.html', 
     														'html_email_template_name': 'users/registration/password_reset_email.html', 
     														'subject_template_name': 'users/registration/password_reset_subject.txt'}, name='password_reset'),
