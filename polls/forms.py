@@ -9,7 +9,6 @@ from django.contrib.postgres.forms import DateTimeRangeField
 
 
 class BallotForm(forms.ModelForm):
-	duration = DateTimeRangeField()
 	def __init__(self, *args, **kwargs):
 		super(BallotForm, self).__init__(*args, **kwargs)
 		self.fields['start_date'].widget = forms.TextInput(attrs={'type': 'date'})
@@ -19,8 +18,8 @@ class BallotForm(forms.ModelForm):
 
 	class Meta:
 		model = BallotPaper
-		fields = ['ballot_name', 'is_photo_ballot', 'start_date', 'start_time', 'stop_date', 'stop_time', 'duration']
-		label = {'ballot_name': '', 'is_photo_ballot':'', 'start_date': '', 'start_time': '', 'stop_date': '', 'stop_time': '', 'duration': ''}
+		fields = ['ballot_name', 'is_photo_ballot', 'start_date', 'start_time', 'stop_date', 'stop_time']
+		label = {'ballot_name': '', 'is_photo_ballot':'', 'start_date': '', 'start_time': '', 'stop_date': '', 'stop_time': ''}
 
 
 class CategoryForm(forms.ModelForm):

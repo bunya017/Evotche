@@ -13,13 +13,22 @@
           <div class="text-center py-3">
           <h2>Enter a Voter Token</h2>
         </div>
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-danger text-center">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </div>
+              {% endfor %}
+          {% endif %}
+
           {% if does_not_exist %}
             <div class="alert alert-danger text-center">
-            {{ does_not_exist }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </div>
-
+              {{ does_not_exist }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </div>
           {% endif %}
 
           {% if token_is_used %}
@@ -33,7 +42,7 @@
             {% csrf_token %}
             {{ form.management_form }}
             <div class="form-group pt-5 pb-3">
-              {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Pass Token.' }}
+              {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
             </div>
             <button class="btn btn-outline-success col-12" type="submit">Submit</button>
           </form>

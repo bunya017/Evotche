@@ -10,7 +10,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 mx-auto">
+      <div class="col-12 mx-auto">
         {% if error_message %}
           <div class="alert alert-danger text-center">
             {{ error_message }}
@@ -22,14 +22,28 @@
         {% csrf_token %}
           <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
           {% for cat in display_ballot.category_set.all %}
-            <h3 class="pt-3">{{ cat }}</h3>
-            {% for choice in cat.choice_set.all %}
-            <div class="offset-1">
-              <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-              <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
-              <br>
+          <h3 class="pt-3">{{ cat }}</h3>   
+            {% if display_ballot.is_photo_ballot %}
+            <div class="row">
+              {% for choice in cat.choice_set.all %}
+                <div class="col-6 col-sm-4 col-md-4">
+                  <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                  <label for="{{ cat }}{{ forloop.counter }}">
+                    <img height="130" width="130" src="{{ choice.photo.url }}" alt="{{ choice.choice }} photo">
+                    <div class="text-center">{{ choice.choice }}</div>
+                  </label>
+                </div>
+              {% endfor %}
             </div>
-            {% endfor %}
+            {% else %}
+              {% for choice in cat.choice_set.all %}
+              <div class="offset-1">
+                <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
+                <br>
+              </div>
+              {% endfor %}
+            {% endif %}
           {% endfor %}
           {% if  user.is_authenticated and user.has_usable_password %}
             <div class="pt-3 pb-5">
@@ -44,14 +58,6 @@
             </div>
           {% endif %}
         </form>
-      <!--
-      <div class="py-5">
-        <h1 class="text-center">Error 404</h1>
-        <h2 class="text-center">Page not found </h2>
-        <h2 class="text-center">The link you followed may be broken.</h2>
-        <p class="text-center pt-5"><a class="text-dark" href="{% url 'polls:index' %}">Go Back Home</a></p>
-      </div>
-    -->
       </div>
     </div>
   </div>

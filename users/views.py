@@ -95,8 +95,7 @@ def token_login(request):
 				if auth_user.token.is_used == False:
 					login(request, auth_user)
 					ballot = auth_user.token.ballot_paper
-					return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url])
-					)
+					return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 				else: 
 					return render(request, 'users/token_login.html', {'form': form, 
 					'token_is_used': 'This token has been used.'})

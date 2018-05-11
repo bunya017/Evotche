@@ -11,15 +11,44 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth import login
 from PIL import Image
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from users.forms import TokenUserForm
 from users.models import Token
 
 
 
 def index(request):
-	return render(request, 'polls/index.html')
+	if request.user.is_authenticated() and request.user.has_usable_password():
+		return HttpResponseRedirect(reverse('polls:ballot'))
+
+	if request.method != 'POST':
+		form = TokenUserForm()
+	else:
+		form = TokenUserForm(request.POST)
+
+		if form.is_valid():
+			user_name = form.cleaned_data['token']
+			try:
+				User.objects.get(username=user_name)
+			except (User.DoesNotExist):
+				messages.success(request, 'Please enter a valid token.')
+				return HttpResponseRedirect(reverse('users:token_login'))
+			else:
+				auth_user = User.objects.get(username=user_name)
+				if auth_user.token.is_used == False:
+					login(request, auth_user)
+					ballot = auth_user.token.ballot_paper
+					return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
+				else:
+					messages.success(request, 'This token has been used.')
+					return HttpResponseRedirect(reverse('users:token_login'))
+
+	context = {'form': form}
+	return render(request, 'polls/index.html', context)
 
 
 @login_required
