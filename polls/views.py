@@ -16,7 +16,7 @@ from django.contrib.auth import login
 from PIL import Image
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
-from users.forms import TokenUserForm
+from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
 
 
@@ -25,13 +25,14 @@ def index(request):
 	if request.user.is_authenticated() and request.user.has_usable_password():
 		return HttpResponseRedirect(reverse('polls:ballot'))
 
+	# Token Form
 	if request.method != 'POST':
-		form = TokenUserForm()
+		token_form = TokenUserForm()
 	else:
-		form = TokenUserForm(request.POST)
+		token_form = TokenUserForm(request.POST)
 
-		if form.is_valid():
-			user_name = form.cleaned_data['token']
+		if token_form.is_valid():
+			user_name = token_form.cleaned_data['token']
 			try:
 				User.objects.get(username=user_name)
 			except (User.DoesNotExist):
@@ -47,7 +48,29 @@ def index(request):
 					messages.success(request, 'This token has been used.')
 					return HttpResponseRedirect(reverse('users:token_login'))
 
-	context = {'form': form}
+	# Check Results Form
+	if request.method != 'POST':
+		result_ckeck_form = ResultCheckForm()
+	else:
+		result_ckeck_form = ResultCheckForm(request.POST)
+
+		if result_ckeck_form.is_valid():
+			user_name = result_ckeck_form.cleaned_data['check_result']
+			try:
+				User.objects.get(username=user_name)
+			except (User.DoesNotExist):
+				messages.success(request, 'Please enter a valid token.')
+				return HttpResponseRedirect(reverse('users:check_results'))
+			else:
+				ballot_token = User.objects.get(username=user_name)
+				ballot = ballot_token.token.ballot_paper
+				#if ballot.show_results_to_public == False:
+				#	messages.success(request, 'Sorry, the results for this campaign is not public yet.')
+				#	return HttpResponseRedirect(reverse('users:token_login'))
+				#else:
+				return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
+
+	context = {'token_form': token_form, 'result_ckeck_form': result_ckeck_form,}
 	return render(request, 'polls/index.html', context)
 
 
@@ -115,6 +138,19 @@ def ballot_results(request, ballot_url):
 	caty_list = Category.objects.filter(ballot_paper=ballot)
 	context = {'caty_list': caty_list, 'ballot': ballot}
 	return render(request, 'polls/ballot_result.html', context)
+
+
+def show_results_public(request, ballot_url):
+	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	if ballot.show_results_to_public == False:
+		ballot.show_results_to_public = True
+		ballot.save()
+	else:
+		ballot.show_results_to_public = False
+		ballot.save()
+
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
+
 
 
 @login_required

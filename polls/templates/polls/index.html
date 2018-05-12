@@ -9,7 +9,7 @@
 <section id="introduction">
   <div class="container">
     <div class="row fill-viewport align-items-center"> 
-      <div class="col-12 col-md-6">
+      <div class="col-12 col-md-8">
         <h1>Evotche helps you create Simple and Secure voting campaigns.</h1>
         <h4 class="pt-2">Creating online election campaigns just got easier.</p>
         <a href="{% url 'users:signup' %}"><button class="btn btn-outline-dark" >Get Started</button></a>
@@ -21,15 +21,26 @@
 <section id="voter-token">
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 py-5">
+      <div class="col-12 col-md-6 py-3 py-md-5">
         <form method="post">
           {% csrf_token %}
-          {{ form.management_form }}
-          <div class="form-group pb-3">
-            <h2 class="text-center">Do you have a Voter Token?</h2>
-            {{ form.token|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
+          {{ token_form.management_form }}
+          <div class="form-group">
+            <h2 class="text-center">Are you here to vote?</h2>
+            {{ token_form.token|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
           </div>
-          <button class="btn btn-outline-success col-12" type="submit">Submit</button>
+          <button class="btn btn-outline-success col-12" type="submit">Proceed to Vote</button>
+        </form>
+      </div>
+      <div class="col-12 col-md-6 py-3 py-md-5">
+        <form method="post">
+          {% csrf_token %}
+          {{ result_ckeck_form.management_form }}
+          <div class="form-group">
+            <h2 class="text-center">Check Election Results</h2>
+            {{ result_ckeck_form.check_result|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
+          </div>
+          <button class="btn btn-outline-success col-12" type="submit">Check Results</button>
         </form>
       </div>
     </div>
@@ -131,22 +142,6 @@
     </div>
   </div>
 </section>
-
-
-<style type="text/css">
-	.d {
-		font-size: 1.3rem;
-		font-weight: 500;
-	}
-	.f {
-		font-weight: 600;
-	}
-  .bigg {
-    font-size: 2rem;
-    font-weight: 300;
-  }
-
-</style>
 
 
 {% endblock content %}

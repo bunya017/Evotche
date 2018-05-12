@@ -18,8 +18,8 @@ class BallotForm(forms.ModelForm):
 
 	class Meta:
 		model = BallotPaper
-		fields = ['ballot_name', 'is_photo_ballot', 'start_date', 'start_time', 'stop_date', 'stop_time']
-		label = {'ballot_name': '', 'is_photo_ballot':'', 'start_date': '', 'start_time': '', 'stop_date': '', 'stop_time': ''}
+		fields = ['ballot_name', 'start_date', 'start_time', 'stop_date', 'stop_time']
+		label = {'ballot_name': '', 'start_date': '', 'start_time': '', 'stop_date': '', 'stop_time': ''}
 
 
 class CategoryForm(forms.ModelForm):

@@ -12,15 +12,20 @@
         <h1 class="text-dark py-3">{{ ballot.ballot_name|title }}</h1>
         <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
         <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
-        <ul class="list-unstyled pt-3">
-          <li class="text-right">
+        <ul class="list-inline text-right pt-3">
+          <li class="list-inline-item">
+            {% if ballot.show_results_to_public is False %}
+              <a class="px-1" href="{% url 'polls:show_results' ballot.ballot_url %}"><button class="btn btn-outline-success">Show Results</button></a>
+            {% else %}
+              <a class="px-1" href="{% url 'polls:show_results' ballot.ballot_url %}"><button class="btn btn-outline-danger">Hide Results</button></a>
+            {% endif %}
+          </li>
+          <li class="list-inline-item">
             <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
           </li>
-          <li>
-            <h5>Open for voting from: {{ ballot.start_date }}, {{ ballot.start_time|time:'h:i A' }}</h5>
-            <h5>Closed for voting on: {{ ballot.stop_date }}, {{ ballot.stop_time|time:'h:i A' }}</h5>
-          </li>
         </ul>
+        <p>Opening: {{ ballot.start_date }}, {{ ballot.start_time|time:'h:i A' }}</p>
+        <p>Closing: {{ ballot.stop_date }}, {{ ballot.stop_time|time:'h:i A' }}</p>
       </div>
     </div>
 

@@ -11,7 +11,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
 from polls.models import BallotPaper, Category, Choice
-from .forms import MyUserSignupForm, TokenUserForm, TokenForm, TokenNumForm, ContactForm 
+from .forms import MyUserSignupForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
 from .models import Token
 from .snippets import gen_token
 
@@ -179,3 +179,29 @@ def contact_us(request):
 
 def contact_success(request):
 	return render(request, 'users/contact_success.html')
+
+
+def check_results(request):
+	if request.method != 'POST':
+		form = ResultCheckForm()
+	else:
+		form = ResultCheckForm(request.POST)
+
+		if form.is_valid():
+			user_name = form.cleaned_data['check_result']
+			try:
+				User.objects.get(username=user_name)
+			except (User.DoesNotExist):
+				return render(request, 'users/check_results.html', {'form': form, 
+					'does_not_exist': 'Please enter a valid token.'})
+			else:
+				ballot_token = User.objects.get(username=user_name)
+				ballot = ballot_token.token.ballot_paper
+				#if ballot.show_results_to_public == False:
+				#	return render(request, 'users/token_login.html', {'form': form, 
+				#		'not_public': 'Sorry, the results for this campaign is not public yet.'})
+				#else:
+				return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
+
+	context = {'form': form}
+	return render(request, 'users/check_results.html', context)

@@ -22,5 +22,6 @@ urlpatterns = [
 	url(r'^delete/(?P<ball_id>[0-9]+)/$', views.delete_ballot, name='delete_ballot'),
 	url(r'^delete/category/(?P<cat_id>[0-9]+)/$', views.delete_caty, name='delete_caty'),
 	url(r'^delete/choice/(?P<ch_id>[0-9]+)/$', views.delete_choice, name='delete_choice'),
+	url(r'^show-results/(?P<ballot_url>[-\w]+)/$', views.show_results_public, name='show_results'),
 
 ]

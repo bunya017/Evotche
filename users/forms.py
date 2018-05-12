@@ -37,6 +37,9 @@ class TokenUserForm(forms.Form):
 	token = forms.CharField(min_length=6, max_length=16)
 
 
+class ResultCheckForm(forms.Form):
+	check_result = forms.CharField(min_length=6, max_length=16)
+
 class TokenNumForm(forms.Form):
 	number_of_tokens = forms.IntegerField()
 
