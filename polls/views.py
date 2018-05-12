@@ -24,7 +24,6 @@ from users.models import Token
 def index(request):
 	if request.user.is_authenticated() and request.user.has_usable_password():
 		return HttpResponseRedirect(reverse('polls:ballot'))
-
 	# Token Form
 	if request.method != 'POST':
 		token_form = TokenUserForm()
@@ -47,7 +46,6 @@ def index(request):
 				else:
 					messages.success(request, 'This token has been used.')
 					return HttpResponseRedirect(reverse('users:token_login'))
-
 	# Check Results Form
 	if request.method != 'POST':
 		result_ckeck_form = ResultCheckForm()
@@ -246,6 +244,5 @@ def delete_choice(request, ch_id):
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
 
 
-
-
-
+def pricing(request):
+	return render(request, 'polls/pricing.html')

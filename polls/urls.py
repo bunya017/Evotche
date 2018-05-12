@@ -7,7 +7,8 @@ from . import views
 app_name = 'polls'
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
-	url(r'^vote/success$', views.vote_success, name='vote_success'),
+	url(r'^vote/success/$', views.vote_success, name='vote_success'),
+	url(r'^pricing/$', views.pricing, name='pricing'),
 	url(r'^vote/(?P<ballot_url>[-\w]+)/$', views.vote, name='vote'),
 	url(r'^results/$', views.results, name='results'),
 	url(r'^results/(?P<ballot_url>[-\w]+)/$', views.ballot_results, name='ballot_results'),
