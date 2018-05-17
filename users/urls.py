@@ -11,6 +11,7 @@ urlpatterns = [
 	url(r'^logout/$', views.logout_view, name='logout'),
 	url(r'^signup/$', views.signup, name='signup'),
 	url(r'^contact-us/$', views.contact_us, name='contact_us'),
+	url(r'^free/(?P<ball_url>[-\w]+)/$', views.get_free_tokens, name='get_free_tokens'),
 	url(r'^contact-success/$', views.contact_success, name='contact_success'),
     url(r'^password_reset/$', auth_views.password_reset, {'template_name': 'users/registration/password_reset_form.html', 
     														'html_email_template_name': 'users/registration/password_reset_email.html', 

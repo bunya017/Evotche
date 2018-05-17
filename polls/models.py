@@ -14,12 +14,14 @@ class BallotPaper(models.Model):
 	ballot_name  = models.CharField(max_length=50)
 	created_by   = UserForeignKey(auto_user_add=True)
 	ballot_url   = models.SlugField(unique=True)
-	show_results_to_public = models.BooleanField(default=False)
 	is_photo_ballot = models.BooleanField(default=False)
+	is_paid = models.BooleanField(default=False)
+	has_free_tokens = models.BooleanField(default=False)
 	start_date = models.DateField(blank=True, null=True)
 	start_time = models.TimeField(blank=True, null=True)
 	stop_date = models.DateField(blank=True, null=True)
 	stop_time = models.TimeField(blank=True, null=True)
+	show_results_to_public = models.BooleanField(default=False)
 
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
