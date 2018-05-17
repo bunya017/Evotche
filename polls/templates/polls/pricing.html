@@ -1,0 +1,57 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Evotche| Pricing{% endblock title %}
+
+{% block content %}
+{% load static %}
+{% load extras %}
+
+<section id="pricing">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mx-auto text-center my-4">
+        <h1>PRICING</h1>
+        <h3>Our pricing is based on the number of your potential voters.</h3>
+      </div>
+    </div>
+    <div class="row justify-content-lg-center">
+      <div class="col-md-6 col-lg-4 my-2">
+        <div class="card bg-light">
+          <div class="card-body">
+            <div class="card-title">
+              <h4 class="text-center">Basic</h4>
+            </div>
+            <div class="text-center">
+              <img class="mx-auto" height="100"" src="{% static 'polls/images/0.png' %}" alt="Basic">
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item py-2"><strong>50 Tokens</strong> per Ballot Box</li>
+              <li class="list-group-item py-2"><strong>Free</strong> for Life</li>
+              <li class="list-group-item py-2"><strong>Public and Private</strong> API access</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 my-2">
+        <div class="card bg-light">
+          <div class="card-body">
+            <div class="card-title">
+              <h4 class="text-center">Pro</h4>
+            </div>
+            <div class="text-center">
+              <img class="mx-auto" height="100"" src="{% static 'polls/images/35.png' %}" alt="Pro">
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item py-2"><strong>10,000k</strong> monthly requests</li>
+              <li class="list-group-item py-2"><strong>9am-5pm</strong> technical support</li>
+              <li class="list-group-item py-2"><strong>Public and Private</strong> API access</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}

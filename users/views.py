@@ -45,6 +45,43 @@ def signup(request):
 	return render(request, 'users/signup.html', context)
 
 
+def contact_us(request):
+	if request.method != 'POST':
+		form = ContactForm()
+	else:
+		form = ContactForm(request.POST)
+
+		if form.is_valid():
+			contact_name = form.cleaned_data['contact_name']
+			contact_email = form.cleaned_data['contact_email']
+			subject = form.cleaned_data['subject']
+			form_content = form.cleaned_data['content']
+			email_context = {
+				'contact_name': contact_name,
+				'contact_email': contact_email,
+				'subject': subject,
+				'form_content': form_content,
+			}
+			template = get_template('users/contact_template.txt')
+			content = template.render(email_context)
+			email = EmailMessage(
+				'New Contact Form Submission',
+				content,
+				'Evotche <no-reply@evotche.com>',
+				['dollabills007@gmail.com',],
+				reply_to=[contact_email],
+			)
+			email.send(fail_silently=False)
+			return HttpResponseRedirect(reverse('users:contact_success'))
+
+	context = {'form': form}
+	return render(request, 'users/contact.html', context)
+
+
+def contact_success(request):
+	return render(request, 'users/contact_success.html')
+
+
 @login_required(login_url='/users/token')
 def show_ballot_page(request, ball_url):
 	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
@@ -136,47 +173,24 @@ def num_token(request):
 			ballot = token.cleaned_data['ballot_paper']
 			tokens = gen_token(num, 8)
 			created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
-			Token.objects.bulk_create([Token(user=i, ballot_paper=ballot, is_used=False)
-									 for i in created_tokens])
+			Token.objects.bulk_create([Token(user=i, ballot_paper=ballot, is_used=False) for i in created_tokens])
 
-			return HttpResponseRedirect(reverse('users:tokens_view'))
+			return HttpResponseRedirect(reverse('users:token', args=[ballot.ballot_url]))
 
 	context = {'numToken': numToken, 'token': token}
 	return render(request, 'users/num_token.html', context)
 
 
-def contact_us(request):
-	if request.method != 'POST':
-		form = ContactForm()
+def get_free_tokens(request, ball_url):
+	ballot = BallotPaper.objects.get(ballot_url=ball_url)
+	if (ballot.has_free_tokens == False) and (ballot.is_paid == False):
+		tokens = gen_token(50, 10)
+		created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
+		Token.objects.bulk_create([Token(user=i, ballot_paper=ballot, is_used=False) for i in created_tokens])
+		ballot.has_free_tokens = True
+		ballot.save()
 	else:
-		form = ContactForm(request.POST)
+		return render(request, 'users/free_tokens.html', {'ballot': ballot, 'not_eligible': 'Sorry, this ballot is not eligible for free tokens.'})
 
-		if form.is_valid():
-			contact_name = form.cleaned_data['contact_name']
-			contact_email = form.cleaned_data['contact_email']
-			subject = form.cleaned_data['subject']
-			form_content = form.cleaned_data['content']
-			email_context = {
-				'contact_name': contact_name,
-				'contact_email': contact_email,
-				'subject': subject,
-				'form_content': form_content,
-			}
-			template = get_template('users/contact_template.txt')
-			content = template.render(email_context)
-			email = EmailMessage(
-				'New Contact Form Submission',
-				content,
-				'Evotche <no-reply@evotche.com>',
-				['dollabills007@gmail.com',],
-				reply_to=[contact_email],
-			)
-			email.send(fail_silently=False)
-			return HttpResponseRedirect(reverse('users:contact_success'))
-
-	context = {'form': form}
-	return render(request, 'users/contact.html', context)
-
-
-def contact_success(request):
-	return render(request, 'users/contact_success.html')
+	context = {'ballot': ballot}
+	return render(request, 'users/free_tokens.html', context)

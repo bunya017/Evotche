@@ -181,6 +181,5 @@ def delete_choice(request, ch_id):
 	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
 
 
-
-
-
+def pricing(request):
+	return render(request, 'polls/pricing.html')
