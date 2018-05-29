@@ -18,7 +18,7 @@
   {% block title %}{% endblock title %}
 </title>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light my-bg-purple sticky-top">
   <a class="navbar-brand bg-faded offset-xl-1" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site logo"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -28,26 +28,31 @@
     <ul class="navbar-nav offset-lg-8 offset-1 mr-auto">
     {% if user.is_authenticated and user.has_usable_password %}
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'polls:ballot' %}">Ballots</a>
+        <a class="nav-link my-text-light" href="{% url 'polls:ballot' %}">Ballots</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'users:tokens_view' %}">Tokens</a>
+        <a class="nav-link my-text-light" href="{% url 'users:tokens_view' %}">Tokens</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'polls:results' %}">Results</a>
+        <a class="nav-link my-text-light" href="{% url 'polls:results' %}">Results</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'users:logout' %}">Log out</a>
+        <a class="nav-link my-text-light" href="{% url 'users:logout' %}">Log out</a>
       </li>
     {% else %}
+    <!--
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'users:signup' %}">Sign up</a>
+        <a class="nav-link my-text-light" href="{% url 'polls:pricing' %}">Pricing</a>
+      </li>
+    !-->
+      <li class="nav-item">
+        <a class="nav-link my-text-light" href="{% url 'users:contact_us' %}">Support</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'users:login' %}">Log in</a>
+        <a class="nav-link my-text-light" href="{% url 'users:login' %}">Log in</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link text-dark" href="{% url 'users:contact_us' %}">Support</a>
+        <a class="nav-link my-text-light btn btn-danger" href="{% url 'users:signup' %}">Sign up</a>
       </li>
     {% endif %}
     </ul>

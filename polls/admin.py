@@ -26,9 +26,9 @@ class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
 	fieldsets = [
 		(None, {'fields': ['ballot_name', 'ballot_url', 'created_by','is_photo_ballot',
-				 'start_date', 'start_time', 'stop_date', 'stop_time']})
+				 'open_date', 'close_date', 'is_not_open', 'is_open', 'is_closed']})
 	]
-	list_display = ['ballot_name', 'created_by']
+	list_display = ['ballot_name', 'created_by', 'is_open']
 
 
 admin.site.register(Category, CategoryAdmin)

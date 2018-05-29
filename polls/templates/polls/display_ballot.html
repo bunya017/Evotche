@@ -10,7 +10,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 mx-auto">
+      <div class="col-12 col-md-8 mx-auto">
         {% if error_message %}
           <div class="alert alert-danger text-center">
             {{ error_message }}
@@ -19,7 +19,7 @@
           </div>
         {% endif %}       
         <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
-        {% csrf_token %}
+          {% csrf_token %}
           <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
           {% for cat in display_ballot.category_set.all %}
           <h3 class="pt-3">{{ cat }}</h3>   
@@ -48,8 +48,8 @@
           {% if  user.is_authenticated and user.has_usable_password %}
             <div class="pt-3 pb-5">
               <p class="text-danger text-uppercase"><b>Note: This is a Preview Page.</b></p>
-              <h5>Voting opens on: {{ display_ballot.start_date }}, {{ display_ballot.start_time }}.</h5>
-              <h5>Voting closes on: {{ display_ballot.stop_date }}, {{ display_ballot.stop_time }}.</h5>
+              <p>Voting opens on: {{ display_ballot.open_date }}</p>
+              <p>Voting closes on: {{ display_ballot.close_date }}</p>
             </div>
           {% else %}
             <div class="mb-5 pt-5">

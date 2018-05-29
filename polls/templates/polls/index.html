@@ -7,141 +7,212 @@
 {% load extras %}
 
 <section id="introduction">
-  <div class="container">
-    <div class="row fill-viewport align-items-center"> 
-      <div class="col-12 col-md-8">
-        <h1>Evotche helps you create Simple and Secure voting campaigns.</h1>
-        <h4 class="pt-2">Creating online election campaigns just got easier.</p>
-        <a href="{% url 'users:signup' %}"><button class="btn btn-outline-dark" >Get Started</button></a>
-      </div>
+  <div id="jumbo" class="jumbotron jumbotron-fluid">
+    <div class="col-md-8 mx-auto text-center pb-5">
+      <h1 class="display-3 pb-3 my-text-light">Simple, Quick and Secure Election Campaigns.</h1>
+      <a href="{% url 'users:signup' %}"><button class="btn btn-danger"><h2>Get Started ></h2></button></a>
     </div>
   </div>
-</section>
-
-<section id="voter-token">
-  <div class="container">
+  <div id="tokenForms" class="container">
     <div class="row">
-      <div class="col-12 col-md-6 py-3 py-md-5">
-        <form method="post">
-          {% csrf_token %}
-          {{ token_form.management_form }}
-          <div class="form-group">
-            <h2 class="text-center">Are you here to vote?</h2>
-            {{ token_form.token|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
-          </div>
-          <button class="btn btn-outline-success col-12" type="submit">Proceed to Vote</button>
-        </form>
+      <div class="col-12 col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light text-center">
+          <form method="post">
+            {% csrf_token %}
+            {{ token_form.management_form }}
+            <div class="form-group">
+              <h2 class="text-center my-text-purple">Do you have a voter token?</h2>
+              {{ token_form.token|add_css:'class:form-control text-center col-md-6 mx-auto, placeholder:Enter a Voter Token.' }}
+            </div>
+            <button class="btn my-btn-purple col-md-5 mx-auto" type="submit">Proceed to Vote</button>
+          </form>
+        </div>
       </div>
-      <div class="col-12 col-md-6 py-3 py-md-5">
-        <form method="post">
-          {% csrf_token %}
-          {{ result_ckeck_form.management_form }}
-          <div class="form-group">
-            <h2 class="text-center">Check Election Results</h2>
-            {{ result_ckeck_form.check_result|add_css:'class:form-control text-center, placeholder:Enter a Voter Token.' }}
-          </div>
-          <button class="btn btn-outline-success col-12" type="submit">Check Results</button>
-        </form>
+      <div class="col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light text-center">
+          <form method="post">
+            {% csrf_token %}
+            {{ result_ckeck_form.management_form }}
+            <div class="form-group">
+              <h2 class="text-center my-text-purple">Check Election Results</h2>
+              {{ result_ckeck_form.check_result|add_css:'class:form-control text-center col-md-6 mx-auto, placeholder:Enter a Voter Token.' }}
+            </div>
+            <button class="btn my-btn-purple col-md-5 mx-auto" type="submit">Check Results</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="info-1" class="bg-light">
+<section id="info-1">
   <div class="container">
-    <div class="row py-5">
-      <div class="col-12 col-md-10">
-        <h2><strong class="text-info">Your Personal Electronic Voting Machine.</strong> Get your election campaigns up and running instantly.</h2>
+    <div class="row pb-3">
+      <div class="col-12 col-md-10 mx-auto">
+        <h2 class="text-center my-text-purple">FEATURES</h2>
+        <h4 class="text-center">Evotche helps you create an election capaign secured with voter token instantly.</h4>
       </div>
     </div>
     <div class="row pb-5">
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-3x mt-3 mx-4">&#xf017;</i>
-        <h4 class="text-center text-info">Save Yourself A Lot of Time</h4>
-        <p class="text-center pt-2">Create your election campaign in minutes with our simple user interface.</p>
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf0e7;</i>
+        <h4 class="text-center my-text-purple">Quick & Easy Setup</h4>
+        <p class="text-center">Create your election in minutes with our easy to use user interface.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-3x mt-3 mx-4">&#xf084;</i>
-        <h4 class="text-center text-info">Secured Voting</h4>
-        <p class="text-center pt-2">Each voter has a unique "Voter Token" and can only vote once.</p>
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf084;</i>
+        <h4 class="text-center my-text-purple">Secure Voting</h4>
+        <p class="text-center">Each voter has a unique "Voter Token" and can only vote once.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-3x mt-3 mx-4">&#xf085;</i>
-        <h4 class="text-center text-info">Complete Control</h4>
-        <p class="text-center pt-2">How many categories, how many choices, who gets to vote, it's all up to you.</p>
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf085;</i>
+        <h4 class="text-center my-text-purple">Complete Control</h4>
+        <p class="text-center">How many categories, how many choices, who gets to vote, it's all up to you.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-3x mt-3">&#xf0e0;</i>
-        <h4 class="text-center text-info">Reach More Voters</h4>
-        <p class="text-center pt-2">Provide optional email address for your voters to be reached.</p>
+        <i class="fa fa-3x mt-2 my-text-purple">&#xf0e0;</i>
+        <h4 class="text-center my-text-purple">Voter Reach</h4>
+        <p class="text-center">Provide optional phone number or email for your voters and we'll send them voter tokens.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto text-center">
-        <i class="fa fa-3x mt-3 mx-4">&#xf200;</i>
-        <h4 class="text-center text-info">Results Tabulation</h4>
-        <p class="text-center pt-2">Elections are automaically calaculated and presented beautifully.</p>
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf023;</i>
+        <h4 class="text-center my-text-purple">256-bit Encryption</h4>
+        <p class="text-center">All elections have SSL grade security with 256-bit encryption that keeps your elections and voter data safe.</p>
+      </div>
+      <div class="col-12 col-md-4 mx-auto text-center">
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf200;</i>
+        <h4 class="text-center my-text-purple">Results Tabulation</h4>
+        <p class="text-center">Elections are automaically calaculated and presented beautifully.</p>
+      </div>
+      <div class="col-12 col-md-4 mx-auto text-center">
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf10b;</i>
+        <h4 class="text-center my-text-purple">Mobile Ready</h4>
+        <p class="text-center">Elections are optimized for desktop and mobile devices. Voters can vote from a web browser on iOS or Android.</p>
+      </div>
+      <div class="col-12 col-md-4 mx-auto text-center">
+        <i class="fa fa-3x mt-2 mx-4 my-text-purple">&#xf1cd;</i>
+        <h4 class="text-center my-text-purple">Amazing Support</h4>
+        <p class="text-center">Have a question? Need help? We are one call/email away.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="how-it-works">
+<section id="how-it-works" class="my-bg-light">
   <div class="container">
     <div class="row pt-5 align-items-center">
       <div class="col-12 col-md-8 mx-auto text-center">
-        <h1 class="text-uppercase">How it works</h1>
+        <h2 class="text-uppercase my-text-purple">How it works</h2>
         <p class="lead pt-3">Our platform gives you complete control over your ballot creation process. How many categories, how many choices, who gets to vote, its all up to you.
       </div>
     </div>
-    <div class="row py-5">
+    <div class="row pb-5">
       <div class="col-12 col-md-4 mx-auto mt-2 mt-md-0 text-center">
-        <i class="fa fa-3x fa-plus my-3 mx-4"></i>
-        <h3>Signup and Create a Ballot Box.</h3>
+        <i class="fa fa-3x my-3 mx-4 my-text-purple">&#xf067;</i>
+        <h3 class="my-text-purple">Sign up</h3>
+        <p>Sign up and create an election campaign within minutes.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto mt-2 mt-md-0 text-center">
-        <i class="fa fa-3x fa-share-alt my-3 mx-4"></i>
-        <h3>Share voter token with voters.</h3>
+        <i class="fa fa-3x my-3 mx-4 my-text-purple">&#xf0e0;</i>
+        <h3 class="my-text-purple">Share Voter token</h3>
+        <p>Distribute voter tokens or we help you send it to voters via text or email.</p>
       </div>
       <div class="col-12 col-md-4 mx-auto mt-2 mt-md-0 text-center">
-        <i class="fa fa-3x fa-bar-chart my-3 mx-4"></i>
-        <h3>Get Election Results in Real-Time</h3>
+        <i class="fa fa-3x my-3 mx-4 my-text-purple">&#xf080;</i>
+        <h3 class="my-text-purple">Get Results in Real-Time</h3>
+        <p>Watch and get results in real-time as votes are being cast.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="footer" class="bg-light">
-  <div class="container">
-    <div class="row pt-5">
-      <div class="col-12 col-md-8 mx-auto text-center">
-        <span>
-          <img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site Logo">
-        </span>
+<section id="pricing">
+  <div class="jumbotron jumbotron-fluid my-bg-purple">
+    <div class="col-md-8 mx-auto text-center pb-5">
+      <h2 class="my-text-light">PRICING</h2>
+      <p class="lead my-text-light">Our pricing is based on the number of voter tokens you want. It is so flexible you only pay for what you need.</p>
+    </div>
+  </div>
+  <div id="tokenForms" class="container">
+    <div class="row">
+      <div class="col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light">
+          <h3 class="text-center my-text-purple">Free</h3>
+          <div class="text-center">
+            <img class="mx-auto" height="100"" src="{% static 'polls/images/0.png' %}" alt="Basic">
+          </div>
+          <ul class="list-group list-group-flush pb-4">
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> Upto <strong>30 Voter Tokens</strong></li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> No recycle of unused voter tokens</li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> Upto 3 free ballot boxes at a time</li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> Reports are kept for 7 days</li>
+          </ul>
+          <div class="text-center">
+            <a href="{% url 'users:signup' %}"><button class="btn btn-danger"><h4>Sign up</h4></button></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light">
+            <h3 class="text-center my-text-purple">Pro</h3>
+          <div class="text-center">
+            <img class="mx-auto" height="100"" src="{% static 'polls/images/35.png' %}" alt="Pro">
+          </div>
+          <ul class="list-group list-group-flush pb-4">
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> voter token purchase</li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> Unused voter tokens can be assigned to another ballot box</li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> Pro ballot boxes</li>
+            <li class="list-group-item py-2"><i class="fa text-success">&#xf058;</i> Reports are kept for 30 days</li>
+          </ul>
+          <div class="text-center">
+            <a href="{% url 'users:signup' %}"><button class="btn btn-danger"><h4>Sign up</h4></button></a>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 text-center pb-5 mx-auto">
+        <h1 class="text-center my-text-purple">Get started on Evotche today.</h1>
+        <p class=" lead text-center">Setup is simple, no stress, no fuss.</p>
+        <div class="text-center">
+          <a href="{% url 'users:signup' %}"><button class="btn btn-danger">Get Started</button></a>
+        </div>
+      </div>
+      </div>
+  </div>
+</section>
+
+<section id="footer" class="my-bg-purple">
+  <div class="container">
     <div class="row">
       <div class="col-12 col-md-8 mx-auto text-center">
         <a href="https://twitter.com/bunyaminu_" target="_blank">
-          <i class="fa fa-2x fa-twitter my-3 mx-2 text-dark"></i>
+          <i class="fa fa-2x my-3 mx-1 my-text-light">&#xf099;</i>
         </a>
         <a href="https://facebook.com/evotche" target="_blank">
-          <i class="fa fa-2x fa-facebook my-3 mx-2 text-dark"></i>
+          <i class="fa fa-2x my-3 mx-1 my-text-light"> &#xf09a;</i>
         </a>
-        <a href="https://twitter.com/bunyaminu_" target="_blank">
-          <i class="fa fa-2x fa-instagram my-3 mx-2 text-dark"></i>
-        </a>
-        <a href="https://twitter.com/bunyaminu_" target="_blank">
-          <i class="fa fa-2x fa-github my-3 mx-2 text-dark"></i>
+        <a href="https://github.com/bunya017" target="_blank">
+          <i class="fa fa-2x my-3 mx-1 my-text-light"> &#xf09b;</i>
         </a>
       </div>
     </div>
-    <div class="row pb-5">
-      <div class="col-12 col-md-8 mx-auto text-center">
-        <a href="mailto:dollabills007@gmail.com">dollabills007@gmail.com</a>
-        <p>+234 (0) 811 2210 423</p>
+    <div class="row p-2">
+      <div class="mx-auto">
+        <p class="my-text-light text-center"><a class="my-text-light" href="">About Us</a> | <a class="my-text-light" href="">Contact Us</a> | <a class="my-text-light" href="">Terms of Service</a> | <a class="my-text-light" href="">Privacy Policy</a></p>
+        <p class="my-text-light text-center">© 2018 <a class="my-text-light" href="{% url 'polls:index' %}">Evotche</a>.  All rights reserved.</p>
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  
+</style>
 
 {% endblock content %}

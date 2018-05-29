@@ -24,8 +24,8 @@
             <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
           </li>
         </ul>
-        <p>Opening: {{ ballot.start_date }}, {{ ballot.start_time|time:'h:i A' }}</p>
-        <p>Closing: {{ ballot.stop_date }}, {{ ballot.stop_time|time:'h:i A' }}</p>
+        <p>Opening: {{ ballot.open_date }}</p>
+        <p>Closing: {{ ballot.close_date }}</p>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
             {% endfor %}
             </ul>
             <div class="text-right pt-1">
-              <a href="{% url 'polls:delete_caty' category.id %}">
+              <a href="{% url 'polls:delete_caty' category.id %}" onclick="return confirm('Are you sure you want to delete this category?')">
               <i class="fa fa-2x text-danger">&#xf014;</i>
             </a>
             </div>

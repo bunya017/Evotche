@@ -17,11 +17,12 @@ class BallotPaper(models.Model):
 	is_photo_ballot = models.BooleanField(default=False)
 	is_paid = models.BooleanField(default=False)
 	has_free_tokens = models.BooleanField(default=False)
-	start_date = models.DateField(blank=True, null=True)
-	start_time = models.TimeField(blank=True, null=True)
-	stop_date = models.DateField(blank=True, null=True)
-	stop_time = models.TimeField(blank=True, null=True)
+	open_date = models.DateTimeField(blank=True, null=True)
+	close_date = models.DateTimeField(blank=True, null=True)
 	show_results_to_public = models.BooleanField(default=False)
+	is_not_open = models.BooleanField(default=True) # When ballot box is yet to be open for voting.
+	is_open = models.BooleanField(default=False)    # When ballot box is open for voting.
+	is_closed = models.BooleanField(default=False)  # When ballot box is closed for voting.
 
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
@@ -34,8 +35,6 @@ class BallotPaper(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		return 'users:show_ballot_page', (self.ballot_url)
-
-	#def start_voting(self):
 	
 	def __str__(self):
 		return self.ballot_name

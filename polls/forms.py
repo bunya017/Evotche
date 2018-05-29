@@ -9,6 +9,11 @@ from django.contrib.postgres.forms import DateTimeRangeField
 
 
 class BallotForm(forms.ModelForm):
+	start_date = forms.DateField(required=True)
+	start_time = forms.TimeField(required=True)
+	stop_date = forms.DateField(required=True)
+	stop_time = forms.TimeField(required=True)
+
 	def __init__(self, *args, **kwargs):
 		super(BallotForm, self).__init__(*args, **kwargs)
 		self.fields['start_date'].widget = forms.TextInput(attrs={'type': 'date'})

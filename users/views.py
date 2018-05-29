@@ -130,12 +130,19 @@ def token_login(request):
 			else:
 				auth_user = User.objects.get(username=user_name)
 				if auth_user.token.is_used == False:
-					login(request, auth_user)
-					ballot = auth_user.token.ballot_paper
-					return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
-				else: 
+					if auth_user.token.ballot_paper.is_not_open == True:
+						return render(request, 'users/token_login.html', {'form': form, 
+							'not_open': 'Sorry, this ballot box is not open for voting yet.'})
+					elif auth_user.token.ballot_paper.is_closed == True:
+						return render(request, 'users/token_login.html', {'form': form, 
+							'closed': 'Sorry, this ballot box is closed for voting.'})
+					else: 
+						login(request, auth_user)
+						ballot = auth_user.token.ballot_paper
+						return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
+				else:
 					return render(request, 'users/token_login.html', {'form': form, 
-					'token_is_used': 'This token has been used.'})
+						'token_is_used': 'This token has been used.'})
 
 	context = {'form': form}
 	return render(request, 'users/token_login.html', context)
@@ -191,37 +198,8 @@ def get_free_tokens(request, ball_url):
 	else:
 		return render(request, 'users/free_tokens.html', {'ballot': ballot, 'not_eligible': 'Sorry, this ballot is not eligible for free tokens.'})
 
-<<<<<<< HEAD
-		if form.is_valid():
-			contact_name = form.cleaned_data['contact_name']
-			contact_email = form.cleaned_data['contact_email']
-			subject = form.cleaned_data['subject']
-			form_content = form.cleaned_data['content']
-			email_context = {
-				'contact_name': contact_name,
-				'contact_email': contact_email,
-				'subject': subject,
-				'form_content': form_content,
-			}
-			template = get_template('users/contact_template.txt')
-			content = template.render(email_context)
-			email = EmailMessage(
-				'New Contact Form Submission',
-				content,
-				'Evotche <no-reply@evotche.com>',
-				['dollabills007@gmail.com',],
-				reply_to=[contact_email],
-			)
-			email.send(fail_silently=False)
-			return HttpResponseRedirect(reverse('users:contact_success'))
-
-	context = {'form': form}
-	return render(request, 'users/contact.html', context)
-
-
-def contact_success(request):
-	return render(request, 'users/contact_success.html')
-
+	context = {'ballot': ballot}
+	return render(request, 'users/free_tokens.html', context)
 
 def check_results(request):
 	if request.method != 'POST':
@@ -247,7 +225,3 @@ def check_results(request):
 
 	context = {'form': form}
 	return render(request, 'users/check_results.html', context)
-=======
-	context = {'ballot': ballot}
-	return render(request, 'users/free_tokens.html', context)
->>>>>>> token_pricing

@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import login
 from PIL import Image
+from datetime import datetime
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
 from users.forms import TokenUserForm, ResultCheckForm
@@ -40,9 +41,16 @@ def index(request):
 			else:
 				auth_user = User.objects.get(username=user_name)
 				if auth_user.token.is_used == False:
-					login(request, auth_user)
-					ballot = auth_user.token.ballot_paper
-					return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
+					if auth_user.token.ballot_paper.is_not_open == True:
+						messages.success(request, 'Sorry, this ballot box is not open for voting yet.')
+						return HttpResponseRedirect(reverse('users:token_login'))
+					elif auth_user.token.ballot_paper.is_closed == True:
+						messages.success(request, 'Sorry, this ballot box is closed for voting.')
+						return HttpResponseRedirect(reverse('users:token_login'))
+					else:
+						login(request, auth_user)
+						ballot = auth_user.token.ballot_paper
+						return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 				else:
 					messages.success(request, 'This token has been used.')
 					return HttpResponseRedirect(reverse('users:token_login'))
@@ -111,11 +119,19 @@ def vote(request, ballot_url):
 				'error_message': 'Please select a choice across all categories.'
 				})
 		else:
-			selected_choice.votes += 1
-			selected_choice.save()
-			user.token.is_used = True
-			user.token.save()
-			logout(request)
+			try:
+				Token.objects.get(user=user)
+			except (Token.DoesNotExist):
+				return render(request, 'polls/display_ballot.html', {
+					'display_ballot': display_ballot,
+					'error_message': 'Sorry, you do not have authorization to vote.'
+					})
+			else:
+				selected_choice.votes += 1
+				selected_choice.save()
+				user.token.is_used = True
+				user.token.save()
+				logout(request)
 	
 	return HttpResponseRedirect(reverse('polls:vote_success'))
 
@@ -138,6 +154,7 @@ def ballot_results(request, ballot_url):
 	return render(request, 'polls/ballot_result.html', context)
 
 
+@login_required
 def show_results_public(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	if ballot.show_results_to_public == False:
@@ -150,7 +167,6 @@ def show_results_public(request, ballot_url):
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
-
 @login_required
 def add_new_ballot(request):
 	if request.method != 'POST':
@@ -158,10 +174,16 @@ def add_new_ballot(request):
 	else:
 		form = BallotForm(request.POST)
 		if form.is_valid():
+			start_date= form.cleaned_data['start_date']
+			start_time= form.cleaned_data['start_time']
+			stop_date= form.cleaned_data['stop_date']
+			stop_time= form.cleaned_data['stop_time']
 			try:
 				new_ballot = form.save(commit=False)
 				new_ballot.created_by = request.user
 				new_ballot.ballot_url = slugify(request.user.username +' '+ new_ballot.ballot_name)
+				new_ballot.open_date = datetime.combine(stop_date, start_time)
+				new_ballot.close_date = datetime.combine(stop_date, stop_time)
 				new_ballot.save()
 			except (IntegrityError):
 				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
@@ -246,3 +268,8 @@ def delete_choice(request, ch_id):
 
 def pricing(request):
 	return render(request, 'polls/pricing.html')
+
+
+def purchase_token(request, ballot_url):
+	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
+	return

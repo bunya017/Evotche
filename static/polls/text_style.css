@@ -1,11 +1,35 @@
 .fill-viewport {
 	min-height: calc(100vh - 75px)
 }
-#introduction {
-	background: linear-gradient(rgba(255,255,255 ,1), rgba(0,0,0,.1)), url('images/bg.jpg') no-repeat center center;
-	-webkit-background-size: cover;
- 	-moz-background-size: cover;
- 	-o-background-size: cover;
- 	image-rendering: -webkit-optimize-contrast;
- 	background-size: cover;
+
+#jumbo {
+  background: linear-gradient(rgba(130, 76, 167 ,0.6),  rgba(0,0,0,0.1)), url('static/polls/images/jumbo.jpg') 0% 0%/cover;
+}
+
+.my-text-purple {
+  color: #824ca7 !important;
+}
+
+.my-text-light {
+  color: #f4f3f4 !important;
+}
+
+.my-bg-purple {
+  background-color: #824ca7 !important;
+}
+
+.my-bg-light {
+  background-color: #f4f3f4 !important;
+}
+
+.my-btn-purple {
+  color: #fff;
+  background-color: #824ca7;
+  border-color: #824ca7;
+}
+
+#tokenForms {
+  position: relative;
+  bottom: 110px;
+  z-index: 500;
 }
