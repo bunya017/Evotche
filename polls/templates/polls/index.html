@@ -9,7 +9,7 @@
 <section id="introduction">
   <div id="jumbo" class="jumbotron jumbotron-fluid">
     <div class="col-md-8 mx-auto text-center pb-5">
-      <h1 class="display-3 pb-3 my-text-light">Simple, Quick and Secure Election Campaigns.</h1>
+      <h1 class="my-text-light py-5 py-md-3">Simple, Quick and Secure Election Campaigns.</h1>
       <a href="{% url 'users:signup' %}"><button class="btn btn-danger"><h2>Get Started ></h2></button></a>
     </div>
   </div>
@@ -21,7 +21,7 @@
             {% csrf_token %}
             {{ token_form.management_form }}
             <div class="form-group">
-              <h2 class="text-center my-text-purple">Do you have a voter token?</h2>
+              <h2 class="text-center my-text-purple">Have a voter token?</h2>
               {{ token_form.token|add_css:'class:form-control text-center col-md-6 mx-auto, placeholder:Enter a Voter Token.' }}
             </div>
             <button class="btn my-btn-purple col-md-5 mx-auto" type="submit">Proceed to Vote</button>
