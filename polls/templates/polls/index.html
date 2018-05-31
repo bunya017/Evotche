@@ -34,7 +34,7 @@
             {% csrf_token %}
             {{ result_ckeck_form.management_form }}
             <div class="form-group">
-              <h2 class="text-center my-text-purple">Check Election Results</h2>
+              <h2 class="text-center my-text-purple">Check Results</h2>
               {{ result_ckeck_form.check_result|add_css:'class:form-control text-center col-md-6 mx-auto, placeholder:Enter a Voter Token.' }}
             </div>
             <button class="btn my-btn-purple col-md-5 mx-auto" type="submit">Check Results</button>
