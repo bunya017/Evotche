@@ -41,3 +41,7 @@
 @media (min-width: 1200px) {
   #jumbo h1 {font-size: 4rem;}
 }
+
+@media (min-width: 768px) {
+  #navbarSupportedContent #signup {background-color: #dc3545}
+}
