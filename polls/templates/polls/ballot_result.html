@@ -1,16 +1,16 @@
-{% extends "polls/base.html" %}
+{% extends base_template %}
 
 {% block title %}{{ ballot.ballot_name|title }} Results{% endblock title %}
 
 {% block content %}
 {% load extras %}
 
-<section>
+
   <div class="container">
-    <h2 class="py-3">{{ ballot.ballot_name|title }} Results</h2>
+    <h2 class="py- my-text-purple">{{ ballot.ballot_name|title }} Results</h2>
     <div class="row">
       {% if caty_list|length > 0 %}
-      <div class="col-12 col-md-10 mx-auto mt-3">
+      <div class="col-12 col-md-10 bg-white mx-auto mt-3 pt-3">
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
@@ -33,7 +33,7 @@
                     <td>{{ choice.choice|title }}</td>
                     <td>{{ choice.votes }}</td>
                     {% if winner == choice.votes %}
-                      <td class="text-center"><i class="fa">&#xf00c;</i></td>
+                      <td class="text-center"><i class="fa my-text-purple">&#xf00c;</i></td>
                     {% else %}
                       <td></td>
                     {% endif %}
@@ -51,6 +51,6 @@
       {% endif %}
     </div>
   </div>
-</section>
+
 
 {% endblock content %}

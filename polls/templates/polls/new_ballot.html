@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/ubase.html" %}
 
 {% block title %}New Ballot{% endblock title %}
 
@@ -8,10 +8,10 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-6 mx-auto py-5">
-      <div class="card border-dark">
+      <div class="card border-0">
         <div class="card-body">
           <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
-          <h4 class="pt-4">New Box:</h4>
+          <h4 class="pt-4 my-text-purple">New Box:</h4>
           <form action="{% url 'polls:add_new_ballot' %}" method="post">
             {% if error_message %}
             <div class="alert alert-danger text-center">

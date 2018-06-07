@@ -1,6 +1,10 @@
 .fill-viewport {
 	min-height: calc(100vh - 75px)
 }
+nav {
+  min-height: 90px;
+  position: sticky;
+}
 
 #jumbo {
   background: linear-gradient(rgba(130, 76, 167 ,0.6),  rgba(0,0,0,0.1)), url('images/jumbo.jpg') 0% 0%/cover;

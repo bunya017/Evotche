@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/ubase.html" %}
 {% load extras %}
 {% block title %}{{ ballot.ballot_name|title }} Tokens{% endblock title %}
 
@@ -9,8 +9,8 @@
     <div class="row my-3">
       {% if token_list %}
       <div class="col-lg-6 mx-auto">
-        <h2 class="text-center py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
-        <div class="card card-default card-body">
+        <h2 class="my-text-purple py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
+        <div class="card card-default card-body border-0">
           <!--Nav Tabs-->
           <ul id="tabsToken" class="nav nav-tabs nav-justified">
             <li class="nav-item">

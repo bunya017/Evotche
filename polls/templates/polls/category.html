@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/ubase.html" %}
 
 {% block title %}{{ ballot.ballot_name|title }}{% endblock title %}
 
@@ -6,11 +6,11 @@
 {% block content %}
  
 <section>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-6 my-3 ml-3 ml-sm-0">
-        <h1 class="text-dark py-3">{{ ballot.ballot_name|title }}</h1>
-        <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
+      <div class="col-md-6 my-3 ml-3">
+        <h1 class="my-text-purple py-3">{{ ballot.ballot_name|title }}</h1>
+        <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
         <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-inline text-right pt-3">
           <li class="list-inline-item">
@@ -31,11 +31,11 @@
 
     <div class="row mb-5">
       {% for category in ballot.category_set.all %}
-      <div class="col-md-6 col-lg-4 my-2">
-        <div class="card">
+      <div class="col-md-4 my-2">
+        <div class="card border-0">
           <div class="card-body">
             <div class="card-title">
-              <a class="text-dark" href="{% url 'polls:choice_view' category.id %}">
+              <a class="my-text-purple" href="{% url 'polls:choice_view' category.id %}">
                 <h4 class="text-center">{{ category.category_name|upper }}</h4>
               </a>
             </div>

@@ -3,13 +3,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 {% load static %}
-<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'polls/bootstrap/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'polls/font-awesome/css/font-awesome.css' %}">
 <link rel="stylesheet" href="{% static 'polls/text_style.css' %}">
-<link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
       
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.css" 
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 
 <link rel="icon" type="image/png" href="{% static 'polls/images/favicon.png' %}">
 
@@ -18,15 +18,24 @@
   {% block title %}{% endblock title %}
 </title>
 
-<nav class="navbar navbar-expand-md navbar-light my-bg-purple sticky-top">
-  <a class="navbar-brand bg-faded offset-xl-1" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="45" alt="Site logo"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<nav class="navbar navbar-expand-lg navbar-dark my-bg-purple sticky-top">
+  <a class="navbar-brand bg-faded pl-2" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="50" alt="Site logo"></a>
+
+  {% if user.is_authenticated and user.has_usable_password %}
+    <button class="navbar-toggler" type="button"  id="menu-toggle"">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  {% else %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  {% endif %}
+  
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav offset-md-8 offset-1 mr-auto">
     {% if user.is_authenticated and user.has_usable_password %}
+    <!--
       <li class="nav-item">
         <a class="nav-link my-text-light" href="{% url 'polls:ballot' %}">Ballots</a>
       </li>
@@ -39,6 +48,7 @@
       <li class="nav-item">
         <a class="nav-link my-text-light" href="{% url 'users:logout' %}">Log out</a>
       </li>
+      !-->
     {% else %}
     <!--
       <li class="nav-item">
@@ -64,9 +74,9 @@
 {% endblock content %}
 
 
-<script src="{% static 'bootstrap/js/jquery.js' %}"></script>
-<script src="{% static 'bootstrap/js/popper.js' %}"></script>
-<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'polls/bootstrap/js/jquery.js' %}"></script>
+<script src="{% static 'polls/bootstrap/js/popper.js' %}"></script>
+<script src="{% static 'polls/bootstrap/js/bootstrap.min.js' %}"></script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

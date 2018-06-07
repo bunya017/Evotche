@@ -74,12 +74,23 @@ def contact_us(request):
 			email.send(fail_silently=False)
 			return HttpResponseRedirect(reverse('users:contact_success'))
 
-	context = {'form': form}
+	user = request.user 
+	if user.is_authenticated and user.has_usable_password:
+		base_template = 'polls/ubase.html'
+	else:
+		base_template = 'polls/base.html'
+	context = {'form': form, 'base_template': base_template}
 	return render(request, 'users/contact.html', context)
 
 
 def contact_success(request):
-	return render(request, 'users/contact_success.html')
+	user = request.user 
+	if user.is_authenticated and user.has_usable_password:
+		base_template = 'polls/ubase.html'
+	else:
+		base_template = 'polls/base.html'
+	context = {'base_template': base_template}
+	return render(request, 'users/contact_success.html', context,)
 
 
 @login_required(login_url='/users/token')

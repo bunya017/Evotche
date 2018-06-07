@@ -1,4 +1,4 @@
-{% extends "polls/base.html" %}
+{% extends "polls/ubase.html" %}
 
 {% block title %}New Choice{% endblock title %}
 
@@ -11,10 +11,10 @@
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-6 mx-auto py-5">
-        <div class="card border-dark">
+        <div class="card border-0">
           <div class="card-body">
             <a href="{% url 'polls:choice_view' category.id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
-            <h4 class="pt-4 pb-2">New Choice:</h4>
+            <h4 class="pt-4 pb-2 my-text-purple">New Choice:</h4>
             {% for error in form.non_field_errors %}
             <div class="alert alert-danger text-center" role="alert">
               {{ error }}

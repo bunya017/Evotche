@@ -1,0 +1,51 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/bootstrap/css/bootstrap.css' %}">
+<link rel="stylesheet" href="{% static 'polls/font-awesome/css/font-awesome.css' %}">
+<link rel="stylesheet" href="{% static 'polls/text_style.css' %}">
+<link rel="stylesheet" href="{% static 'polls/ubase.css' %}">
+
+<body>
+  <nav class="navbar navbar-dark my-bg-purple sticky-top">
+    <a class="navbar-brand bg-faded pl-2" href="{% url 'polls:index' %}"><img src="{% static 'polls/images/logo.png' %}" height="50" alt="Site logo"></a>
+      <button class="navbar-toggler" type="button" id="menu-toggle">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  </nav>
+
+  <div id="sidenav">
+    <ul class="list-unstyled">
+      <li ><a href="{% url 'polls:ballot' %}" class="text-dark active"><i class="fa pr-2">&#xf187;</i> Ballots</a></li>
+      <li><a href="{% url 'users:tokens_view' %}" class="text-dark"><i class="fa pr-2">&#xf084;</i> Tokens</a></li>
+      <li><a href="{% url 'polls:results' %}" class="text-dark"><i class="fa pr-2">&#xf0cb;</i> Results</a></li>
+      <li><a href="{% url 'users:contact_us' %}" class="text-dark"><i class="fa pr-2">&#xf1cd;</i> Support</a></li>
+      <li><a href="{% url 'users:logout' %}" class="text-dark"><i class="fa pr-2">&#xf011;</i> Logout</a></li>  
+    </ul>
+  </div>
+  <div id="content">
+    {% block content %}
+    {% endblock content %}
+  </div>
+
+<script src="{% static 'polls/bootstrap/js/jquery.js' %}"></script>
+<script src="{% static 'polls/bootstrap/js/popper.js' %}"></script>
+<script src="{% static 'polls/bootstrap/js/bootstrap.min.js' %}"></script>
+  <script>
+    $("#menu-toggle").click( function (e){
+      e.preventDefault();
+      $("#sidenav").toggleClass("toggled")
+    });
+
+    $(document).ready(function () {
+        var url = window.location;
+    // Will only work if string in href matches with location
+        $('li a[href="' + url + '"]').parent().addClass('active');
+
+    // Will also work for relative and absolute hrefs
+        $('li a').filter(function () {
+            return this.href == url;
+        }).parent().addClass('active').parent().parent().addClass('active');
+    });
+  </script>
+
+</body>

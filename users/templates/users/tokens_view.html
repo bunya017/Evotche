@@ -1,10 +1,10 @@
-{% extends "polls/base.html" %}
+{% extends "polls/ubase.html" %}
 {% block title %}Tokens{% endblock title %}
 {% block content %}
 
 <section id="tokens">
   <div class="container">
-    <h1 class="py-3">Ballot Tokens</h1>
+    <h1 class="py-3 my-text-purple">Ballot Tokens</h1>
     <div class="row mb-5">
       <!--
       <div class="col-sm-6 col-lg-4 my-2">
@@ -23,13 +23,13 @@
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-lg-4 my-2">
-          <div class="card" style="height: 12rem;">
+          <div class="card border-0" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'users:my_token' ballot.ballot_url %}">
                 <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>
               </a>
               <div class="text-center">
-                <i class="fa fa-5x">&#xf084;</i>
+                <i class="fa fa-5x my-text-purple">&#xf084;</i>
               </div>
             </div>
           </div>

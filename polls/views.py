@@ -22,6 +22,9 @@ from users.models import Token
 
 
 
+def base(request):
+	return render(request, 'polls/user_base.html')
+
 def index(request):
 	if request.user.is_authenticated() and request.user.has_usable_password():
 		return HttpResponseRedirect(reverse('polls:ballot'))
@@ -150,7 +153,12 @@ def results(request):
 def ballot_results(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=ballot)
-	context = {'caty_list': caty_list, 'ballot': ballot}
+	user = request.user 
+	if user.is_authenticated and user.has_usable_password:
+		base_template = 'polls/ubase.html'
+	else:
+		base_template = 'polls/base.html'
+	context = {'caty_list': caty_list, 'ballot': ballot, 'base_template': base_template}
 	return render(request, 'polls/ballot_result.html', context)
 
 
