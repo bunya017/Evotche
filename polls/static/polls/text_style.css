@@ -38,6 +38,12 @@ nav {
   z-index: 500;
 }
 
+.divider {
+  height: 2px;
+  overflow: hidden;
+  background-color: #824ca7;
+}
+
 @media (min-width: 1080px) {
   #jumbo h1 {font-size: 3rem;}
 }

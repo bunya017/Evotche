@@ -7,45 +7,45 @@
 {% load extras %}
 
 <section id="pricing">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-6 mx-auto text-center my-4">
-        <h1>PRICING</h1>
-        <h3>Our pricing is based on the number of your potential voters.</h3>
-      </div>
+  <div class="jumbotron jumbotron-fluid my-bg-purple">
+    <div class="col-md-8 mx-auto text-center pb-3">
+      <h2 class="my-text-light">PRICING</h2>
+      <p class="lead my-text-light">Our pricing is based on the number of voter tokens you want. It is so flexible you only pay for what you need.</p>
     </div>
-    <div class="row justify-content-lg-center">
-      <div class="col-md-6 col-lg-4 my-2">
-        <div class="card bg-light">
-          <div class="card-body">
-            <div class="card-title">
-              <h4 class="text-center">Basic</h4>
-            </div>
-            <div class="text-center">
-              <img class="mx-auto" height="100"" src="{% static 'polls/images/0.png' %}" alt="Basic">
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item py-2"><strong>50 Tokens</strong> per Ballot Box</li>
-              <li class="list-group-item py-2"><strong>Free</strong> for Life</li>
-              <li class="list-group-item py-2"><strong>Public and Private</strong> API access</li>
-            </ul>
+  </div>
+  <div id="tokenForms" class="container">
+    <div class="row">
+      <div class="col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light">
+          <div class="row align-items-baseline py-3">
+            <div class="col-6"><h1 class="ml-3 my-text-purple">Free</h1></div>
+            <div class="col-6"><img align="right" height="80"" src="{% static 'polls/images/0.png' %}" alt="Basic"></div>
+          </div>
+          <ul class="list-group list-group-flush py-3">
+            <li class="list-group-item py-2 my-bg-light border-0"><i class="fa text-success">&#xf058;</i> Upto <strong>30 Voter Tokens</strong></li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> No recycle of unused voter tokens</li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Upto 3 free ballot boxes at a time</li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Reports are kept for 7 days</li>
+          </ul>
+          <div class="ml-4">
+            <a href="{% url 'users:signup' %}"><button class="btn my-bg-purple my-text-light"><h4>Sign up</h4></button></a>
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4 my-2">
-        <div class="card bg-light">
-          <div class="card-body">
-            <div class="card-title">
-              <h4 class="text-center">Pro</h4>
-            </div>
-            <div class="text-center">
-              <img class="mx-auto" height="100"" src="{% static 'polls/images/35.png' %}" alt="Pro">
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item py-2"><strong>10,000k</strong> monthly requests</li>
-              <li class="list-group-item py-2"><strong>9am-5pm</strong> technical support</li>
-              <li class="list-group-item py-2"><strong>Public and Private</strong> API access</li>
-            </ul>
+      <div class="col-md-6 my-2">
+        <div class="card card-body border-0 my-bg-light">
+          <div class="row align-items-baseline py-3">
+            <div class="col-6"><h1 class="ml-3 my-text-purple">Pro</h1></div>
+            <div class="col-6"><img align="right" height="80"" src="{% static 'polls/images/35.png' %}" alt="Basic"></div>
+          </div>
+          <ul class="list-group list-group-flush py-3">
+            <li class="list-group-item py-2 my-bg-light border-0"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> voter token purchase</li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Unused voter tokens can be recycled</li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> Pro ballot boxes</li>
+            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Reports are kept for 30 days</li>
+          </ul>
+          <div class="ml-4">
+            <a href="{% url 'users:signup' %}"><button class="btn my-bg-purple my-text-light"><h4>Sign up</h4></button></a>
           </div>
         </div>
       </div>

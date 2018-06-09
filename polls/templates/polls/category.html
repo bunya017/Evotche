@@ -7,11 +7,12 @@
  
 <section>
   <div class="container-fluid">
+      <h1 class="my-text-purple pt-3">{{ ballot.ballot_name|title }}</h1>
+      <div class="divider mb-4"></div>
     <div class="row">
       <div class="col-lg-6 my-3 ml-3">
-        <h1 class="my-text-purple py-3">{{ ballot.ballot_name|title }}</h1>
         <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
-        <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
+        <a class="my-text-purple float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-inline text-right pt-3">
           <li class="list-inline-item">
             {% if ballot.show_results_to_public is False %}
