@@ -7,17 +7,11 @@
 <link rel="stylesheet" href="{% static 'polls/font-awesome/css/font-awesome.css' %}">
 <link rel="stylesheet" href="{% static 'polls/text_style.css' %}">
 <link rel="stylesheet" href="{% static 'polls/ubase.css' %}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.css" 
-  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-
 <link rel="icon" type="image/png" href="{% static 'polls/images/favicon.png' %}">
-
   
 <title>
   {% block title %}{% endblock title %}
 </title>
-
 
 <body>
   <nav class="navbar navbar-dark my-bg-purple sticky-top">
@@ -26,7 +20,6 @@
         <span class="navbar-toggler-icon"></span>
       </button>
   </nav>
-
   <div id="sidenav">
     <ul class="list-unstyled">
       <li ><a href="{% url 'polls:ballot' %}" class="text-dark active"><i class="fa pr-2">&#xf187;</i> Ballots</a></li>
