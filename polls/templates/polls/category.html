@@ -8,7 +8,7 @@
 <section>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-6 my-3 ml-3">
+      <div class="col-lg-6 my-3 ml-3">
         <h1 class="my-text-purple py-3">{{ ballot.ballot_name|title }}</h1>
         <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
         <a class="text-dark float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
@@ -31,7 +31,7 @@
 
     <div class="row mb-5">
       {% for category in ballot.category_set.all %}
-      <div class="col-md-4 my-2">
+      <div class="col-sm-6 col-xl-4 my-2">
         <div class="card border-0">
           <div class="card-body">
             <div class="card-title">

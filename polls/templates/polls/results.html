@@ -9,7 +9,7 @@
     <div class="row mb-5">
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
-        <div class="col-sm-6 col-lg-4 my-2">
+        <div class="col-sm-6 col-xl-3 my-2">
           <div class="card border-0" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'polls:ballot_results' ballot.ballot_url %}">
@@ -23,7 +23,7 @@
         </div>
         {% endfor %}
       {% else %}
-      <div class="col-sm-6 col-lg-4 my-4">
+      <div class="col-sm-6 col-xl-3 my-4">
         <h4 class="text-center">No Ballot Results Available.</h4>
       </div>
       {% endif %}
