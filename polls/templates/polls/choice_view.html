@@ -19,7 +19,7 @@
       <div class="row mb-5">
         {% for choice in category.choice_set.all %}
           <div class="col-md-6 col-lg-4 my-2">
-            <div class="card border-0" style="height: 25rem;">
+            <div class="card" style="height: 25rem;">
               <div class="card-body">
                 <h4 class="text-center">{{ choice.choice|title }}</h4>
                 <div class="mx-auto">
@@ -38,7 +38,7 @@
         <div class="col-sm-8 col-lg-6 my-5 mx-auto">
           <a href="{% url 'polls:category_view' category.ballot_paper_id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
           <a class="float-right text-dark" href="{% url 'polls:add_new_choice' category.id %}"><h3><i class="fa">&#xf055;</i> New Choice</h3></a>
-          <div class="card border-0 mt-5">
+          <div class="card mt-5">
             <div class="card-body">
               <div class="card-title">
                 <h2 class="text-center my-text-purple">{{ category.category_name|upper }}</h2>

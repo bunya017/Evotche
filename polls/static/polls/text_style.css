@@ -1,6 +1,13 @@
 .fill-viewport {
 	min-height: calc(100vh - 75px)
 }
+body {
+  background-color: #f4f3f4 !important;
+}
+#introduction, #how-it-works, #pricing, #get-started {
+  background-color: #fff !important;
+}
+
 nav {
   min-height: 90px;
   position: sticky;
@@ -53,5 +60,5 @@ nav {
 }
 
 @media (min-width: 768px) {
-  #navbarSupportedContent #signup {background-color: #dc3545}
+  #navbarSupportedContent #signup {background-color: #dc3545;}
 }

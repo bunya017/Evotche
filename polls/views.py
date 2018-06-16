@@ -22,9 +22,6 @@ from users.models import Token
 
 
 
-def base(request):
-	return render(request, 'polls/user_base.html')
-
 def index(request):
 	if request.user.is_authenticated() and request.user.has_usable_password():
 		return HttpResponseRedirect(reverse('polls:ballot'))
@@ -85,6 +82,11 @@ def index(request):
 
 @login_required
 def ballot(request):
+	user = request.user
+	if user.has_usable_password() == False:
+		if user.token.is_token:
+			ballot = user.token.ballot_paper
+			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'polls/ballot.html', context)
@@ -145,6 +147,11 @@ def vote_success(request):
 
 @login_required
 def results(request):
+	user = request.user
+	if user.has_usable_password() == False:
+		ballot = user.token.ballot_paper
+		if user.token.is_token:
+			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'polls/results.html', context)
@@ -154,7 +161,7 @@ def ballot_results(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=ballot)
 	user = request.user 
-	if user.is_authenticated and user.has_usable_password:
+	if user.is_authenticated() and user.has_usable_password():
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
@@ -177,6 +184,11 @@ def show_results_public(request, ballot_url):
 
 @login_required
 def add_new_ballot(request):
+	user = request.user
+	if user.has_usable_password() == False:
+		ballot = user.token.ballot_paper
+		if user.token.is_token:
+			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	if request.method != 'POST':
 		form = BallotForm()
 	else:

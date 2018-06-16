@@ -10,6 +10,7 @@ class Token(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	ballot_paper = models.ForeignKey(BallotPaper, on_delete=models.CASCADE)
 	is_used = models.BooleanField(default=False)
+	is_token = models.BooleanField(default=True)
 
 	class Meta:
 		ordering = ['id']

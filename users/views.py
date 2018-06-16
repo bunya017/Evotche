@@ -75,7 +75,7 @@ def contact_us(request):
 			return HttpResponseRedirect(reverse('users:contact_success'))
 
 	user = request.user 
-	if user.is_authenticated and user.has_usable_password:
+	if user.is_authenticated() and user.has_usable_password():
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
@@ -85,7 +85,7 @@ def contact_us(request):
 
 def contact_success(request):
 	user = request.user 
-	if user.is_authenticated and user.has_usable_password:
+	if user.is_authenticated() and user.has_usable_password():
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
@@ -97,7 +97,12 @@ def contact_success(request):
 def show_ballot_page(request, ball_url):
 	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	caty_list = Category.objects.filter(ballot_paper=display_ballot)
-	context = {'display_ballot': display_ballot, 'caty_list': caty_list}
+	user = request.user
+	if user.is_authenticated() and user.has_usable_password():
+		base_template = 'polls/ubase.html'
+	else:
+		base_template = 'polls/base.html'
+	context = {'display_ballot': display_ballot, 'caty_list': caty_list, 'base_template':base_template}
 	return render(request, 'polls/display_ballot.html', context)
 
 
@@ -161,6 +166,11 @@ def token_login(request):
 
 @login_required
 def tokens_view(request):
+	user = request.user
+	if user.has_usable_password() == False:
+		ballot = user.token.ballot_paper
+		if user.token.is_token:
+			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'users/tokens_view.html', context)
@@ -198,6 +208,7 @@ def num_token(request):
 	return render(request, 'users/num_token.html', context)
 
 
+@login_required
 def get_free_tokens(request, ball_url):
 	ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	if (ballot.has_free_tokens == False) and (ballot.is_paid == False):
@@ -211,6 +222,7 @@ def get_free_tokens(request, ball_url):
 
 	context = {'ballot': ballot}
 	return render(request, 'users/free_tokens.html', context)
+
 
 def check_results(request):
 	if request.method != 'POST':

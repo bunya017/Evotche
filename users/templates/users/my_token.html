@@ -6,11 +6,26 @@
 
 <section id="my_tokens">
   <div class="container">
+    <h2 class="my-text-purple py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
+    <div class="divider mb-4"></div>
     <div class="row my-3">
       {% if token_list %}
+      <div class="col-lg-4 mb-4">
+        <div class="card card-body">
+          <h4 class="mt-1 my-text-purple">Ballot box status:</h4>
+          {% if ballot.is_free is True %}
+            <h4 class="pl-2">Free</h4>
+          {% else %}
+            <h4 class="pl-2">Paid</h4>
+          {% endif %}
+          <h4 class="mt-1 my-text-purple">Unused Voter Tokens:</h4>
+          <h4 class="pl-2">{{ unused_token|length }}</h4>
+          <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
+          <h4 class="pl-2">{{ used_token|length }}</h4>
+        </div>
+      </div>
       <div class="col-lg-8 mx-auto">
-        <h2 class="my-text-purple py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
-        <div class="card card-default card-body border-0">
+        <div class="card card-default card-body">
           <!--Nav Tabs-->
           <ul id="tabsToken" class="nav nav-tabs nav-justified">
             <li class="nav-item">

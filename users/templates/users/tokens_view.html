@@ -4,7 +4,8 @@
 
 <section id="tokens">
   <div class="container">
-    <h1 class="py-3 my-text-purple">Ballot Tokens</h1>
+    <h1 class="pt-3 my-text-purple">Ballot Tokens</h1>
+    <div class="divider mb-4"></div>
     <div class="row mb-5">
       <!--
       <div class="col-sm-6 col-lg-4 my-2">
@@ -23,7 +24,7 @@
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-xl-4 my-2">
-          <div class="card border-0" style="height: 12rem;">
+          <div class="card" style="height: 12rem;">
             <div class="card-body">
               <a class="text-dark" href="{% url 'users:my_token' ballot.ballot_url %}">
                 <h4 class="text-center">{{ ballot.ballot_name|upper }}</h4>

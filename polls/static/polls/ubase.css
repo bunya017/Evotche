@@ -75,6 +75,7 @@ nav{
     z-index: 1;
     position: fixed;
     margin-top: 90px;
+    overflow: hidden;
   }
   #content {
     padding-left: 0;
