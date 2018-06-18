@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['evotche.herokuapp.com', '192.168.43.33', '127.0.0.1', 'localho
 INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'users.apps.UsersConfig',
+    'transactions.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
