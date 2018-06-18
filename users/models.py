@@ -19,3 +19,13 @@ class Token(models.Model):
 		return self.user.username
 
 
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	phone = models.CharField(max_length=50)
+	organization = models.CharField(max_length=75)
+
+	class Meta:
+		ordering = ['id']
+
+	def __str__(self):
+		return self.user.username
