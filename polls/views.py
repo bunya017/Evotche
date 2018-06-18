@@ -290,6 +290,17 @@ def pricing(request):
 	return render(request, 'polls/pricing.html')
 
 
-def purchase_token(request, ballot_url):
-	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
-	return
+def toggle_ballot(request, ballot_url):
+	ballot = get_object_or_404(BallotPaper, created_by=request.user, ballot_url=ballot_url)
+	if ballot.is_open == False:
+		ballot.is_not_open = False
+		ballot.is_open = True
+		ballot.is_closed = False
+		ballot.save()
+	else:
+		ballot.is_not_open = False
+		ballot.is_open = False
+		ballot.is_closed = True
+		ballot.save()
+
+	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
