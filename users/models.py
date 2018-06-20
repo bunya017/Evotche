@@ -21,8 +21,10 @@ class Token(models.Model):
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	payant_id = models.IntegerField(null=True ,blank=True)
 	phone = models.CharField(max_length=50)
 	organization = models.CharField(max_length=75)
+	is_new_customer = models.BooleanField(default=True)
 
 	class Meta:
 		ordering = ['id']

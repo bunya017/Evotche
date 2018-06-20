@@ -33,6 +33,13 @@ class MyUserSignupForm(forms.Form):
 			raise forms.ValidationError('Email is already taken.')
 
 
+class UserProfileForm(forms.Form):
+	first_name = forms.CharField(max_length=50, required=True)
+	last_name = forms.CharField(max_length=50, required=True)
+	phone = forms.CharField(max_length=50, required=True)
+	organization = forms.CharField(max_length=100)
+
+
 class TokenUserForm(forms.Form):
 	token = forms.CharField(min_length=6, max_length=16)
 

@@ -1,0 +1,28 @@
+{% extends "polls/ubase.html" %}
+{% block title %}Profile || Evotche{% endblock title %}
+{% block content %}
+
+
+<section>
+  <div class="container">
+  	<h1 class="pt-3 my-text-purple">My Profile</h1>
+    <div class="divider mb-4"></div>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card card-body">
+          {{ user.username }}
+          {{ user.first_name }}
+          {{ user.last_name }}
+          {{ user.email }}
+          {{ user.profile.phone_number }}
+          {% if user.profile.organization %}
+            {{ user.profile.organization }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}

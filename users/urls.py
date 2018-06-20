@@ -27,4 +27,6 @@ urlpatterns = [
 	url(r'^my-tokens/$', views.tokens_view, name='tokens_view'),
 	url(r'^mytokens/(?P<ball_url>[-\w]+)/$', views.my_token, name='my_token'),
 	url(r'^check-results/$', views.check_results, name='check_results'),
+	url(r'^profile/$', views.display_profile, name='display_profile'),
+	url(r'^profile/update$', views.update_profile, name='update_profile'),
 ]

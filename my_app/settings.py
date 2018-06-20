@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['evotche.herokuapp.com', '192.168.43.33', '127.0.0.1', 'localho
 INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'users.apps.UsersConfig',
-    'transactions.apps.UsersConfig',
+    'transactions.apps.TransactionsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -89,6 +89,11 @@ EMAIL_HOST_USER = 'postmaster@sandbox14dd7e40687b49a8bbf4cae7c0bbfb96.mailgun.or
 EMAIL_HOST_PASSWORD = 'f4976f8b7ad4250361a3d13bf7c4e84c'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Evotche <no-reply@evotche.com>'
+
+
+# Payant Developer Keys
+# demo keys
+PAYANT_AUTH_KEY = 'bdf3961ceb87e00f1ecbaeae56a913551a7a309ac9b614ff312aa30f'
 
 
 # Database

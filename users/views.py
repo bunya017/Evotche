@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -11,8 +12,8 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
 from polls.models import BallotPaper, Category, Choice
-from .forms import MyUserSignupForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
-from .models import Token
+from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
+from .models import Token, Profile
 from .snippets import gen_token
 
 
@@ -248,3 +249,36 @@ def check_results(request):
 
 	context = {'form': form}
 	return render(request, 'users/check_results.html', context)
+
+
+@login_required
+def update_profile(request):
+	user = request.user
+	if request.method != 'POST':
+		form = UserProfileForm()
+	else:
+		form = UserProfileForm(request.POST)
+		if form.is_valid():
+			user.first_name = form.cleaned_data['first_name']
+			user.last_name = form.cleaned_data['last_name']
+			user.save()
+			try:
+				profile = Profile.objects.get(user=user)
+			except (ObjectDoesNotExist):
+				profile = Profile.objects.create(user=user)
+			else:
+				pass
+			finally:
+				profile.phone = form.cleaned_data['phone']
+				profile.organization = form.cleaned_data['organization']
+				profile.save()
+				return HttpResponseRedirect(reverse('users:display_profile'))
+
+	context = {'form': form}
+	return render(request, 'users/update_profile.html', context)
+
+
+def display_profile(request):
+	user = request.user
+	context = {'user': user}
+	return render(request, 'users/profile.html', context)
