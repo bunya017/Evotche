@@ -15,6 +15,9 @@ class Token(models.Model):
 	class Meta:
 		ordering = ['id']
 
+	def is_used(self):
+		return self.is_used
+
 	def __str__(self):
 		return self.user.username
 
@@ -24,7 +27,6 @@ class Profile(models.Model):
 	payant_id = models.IntegerField(null=True ,blank=True)
 	phone = models.CharField(max_length=50)
 	organization = models.CharField(max_length=75)
-	is_new_customer = models.BooleanField(default=True)
 
 	class Meta:
 		ordering = ['id']

@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.contrib.auth import login, logout, authenticate
@@ -12,6 +13,8 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required
 from polls.models import BallotPaper, Category, Choice
+from my_app.settings import PAYANT_AUTH_KEY as key
+from pypayant import Client
 from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
 from .models import Token, Profile
 from .snippets import gen_token
@@ -140,22 +143,22 @@ def token_login(request):
 		if form.is_valid():
 			user_name = form.cleaned_data['token']
 			try:
-				User.objects.get(username=user_name)
-			except (User.DoesNotExist):
+				Token.objects.get(user=User.objects.get(username=user_name))
+			except (User.DoesNotExist, Token.DoesNotExist):
 				return render(request, 'users/token_login.html', {'form': form, 
 					'does_not_exist': 'Please enter a valid token.'})
 			else:
 				auth_user = User.objects.get(username=user_name)
+				ballot = auth_user.token.ballot_paper
 				if auth_user.token.is_used == False:
-					if auth_user.token.ballot_paper.is_not_open == True:
+					if ballot.is_not_open():
 						return render(request, 'users/token_login.html', {'form': form, 
 							'not_open': 'Sorry, this ballot box is not open for voting yet.'})
-					elif auth_user.token.ballot_paper.is_closed == True:
+					elif ballot.is_closed() :
 						return render(request, 'users/token_login.html', {'form': form, 
 							'closed': 'Sorry, this ballot box is closed for voting.'})
 					else: 
 						login(request, auth_user)
-						ballot = auth_user.token.ballot_paper
 						return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 				else:
 					return render(request, 'users/token_login.html', {'form': form, 
@@ -272,6 +275,17 @@ def update_profile(request):
 				profile.phone = form.cleaned_data['phone']
 				profile.organization = form.cleaned_data['organization']
 				profile.save()
+				client = Client(key)
+				new_client = client.add(
+					first_name=user.first_name,
+					last_name=user.last_name,
+					email=user.email,
+					phone=profile.phone,
+					company_name=(profile.organization if profile.organization else None)
+				)
+				profile.payant_id = int(new_client[2]['id'])
+				profile.save()
+
 				return HttpResponseRedirect(reverse('users:display_profile'))
 
 	context = {'form': form}

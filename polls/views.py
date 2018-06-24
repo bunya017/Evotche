@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db.models import Max
 from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.utils.text import slugify
+from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.datastructures import MultiValueDictKeyError
 from django.db.utils import IntegrityError
@@ -34,22 +34,22 @@ def index(request):
 		if token_form.is_valid():
 			user_name = token_form.cleaned_data['token']
 			try:
-				User.objects.get(username=user_name)
-			except (User.DoesNotExist):
+				Token.objects.get(user=User.objects.get(username=user_name))
+			except (User.DoesNotExist, Token.DoesNotExist):
 				messages.success(request, 'Please enter a valid token.')
 				return HttpResponseRedirect(reverse('users:token_login'))
 			else:
 				auth_user = User.objects.get(username=user_name)
+				ballot = auth_user.token.ballot_paper
 				if auth_user.token.is_used == False:
-					if auth_user.token.ballot_paper.is_not_open == True:
+					if ballot.is_not_open():
 						messages.success(request, 'Sorry, this ballot box is not open for voting yet.')
 						return HttpResponseRedirect(reverse('users:token_login'))
-					elif auth_user.token.ballot_paper.is_closed == True:
+					elif ballot.is_closed():
 						messages.success(request, 'Sorry, this ballot box is closed for voting.')
 						return HttpResponseRedirect(reverse('users:token_login'))
 					else:
 						login(request, auth_user)
-						ballot = auth_user.token.ballot_paper
 						return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 				else:
 					messages.success(request, 'This token has been used.')
@@ -63,8 +63,8 @@ def index(request):
 		if result_ckeck_form.is_valid():
 			user_name = result_ckeck_form.cleaned_data['check_result']
 			try:
-				User.objects.get(username=user_name)
-			except (User.DoesNotExist):
+				Token.objects.get(user=User.objects.get(username=user_name))
+			except (User.DoesNotExist, Token.DoesNotExist):
 				messages.success(request, 'Please enter a valid token.')
 				return HttpResponseRedirect(reverse('users:check_results'))
 			else:
@@ -72,7 +72,7 @@ def index(request):
 				ballot = ballot_token.token.ballot_paper
 				#if ballot.show_results_to_public == False:
 				#	messages.success(request, 'Sorry, the results for this campaign is not public yet.')
-				#	return HttpResponseRedirect(reverse('users:token_login'))
+				#	return HttpResponseRedirect(reverse('users:check_results'))
 				#else:
 				return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
 

@@ -26,7 +26,7 @@ class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
 	fieldsets = [
 		(None, {'fields': ['ballot_name', 'ballot_url', 'created_by','is_photo_ballot',
-				 'open_date', 'close_date', 'is_not_open', 'is_open', 'is_closed']})
+				 'open_date', 'close_date', 'is_open']})
 	]
 	list_display = ['ballot_name', 'created_by', 'is_open']
 
