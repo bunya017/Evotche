@@ -1,0 +1,17 @@
+{% extends "polls/ubase.html" %}
+
+{% block title %}Check Results{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+<form class="pb-5" method="post">
+	{% csrf_token %}
+	{{ form.management_form }}
+  	<div class="form-group pt-5 pb-3">
+  	{{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity.' }}
+  	</div>
+	<button class="btn btn-outline-success col-12" type="submit">Proceed to pay</button>
+</form>
+
+{% endblock content %}
