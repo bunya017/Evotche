@@ -19,7 +19,6 @@ class BallotPaper(models.Model):
 	has_free_tokens = models.BooleanField(default=False)
 	open_date = models.DateTimeField(blank=True, null=True)
 	close_date = models.DateTimeField(blank=True, null=True)
-	show_results_to_public = models.BooleanField(default=False)
 	is_open = models.BooleanField(default=False)
 
 	class Meta:

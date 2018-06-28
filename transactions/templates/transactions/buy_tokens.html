@@ -1,17 +1,53 @@
 {% extends "polls/ubase.html" %}
 
-{% block title %}Check Results{% endblock title %}
+{% block title %}Buy Voter Tokens{% endblock title %}
 
 {% block content %}
 {% load extras %}
 
-<form class="pb-5" method="post">
-	{% csrf_token %}
-	{{ form.management_form }}
-  	<div class="form-group pt-5 pb-3">
-  	{{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity.' }}
-  	</div>
-	<button class="btn btn-outline-success col-12" type="submit">Proceed to pay</button>
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-6 mx-auto py-5">
+      <h2 class="pb-3">Buy voter tokens</h2>
+      <div class="card card-body">
+        <form class="pb-3" method="post">
+        	{% csrf_token %}
+        	{{ form.management_form }}
+          	<div class="form-group py-3">
+          	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
+          	</div>
+            <div class="card card-body">
+              {% if error_message %}
+                <div class="alert alert-danger text-center">
+                  {{ error_message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endif %} 
+            	<div class="form-group">
+                <div class="list-inline">
+                  <div class="list-inline-item">{{ form.email_delivery|add_css:'class:form-control text-center' }}</div>
+                  <div class="list-inline-item">Email Delivery at additional NGN1.00/Token</div>
+                </div>
+            	</div>
+            	<div class="form-group">
+                <div class="list-inline">
+                  <div class="list-inline-item">{{ form.text_delivery|add_css:'class:form-control text-center' }}</div>
+                  <div class="list-inline-item">Text Delivery at additional NGN5.00/Token</div>
+                </div>
+            	</div>
+            </div>
+            <div class="text-center pt-5">
+            	<button class="btn btn-outline-success col-6" type="submit">
+                Place Order
+              </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock content %}

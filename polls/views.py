@@ -19,6 +19,7 @@ from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
 from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
+from .snippets import check_start, check_close
 
 
 
@@ -185,6 +186,7 @@ def show_results_public(request, ballot_url):
 @login_required
 def add_new_ballot(request):
 	user = request.user
+	now = datetime.now()
 	if user.has_usable_password() == False:
 		ballot = user.token.ballot_paper
 		if user.token.is_token:
@@ -198,15 +200,21 @@ def add_new_ballot(request):
 			start_time= form.cleaned_data['start_time']
 			stop_date= form.cleaned_data['stop_date']
 			stop_time= form.cleaned_data['stop_time']
+			start = datetime.combine(start_date, start_time)
+			close = datetime.combine(stop_date, stop_time)
 			try:
 				new_ballot = form.save(commit=False)
 				new_ballot.created_by = request.user
 				new_ballot.ballot_url = slugify(request.user.username +' '+ new_ballot.ballot_name)
-				new_ballot.open_date = datetime.combine(stop_date, start_time)
-				new_ballot.close_date = datetime.combine(stop_date, stop_time)
+				new_ballot.open_date = check_start(start, now)
+				new_ballot.close_date = check_close(close, start)
 				new_ballot.save()
 			except (IntegrityError):
 				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
+			except (AssertionError):
+				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you can\'t set open time less than now.'})
+			except (ZeroDivisionError):
+				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you can\'t set close time less than open time.'})
 			else:
 				return HttpResponseRedirect(reverse('polls:category_view', args=[new_ballot.id]))
 	context = {'form': form}
