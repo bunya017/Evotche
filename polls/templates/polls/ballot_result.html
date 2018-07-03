@@ -1,13 +1,13 @@
 {% extends base_template %}
 
-{% block title %}{{ ballot.ballot_name|title }} Results{% endblock title %}
+{% block title %}Evotche - {{ ballot.ballot_name|title }} Results{% endblock title %}
 
 {% block content %}
 {% load extras %}
 
 
   <div class="container">
-    <h2 class="pt-3 my-text-purple">{{ ballot.ballot_name|title }} Results</h2>
+    <h1 class="pt-3 my-text-purple">{{ ballot.ballot_name|title }} Results</h1>
     <div class="divider mb-4"></div>
     <div class="row">
       {% if caty_list|length > 0 %}

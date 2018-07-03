@@ -19,7 +19,7 @@ from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
 from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
-from .snippets import check_start, check_close
+from .snippets import check_start, check_close, result_avialable
 
 
 
@@ -71,11 +71,14 @@ def index(request):
 			else:
 				ballot_token = User.objects.get(username=user_name)
 				ballot = ballot_token.token.ballot_paper
-				#if ballot.show_results_to_public == False:
-				#	messages.success(request, 'Sorry, the results for this campaign is not public yet.')
-				#	return HttpResponseRedirect(reverse('users:check_results'))
-				#else:
-				return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
+				close = ballot.close_date
+				try:
+					result_avialable(close=close, now=timezone.now())
+				except (UserWarning):
+					messages.success(request, 'Sorry, the results for this campaign is not public yet.')
+					return HttpResponseRedirect(reverse('users:check_results'))
+				else:
+					return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
 
 	context = {'token_form': token_form, 'result_ckeck_form': result_ckeck_form,}
 	return render(request, 'polls/index.html', context)
@@ -135,6 +138,9 @@ def vote(request, ballot_url):
 			else:
 				selected_choice.votes += 1
 				selected_choice.save()
+				if not display_ballot.is_open:
+					display_ballot.is_open = True
+					display_ballot.save() 
 				user.token.is_used = True
 				user.token.save()
 				logout(request)

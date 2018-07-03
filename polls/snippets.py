@@ -17,3 +17,10 @@ def check_close(close, start):
 		raise ZeroDivisionError
 	else:
 		return close
+
+
+def result_avialable(close, now):
+	try:
+		assert now > close
+	except AssertionError:
+		raise UserWarning

@@ -1,23 +1,37 @@
 {% extends "polls/ubase.html" %}
 {% load extras %}
-{% block title %}{{ ballot.ballot_name|title }} Tokens{% endblock title %}
+{% block title %}Evotche - {{ ballot.ballot_name|title }} Tokens{% endblock title %}
 
 {% block content %}
 
 <section id="my_tokens">
   <div class="container">
-    <h2 class="my-text-purple py-3">{{ ballot.ballot_name|title }} Pass Tokens</h2>
+    <h1 class="my-text-purple pt-3">{{ ballot.ballot_name|title }} Voter Tokens</h1>
     <div class="divider mb-4"></div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-danger text-center">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </div>
+      {% endfor %}
+    {% endif %}
     <div class="row my-3">
-      {% if token_list %}
       <div class="col-lg-4 mb-4">
         <div class="card card-body">
           <h4 class="mt-1 my-text-purple">Ballot box status:</h4>
-          {% if ballot.is_free is True %}
-            <h4 class="pl-2">Free</h4>
-          {% else %}
-            <h4 class="pl-2">Paid</h4>
-          {% endif %}
+          <h4 class="pl-2">
+            {% if ballot.is_paid is True %}
+              Paid
+            {% else %}
+              Free
+            {% endif %}
+            {% if token_list|length is 0 %}
+              {% if invoice %}
+                </h4><a href="{% url 'trxns:refresh_purchase' invoice.reference_code %}">Refresh</a>
+              {% endif %}
+            {% endif %}
           <h4 class="mt-1 my-text-purple">Unused Voter Tokens:</h4>
           <h4 class="pl-2">{{ unused_token|length }}</h4>
           <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
@@ -38,27 +52,30 @@
           <!--/tabs-->
           <div id="tabsTokenContent" class="tab-content">
             <div id="unusedToken" class="tab-pane active show">
+              {% if token_list %}
               <div class="list-group">
                 {% for token in unused_token %}
                 <p class="list-group-item">{{ token.user.username }}</p>
                 {% endfor %}
               </div>
+              {% else %}
+                <h4 class="text-center py-5">No voter tokens available.</h4>
+              {% endif %}
             </div>
             <div id="usedToken" class="tab-pane">
+              {% if token_list %}
               <div class="list-group">
-                {% for utoken in used_token %}
-                <p class="list-group-item">{{ utoken.user.username }}</p>
-                {% endfor %}
-              </div>
+                  {% for utoken in used_token %}
+                  <p class="list-group-item">{{ utoken.user.username }}</p>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <h4 class="text-center py-5">No voter tokens available.</h4>
+              {% endif %}
             </div>
           </div>
         </div>
       </div>
-    {% else %}
-      <div class="col-sm-6 col-lg-4 my-4">
-        <h4 class="text-center">No Pass Tokens Available.</h4>
-      </div>
-    {% endif %}
     </div>
   </div>
 </section>

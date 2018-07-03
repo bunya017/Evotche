@@ -1,6 +1,6 @@
 {% extends "polls/ubase.html" %}
 
-{% block title %}{{ ballot.ballot_name|title }}{% endblock title %}
+{% block title %}Evotche - {{ ballot.ballot_name|title }}{% endblock title %}
 
 
 {% block content %}
@@ -15,10 +15,8 @@
         <a class="my-text-purple float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-inline text-right pt-3">
           <li class="list-inline-item">
-            {% if ballot.show_results_to_public is False %}
-              <a class="px-1" href="{% url 'polls:show_results' ballot.ballot_url %}"><button class="btn btn-outline-success">Show Results</button></a>
-            {% else %}
-              <a class="px-1" href="{% url 'polls:show_results' ballot.ballot_url %}"><button class="btn btn-outline-danger">Hide Results</button></a>
+            {% if ballot.is_paid is False and ballot.has_free_tokens is False %}
+              <a class="px-1" href="{% url 'trxns:buy_tokens' ballot.ballot_url %}"><button class="btn btn-outline-success">Buy voter tokens</button></a>
             {% endif %}
           </li>
           <li class="list-inline-item">

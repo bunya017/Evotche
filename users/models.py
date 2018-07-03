@@ -15,9 +15,6 @@ class Token(models.Model):
 	class Meta:
 		ordering = ['id']
 
-	def is_used(self):
-		return self.is_used
-
 	def __str__(self):
 		return self.user.username
 

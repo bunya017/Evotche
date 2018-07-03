@@ -18,7 +18,7 @@ urlpatterns = [
 	url(r'^new-choice/(?P<cat_id>[0-9]+)/$', views.add_new_choice, 
 			name='add_new_choice'),
 	url(r'^new-ballot/$', views.add_new_ballot, name='add_new_ballot'),
-	url(r'^ballot/$', views.ballot, name='ballot'),
+	url(r'^ballots/$', views.ballot, name='ballot'),
 	url(r'^ballot/(?P<ball_id>[0-9]+)/$', views.category_view, name='category_view'),
 	url(r'^category/(?P<cat_id>[0-9]+)/$', views.choice_view, name='choice_view'),
 	url(r'^delete/(?P<ball_id>[0-9]+)/$', views.delete_ballot, name='delete_ballot'),

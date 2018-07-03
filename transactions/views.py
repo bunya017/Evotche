@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib import messages
 import datetime
 from my_app.settings import PAYANT_AUTH_KEY as key
 from pypayant import Client, Invoice, Payment
@@ -15,7 +16,19 @@ from users.models import Profile, Token
 from .models import PurchaseInvoice, Item
 from .forms import InvoiceForm
 from .snippets import make_dict
+from django.shortcuts import get_object_or_404, get_list_or_404
 
+
+
+def invoice_list(request):
+	user = request.user
+	if user.has_usable_password() == False:
+		ballot = user.token.ballot_paper
+		if user.token.is_token:
+			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
+	invoice_list = PurchaseInvoice.objects.filter(user=user)
+	context = {'invoice_list': invoice_list}
+	return render(request, 'transactions/invoice_list.html', context)
 
 
 def pay(request, ref_code):
@@ -31,70 +44,86 @@ def buy_tokens(request, ballot_url):
 	else:
 		form = InvoiceForm(request.POST)
 		if form.is_valid():
-			p_invoice = PurchaseInvoice.objects.create(
-				user=user,
-				ballot_paper=ballot,
-				date_created=datetime.datetime.now(),
-				due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
-			)
-			p_invoice.save()
-			token_item = Item.objects.create(
-				invoice=p_invoice,
-				item='Voter Token',
-				description='Voter Tokens for %s ballot box' % (ballot.ballot_name),
-				unit_cost=35.00,
-				quantity=form.cleaned_data['quantity']
-			)
-			token_item.save()
-			token_item_dict = make_dict(token_item)
-			item_list=[token_item_dict]
+			try:
+				PurchaseInvoice.objects.get(ballot_paper=ballot)
+			except (PurchaseInvoice.DoesNotExist):
+				if (form.cleaned_data['email_delivery'] and form.cleaned_data['text_delivery']) == True:
+					context = {'form': form, 'error_message': 'Sorry, you can only select one of these two.'}
+					return render(request, 'transactions/buy_tokens.html', context)
+				p_invoice = PurchaseInvoice.objects.create(
+					user=user,
+					ballot_paper=ballot,
+					date_created=datetime.datetime.now(),
+					due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
+				)
+				p_invoice.save()
+				token_item = Item.objects.create(
+					invoice=p_invoice,
+					item='Voter Token',
+					description='Voter Tokens for %s ballot box' % (ballot.ballot_name),
+					unit_cost=35.00,
+					quantity=form.cleaned_data['quantity']
+				)
+				token_item.save()
+				token_item_dict = make_dict(token_item)
+				item_list=[token_item_dict]
 
-			if (form.cleaned_data['email_delivery'] == True) and (form.cleaned_data['text_delivery'] == False):
-				email_item = Item.objects.create(
-				invoice=p_invoice,
-				item='Email Delivery',
-				description='Delivery of Voter Tokens for %s ballot box via email.' % (ballot.ballot_name),
-				unit_cost=1.00,
-				quantity=form.cleaned_data['quantity']
+				if (form.cleaned_data['email_delivery'] == True) and (form.cleaned_data['text_delivery'] == False):
+					email_item = Item.objects.create(
+					invoice=p_invoice,
+					item='Email Delivery',
+					description='Delivery of Voter Tokens for %s ballot box via email.' % (ballot.ballot_name),
+					unit_cost=1.00,
+					quantity=form.cleaned_data['quantity']
+					)
+					email_item.save()
+					email_item_dict = make_dict(email_item)
+					item_list=[token_item_dict, email_item_dict]
+				elif (form.cleaned_data['text_delivery'] == True) and (form.cleaned_data['email_delivery'] == False):
+					text_item = Item.objects.create(
+					invoice=p_invoice,
+					item='Text Delivery',
+					description='Delivery of Voter Tokens for %s ballot box via text.' % (ballot.ballot_name),
+					unit_cost=5.00,
+					quantity=form.cleaned_data['quantity']
+					)
+					text_item.save()
+					text_item_dict = make_dict(text_item)
+					item_list=[token_item_dict, text_item_dict]
+				
+				pay_invoice = Invoice(key)
+				new_invoice = pay_invoice.add(
+					client_id=(user.profile.payant_id),
+					due_date=p_invoice.due_date.strftime('%m/%d/%Y'),
+					fee_bearer='account',
+					items=item_list
 				)
-				email_item.save()
-				email_item_dict = make_dict(email_item)
-				item_list=[token_item_dict, email_item_dict]
-			elif (form.cleaned_data['text_delivery'] == True) and (form.cleaned_data['email_delivery'] == False):
-				text_item = Item.objects.create(
-				invoice=p_invoice,
-				item='Text Delivery',
-				description='Delivery of Voter Tokens for %s ballot box via text.' % (ballot.ballot_name),
-				unit_cost=5.00,
-				quantity=form.cleaned_data['quantity']
-				)
-				text_item.save()
-				text_item_dict = make_dict(text_item)
-				item_list=[token_item_dict, text_item_dict]
-			elif (form.cleaned_data['email_delivery'] and form.cleaned_data['text_delivery']) == True:
-				context = {'form': form, 'error_message': 'Sorry, you can only select one of these two.'}
-				return render(request, 'transactions/buy_tokens.html', context)
+				p_invoice.reference_code = new_invoice[2]['reference_code']
+				p_invoice.status = new_invoice[2]['status']
+				p_invoice.save()
+				return HttpResponseRedirect(reverse('trxns:pay', args=[p_invoice.reference_code]))
 			else:
-				pass
-			
-			pay_invoice = Invoice(key)
-			new_invoice = pay_invoice.add(
-				client_id=(user.profile.payant_id),
-				due_date=p_invoice.due_date.strftime('%m/%d/%Y'),
-				fee_bearer='account',
-				items=item_list
-			)
-			p_invoice.reference_code = new_invoice[2]['reference_code']
-			p_invoice.status = new_invoice[2]['status']
-			p_invoice.save()
-			return HttpResponseRedirect(reverse('trxns:pay', args=[p_invoice.reference_code]))
+				context1 = {'form': form, 'cant_buy': 'You have bought voter tokens for this box already!'}
+				return render(request, 'transactions/buy_tokens.html', context1)
 
 	context = {'form': form}
 	return render(request, 'transactions/buy_tokens.html', context)
 
 
-#def refresh_purchase(request, ballot_url, reference_code):
-#	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
-#	payment = Payment(key)
-#	pay_info = payment.get(reference_code)
-#	invoice = PurchaseInvoice.objects.get()
+def refresh_purchase(request, ref_code):
+	invoice = PurchaseInvoice.objects.get(reference_code=ref_code)
+	ballot = invoice.ballot_paper
+	payment = Payment(key)
+
+	# paymentDate = payment[2]['transaction_date']
+
+	if (ballot.is_paid) and len(Token.objects.filter(ballot_paper=ballot)):
+		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	elif invoice.status != 'successful':
+		messages.success(request, 'Your payment was not successful.')
+		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	elif invoice.status == 'successful':
+		ballot.is_paid = True
+		ballot.save()
+		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+

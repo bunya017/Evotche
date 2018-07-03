@@ -18,6 +18,8 @@ from pypayant import Client
 from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
 from .models import Token, Profile
 from .snippets import gen_token
+from polls.snippets import result_avialable
+from transactions.models import PurchaseInvoice
 
 
 
@@ -186,7 +188,13 @@ def my_token(request, ball_url):
 	unused_token = Token.objects.filter(ballot_paper=ballot, is_used=False)
 	used_token = Token.objects.filter(ballot_paper=ballot, is_used=True)
 	token_list = Token.objects.filter(ballot_paper=ballot)
-	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list}
+	try:
+		PurchaseInvoice.objects.get(ballot_paper=ballot)
+	except (PurchaseInvoice.DoesNotExist ):
+		invoice = ''
+	else:
+		invoice = PurchaseInvoice.objects.get(ballot_paper=ballot)
+	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list, 'invoice': invoice}
 	return render(request, 'users/my_token.html', context)
 
 
@@ -237,18 +245,21 @@ def check_results(request):
 		if form.is_valid():
 			user_name = form.cleaned_data['check_result']
 			try:
-				User.objects.get(username=user_name)
-			except (User.DoesNotExist):
+				Token.objects.get(user=User.objects.get(username=user_name))
+			except (User.DoesNotExist, Token.DoesNotExist):
 				return render(request, 'users/check_results.html', {'form': form, 
 					'does_not_exist': 'Please enter a valid token.'})
 			else:
 				ballot_token = User.objects.get(username=user_name)
 				ballot = ballot_token.token.ballot_paper
-				#if ballot.show_results_to_public == False:
-				#	return render(request, 'users/token_login.html', {'form': form, 
-				#		'not_public': 'Sorry, the results for this campaign is not public yet.'})
-				#else:
-				return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
+				close = ballot.close_date
+				try:
+					result_avialable(close=close, now=timezone.now())
+				except (UserWarning):
+					return render(request, 'users/check_results.html', {'form': form, 
+												'not_public': 'Sorry, the results for this campaign is not published yet.'})
+				else:
+					return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))
 
 	context = {'form': form}
 	return render(request, 'users/check_results.html', context)

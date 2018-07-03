@@ -1,6 +1,6 @@
 {% extends "polls/base.html" %}
 
-{% block title %}Pass Token{% endblock title %}
+{% block title %}Evotche - Voter Access{% endblock title %}
 
 {% block content %}
 {% load extras %}
@@ -20,7 +20,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </div>
-              {% endfor %}
+            {% endfor %}
           {% endif %}
 
           {% if does_not_exist %}
