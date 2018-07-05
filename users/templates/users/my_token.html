@@ -1,87 +1,117 @@
 {% extends "polls/ubase.html" %}
 {% load extras %}
+{% load static %}
 {% block title %}Evotche - {{ ballot.ballot_name|title }} Tokens{% endblock title %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'users/datatables.min.css' %}">
+{% endblock css %}
 
 {% block content %}
 
-<section id="my_tokens">
-  <div class="container">
-    <h1 class="my-text-purple pt-3">{{ ballot.ballot_name|title }} Voter Tokens</h1>
-    <div class="divider mb-4"></div>
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert alert-danger text-center">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </div>
-      {% endfor %}
-    {% endif %}
-    <div class="row my-3">
-      <div class="col-lg-4 mb-4">
-        <div class="card card-body">
-          <h4 class="mt-1 my-text-purple">Ballot box status:</h4>
-          <h4 class="pl-2">
-            {% if ballot.is_paid is True %}
-              Paid
-            {% else %}
-              Free
-            {% endif %}
-            {% if token_list|length is 0 %}
-              {% if invoice %}
-                </h4><a href="{% url 'trxns:refresh_purchase' invoice.reference_code %}">Refresh</a>
+  <section id="my_tokens">
+    <div class="container">
+      <h1 class="my-text-purple pt-3">{{ ballot.ballot_name|title }} Voter Tokens</h1>
+      <div class="divider mb-4"></div>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-danger text-center">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <div class="row my-3">
+        <div class="col-lg-4 mb-4">
+          <div class="card card-body">
+            <h4 class="mt-1 my-text-purple">Ballot box status:</h4>
+            <h4 class="pl-2">
+              {% if ballot.is_paid is True %}
+                Paid
+              {% else %}
+                Free
               {% endif %}
-            {% endif %}
-          <h4 class="mt-1 my-text-purple">Unused Voter Tokens:</h4>
-          <h4 class="pl-2">{{ unused_token|length }}</h4>
-          <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
-          <h4 class="pl-2">{{ used_token|length }}</h4>
+              {% if token_list|length is 0 %}
+                {% if invoice %}
+                  </h4><a href="{% url 'trxns:refresh_purchase' invoice.reference_code %}">Refresh</a>
+                {% endif %}
+              {% endif %}
+            <h4 class="mt-1 my-text-purple">Unused Voter Tokens:</h4>
+            <h4 class="pl-2">{{ unused_token|length }}</h4>
+            <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
+            <h4 class="pl-2">{{ used_token|length }}</h4>
+          </div>
         </div>
-      </div>
-      <div class="col-lg-8 mx-auto">
-        <div class="card card-default card-body">
-          <!--Nav Tabs-->
-          <ul id="tabsToken" class="nav nav-tabs nav-justified">
-            <li class="nav-item">
-              <a class="nav-link text-dark active show" href="" data-target="#unusedToken" data-toggle="tab">Unused Tokens</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" href="" data-target="#usedToken" data-toggle="tab">Used Tokens</a>
-            </li>
-          </ul>
-          <!--/tabs-->
-          <div id="tabsTokenContent" class="tab-content">
-            <div id="unusedToken" class="tab-pane active show">
+        <div class="col-lg-8 mx-auto">
+          <div class="card card-default card-body">
+            <!--Nav Tabs-->
+            <ul id="tabsToken" class="nav nav-tabs nav-justified">
+              <li class="nav-item">
+                <a class="nav-link pb-3 text-dark active show" href="" data-target="#unusedToken" data-toggle="tab">Unused</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link pb-3 text-dark" href="" data-target="#usedToken" data-toggle="tab">Used</a>
+              </li>
+            </ul>
+            <!--/tabs-->
+            <div id="tabsTokenContent" class="tab-content">
+              <div id="unusedToken" class="tab-pane active show">
               {% if token_list %}
-              <div class="list-group">
-                {% for token in unused_token %}
-                <p class="list-group-item">{{ token.user.username }}</p>
-                {% endfor %}
+                <table class="table table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Unused Voter Tokens</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for token in unused_token %}
+                    <tr>
+                      <td>{{ token.user.username }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% else %}
+                  <h4 class="text-center py-5">No voter tokens available.</h4>
+                {% endif %}
               </div>
-              {% else %}
-                <h4 class="text-center py-5">No voter tokens available.</h4>
-              {% endif %}
-            </div>
-            <div id="usedToken" class="tab-pane">
+              <div id="usedToken" class="tab-pane">
               {% if token_list %}
-              <div class="list-group">
-                  {% for utoken in used_token %}
-                  <p class="list-group-item">{{ utoken.user.username }}</p>
-                  {% endfor %}
-                </div>
+                <table class="table table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Used Voter Tokens</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for utoken in used_token %}
+                    <tr>
+                      <td>{{ utoken.user.username }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
               {% else %}
                 <h4 class="text-center py-5">No voter tokens available.</h4>
               {% endif %}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-
-
+  </section>
 
 
 {% endblock content %}
+{% block script %}
+<script src="{% static 'users/datatables.min.js' %}"></script>
+<script>
+  $(document).ready( function () {
+    $('table.display').DataTable({
+      "searching": false,
+      "columns.searchable": false,
+    });
+  });
+</script>
+{% endblock script %}

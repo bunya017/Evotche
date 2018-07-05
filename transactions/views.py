@@ -60,7 +60,7 @@ def buy_tokens(request, ballot_url):
 				token_item = Item.objects.create(
 					invoice=p_invoice,
 					item='Voter Token',
-					description='Voter Tokens for %s ballot box' % (ballot.ballot_name),
+					description='Voter Tokens for %s.' % (ballot.ballot_name),
 					unit_cost=35.00,
 					quantity=form.cleaned_data['quantity']
 				)
@@ -72,7 +72,7 @@ def buy_tokens(request, ballot_url):
 					email_item = Item.objects.create(
 					invoice=p_invoice,
 					item='Email Delivery',
-					description='Delivery of Voter Tokens for %s ballot box via email.' % (ballot.ballot_name),
+					description='Delivery of Voter Tokens via email.',
 					unit_cost=1.00,
 					quantity=form.cleaned_data['quantity']
 					)
@@ -83,7 +83,7 @@ def buy_tokens(request, ballot_url):
 					text_item = Item.objects.create(
 					invoice=p_invoice,
 					item='Text Delivery',
-					description='Delivery of Voter Tokens for %s ballot box via text.' % (ballot.ballot_name),
+					description='Delivery of Voter Tokens via text.',
 					unit_cost=5.00,
 					quantity=form.cleaned_data['quantity']
 					)
@@ -127,3 +127,16 @@ def refresh_purchase(request, ref_code):
 		ballot.save()
 		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 
+
+def get_invoice(request, ref_code):
+	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
+	item_list =invoice.item_set.all()
+	total = sum([item.total() for item in item_list])
+	user = request.user
+	fullname = ('%s %s' % (user.first_name, user.last_name)).title()
+	if invoice.status == 'successful':
+		not_paid = False
+	else:
+		not_paid = True
+	context = {'invoice': invoice, 'total': total, 'not_paid': not_paid, 'fullname': fullname}
+	return render(request, 'transactions/get_invoice.html', context)

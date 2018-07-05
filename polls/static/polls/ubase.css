@@ -2,7 +2,7 @@ body {
   background-color: #f4f3f4;
 }
 
-nav{
+#nav{
   min-height: 76px;
   background-color: #824ca7 !important;
 }
@@ -10,7 +10,7 @@ nav{
 #sidenav {
   z-index: 9999;
   position: fixed;
-	width: 300px;
+	width: 250px;
   height: calc(100vh - 76px);
   overflow-x: scroll;
   overflow-y: scroll;
@@ -52,7 +52,7 @@ nav{
 }
 
 #content {
-  padding-left: 300px;
+  padding-left: 250px;
   position: relative;
 }
 
@@ -83,12 +83,12 @@ nav{
   }
 
   #sidenav.toggled {
-    width: 300px;
+    width: 250px;
     border-right: 3px solid #824ca7;
   }
 
   #sidenav.toggled #content {
-    padding-left: 300px;
+    padding-left: 250px;
     position: relative;
   }
 

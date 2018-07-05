@@ -34,7 +34,7 @@ class Item(models.Model):
 		ordering = ['date_added']
 
 	def total(self):
-		return self.unit_cost * self.unit_cost
+		return self.unit_cost * self.quantity
 
 	def __str__(self):
 		return self.item
