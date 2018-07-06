@@ -6,9 +6,10 @@
 {% load extras %}
 
 <div class="container">
+  <h1 class="pt-2 my-text-purple">Buy voter tokens</h1>
+  <div class="divider mb-4"></div>
   <div class="row">
-    <div class="col-12 col-md-6 mx-auto py-5">
-      <h2 class="pb-3">Buy voter tokens</h2>
+    <div class="col-12 col-md-6 mx-auto">
       <div class="card card-body">
         {% if cant_buy %}
           <div class="alert alert-danger text-center">
@@ -17,10 +18,22 @@
             <span aria-hidden="true">&times;</span>
           </div>
         {% endif %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger text-center">
+              {{ message }} Please follow this <a class="text-danger font-weight-bold" 
+                href="{% url 'users:update_profile' %}">link</a> to update.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
         <form class="pb-3" method="post">
         	{% csrf_token %}
         	{{ form.management_form }}
-          	<div class="form-group py-3">
+          	<div class="form-group py-2">
+              <label><h4>Quantity</h4></label>
           	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
           	</div>
             <div class="card card-body">
@@ -31,21 +44,22 @@
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
-              {% endif %} 
+              {% endif %}
+              <h4 class="card-title">Delivery type:</h4>
             	<div class="form-group">
                 <div class="list-inline">
                   <div class="list-inline-item">{{ form.email_delivery|add_css:'class:form-control text-center' }}</div>
-                  <div class="list-inline-item">Email Delivery at additional NGN1.00/Token</div>
+                  <div class="list-inline-item">Email Delivery at additional ₦1.00/Token</div>
                 </div>
             	</div>
             	<div class="form-group">
                 <div class="list-inline">
                   <div class="list-inline-item">{{ form.text_delivery|add_css:'class:form-control text-center' }}</div>
-                  <div class="list-inline-item">Text Delivery at additional NGN5.00/Token</div>
+                  <div class="list-inline-item">Text Delivery at additional ₦5.00/Token</div>
                 </div>
             	</div>
             </div>
-            <div class="text-center pt-5">
+            <div class="text-center pt-4">
             	<button class="btn btn-outline-success col-6" type="submit">
                 Place Order
               </button>

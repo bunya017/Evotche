@@ -61,8 +61,8 @@ def buy_tokens(request, ballot_url):
 			try:
 				Profile.objects.get(user=user)
 			except (Profile.DoesNotExist):
-				messages.success(request, 'Your payment was not successful.')
-				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+				messages.success(request, 'You profile details are required before you can make a purchase.')
+				return render(request, 'transactions/buy_tokens.html', {'form': form, 'ballot': ballot})
 			else:
 				try:
 					PurchaseInvoice.objects.get(ballot_paper=ballot)
@@ -126,7 +126,7 @@ def buy_tokens(request, ballot_url):
 					context1 = {'form': form, 'cant_buy': 'This box has voter tokens already! You cannot buy more.'}
 					return render(request, 'transactions/buy_tokens.html', context1)
 
-	context = {'form': form}
+	context = {'form': form, 'ballot': ballot}
 	return render(request, 'transactions/buy_tokens.html', context)
 
 
