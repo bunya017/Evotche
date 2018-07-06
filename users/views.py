@@ -31,8 +31,6 @@ def logout_view(request):
 def signup(request):
 	if request.method != 'POST':
 		form = MyUserSignupForm()
-		username_error = ''
-		email_error = ''
 	else:
 		form = MyUserSignupForm(data=request.POST)
 
@@ -40,7 +38,13 @@ def signup(request):
 			new_user = User.objects.create_user(
 				username=form.cleaned_data['username'],
 				email=form.cleaned_data['email'],
-				password=form.cleaned_data['password']
+				password=form.cleaned_data['password'],
+				first_name=form.cleaned_data['first_name'],
+				last_name=form.cleaned_data['last_name']
+			)
+			new_user_profile = Profile.objects.create(
+				user=new_user,
+				phone=form.cleaned_data['phone']
 			)
 			authenticated_user = authenticate(username=new_user.username,
 					   password=request.POST['password'])
@@ -218,22 +222,6 @@ def num_token(request):
 
 	context = {'numToken': numToken, 'token': token}
 	return render(request, 'users/num_token.html', context)
-
-
-@login_required
-def get_free_tokens(request, ball_url):
-	ballot = BallotPaper.objects.get(ballot_url=ball_url)
-	if (ballot.has_free_tokens == False) and (ballot.is_paid == False):
-		tokens = gen_token(50, 10)
-		created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
-		Token.objects.bulk_create([Token(user=i, ballot_paper=ballot, is_used=False) for i in created_tokens])
-		ballot.has_free_tokens = True
-		ballot.save()
-	else:
-		return render(request, 'users/free_tokens.html', {'ballot': ballot, 'not_eligible': 'Sorry, this ballot is not eligible for free tokens.'})
-
-	context = {'ballot': ballot}
-	return render(request, 'users/free_tokens.html', context)
 
 
 def check_results(request):

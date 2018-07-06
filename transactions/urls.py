@@ -9,5 +9,6 @@ urlpatterns = [
 	url(r'^invoices/$', views.invoice_list, name='invoice_list'),
 	url(r'^invoices/(?P<ref_code>[-\w]+)/$', views.get_invoice, name='get_invoice'),
 	url(r'^buy-tokens/(?P<ballot_url>[-\w]+)/$', views.buy_tokens, name='buy_tokens'),
+	url(r'^free-tokens/(?P<ball_url>[-\w]+)/$', views.get_free_tokens, name='get_free_tokens'),
 	url(r'^refresh-purchase/(?P<ref_code>[-\w]+)/$', views.refresh_purchase, name='refresh_purchase'),
 ]

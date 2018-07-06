@@ -14,7 +14,7 @@ from pypayant import Client, Invoice, Payment
 from polls.models import BallotPaper
 from users.models import Profile, Token
 from .models import PurchaseInvoice, Item
-from .forms import InvoiceForm
+from .forms import InvoiceForm, FreeTokenForm
 from .snippets import make_dict
 from django.shortcuts import get_object_or_404, get_list_or_404
 
@@ -128,6 +128,25 @@ def buy_tokens(request, ballot_url):
 
 	context = {'form': form, 'ballot': ballot}
 	return render(request, 'transactions/buy_tokens.html', context)
+
+
+@login_required
+def get_free_tokens(request, ballot_url):
+	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	user = ballot.created_by
+	if request.method != 'POST':
+		form = FreeTokenForm()
+	else:
+		form = FreeTokenForm(request.POST)
+		if form.is_valid():
+			try:
+				Profile.objects.get(user=user)
+			except (Profile.DoesNotExist):
+				messages.success(request, 'You profile details are required before you can make a purchase.')
+				return render(request, 'transactions/free_tokens.html', {'form': form, 'ballot': ballot})
+
+	context = {'ballot': ballot}
+	return render(request, 'transactions/free_tokens.html', context)
 
 
 def refresh_purchase(request, ref_code):

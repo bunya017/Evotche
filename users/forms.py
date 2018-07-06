@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Token
+from .models import Token, Profile
 from polls.models import BallotPaper
 from django.db import transaction
 
@@ -13,6 +13,10 @@ class MyUserSignupForm(forms.Form):
 	username = forms.CharField(max_length=30, required=True)
 	email = forms.EmailField(required=True)
 	password = forms.CharField(widget=forms.PasswordInput(), required=True)
+	first_name = forms.CharField(max_length=50, required=True)
+	last_name = forms.CharField(max_length=50, required=True)
+	phone = forms.CharField(max_length=50, required=True)
+	organization = forms.CharField(max_length=100)
 
 	def clean_username(self):
 		username = self.cleaned_data['username']
@@ -30,7 +34,16 @@ class MyUserSignupForm(forms.Form):
 		except ObjectDoesNotExist:
 			return email
 		else:
-			raise forms.ValidationError('Email is already taken.')
+			raise forms.ValidationError('Email is already in use.')
+
+	def clean_phone(self):
+		phone = self.cleaned_data['phone']
+		try:
+			Profile.objects.get(phone=phone)
+		except ObjectDoesNotExist:
+			return phone
+		else:
+			raise forms.ValidationError('Phone number is already in use.')
 
 
 class UserProfileForm(forms.Form):
