@@ -7,11 +7,11 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 mx-auto py-5">
+      <div class="col-12 col-md-6 mx-auto py-3">
         <div class="card">
           <div class="card-body">
-            <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
-            <h4 class="pt-4 pb-2 my-text-purple">New Category:</h4>
+            <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+            <h4 class="py-3">New Category:</h4>
             {% for error in form.non_field_errors %}
             <div class="alert alert-danger text-center" role="alert">
               {{ error }}
@@ -24,11 +24,13 @@
               {{ chForms.management_form }}
               <div class="form-group">
                 {{ form.ballot_paper }}
-                {{ form.category_name|add_css:'class:form-control, placeholder:Category Name' }}
+                <label>Category name:</label>
+                {{ form.category_name|add_css:'class:form-control, placeholder:Category name' }}
               </div>
 
               {% for c in chForms %}
               <div class="form-group offset-1">
+                <label>Choice {{ forloop.counter }}:</label>
                 {{ c.choice|add_css:'class:form-control, placeholder:Choice' }}
                 {% if ballot.is_photo_ballot %}
                 <div class="pt-1 pb-3">

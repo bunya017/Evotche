@@ -7,11 +7,11 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 mx-auto py-5">
+      <div class="col-12 col-md-8 col-xl-6 py-3 mx-auto">
       <div class="card">
         <div class="card-body">
-          <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x text-dark">&#xf060;</i></a>
-          <h4 class="pt-4 my-text-purple">New Box:</h4>
+          <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+          <h4 class="py-3">New Box:</h4>
           <form action="{% url 'polls:add_new_ballot' %}" method="post">
             {% if error_message %}
             <div class="alert alert-danger text-center">
@@ -22,19 +22,20 @@
             {% endif %} 
             {% csrf_token %}
             <div class="form-group">
+              <label>Ballot name:</label>
               {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
               <div class="card card-body py-2 mt-2">
                 Voting opens on:
                 <div class="list-inline">
                   <div class="list-inline-item">Date: {{ form.start_date|add_css:'class:form-control' }}</div>
-                  <div class="list-inline-item">Time: {{ form.start_time|add_css:'class:form-control' }}</div>
+                  <div class="list-inline-item">Time (hh:mm am/pm): {{ form.start_time|add_css:'class:form-control' }}</div>
                 </div>
               </div>
               <div class="card card-body py-2 mt-2">
                 Voting closes on:
                 <div class="list-inline">
                   <div class="list-inline-item">Date: {{ form.stop_date|add_css:'class:form-control' }}</div>
-                  <div class="list-inline-item">Time: {{ form.stop_time|add_css:'class:form-control' }}</div>
+                  <div class="list-inline-item">Time (hh:mm am/pm): {{ form.stop_time|add_css:'class:form-control' }}</div>
                 </div>
               </div>
             </div>
