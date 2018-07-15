@@ -15,40 +15,15 @@
         </div>
         <form method="post" action="{% url 'users:signup' %}">
           {% csrf_token %}
-          <div class="form-group">
-            <label>First Name <span class="text-danger">*</span></label>
-            {{ form.first_name|add_css:'class:form-control, placeholder:First Name' }}
-          </div>
-          <div class="form-group">
-            <label>Last Name <span class="text-danger">*</span></label>
-            {{ form.last_name|add_css:'class:form-control, placeholder:Last Name' }}
-          </div>
-          <div class="form-group">
-            <label>Username <span class="text-danger">*</span></label>
-            {{ form.username|add_css:'class:form-control, placeholder:Username' }}
-            {% if form.username.errors %}
-              <small class="text-danger pb-0">{{ form.username.errors }}</small>
-            {% endif %}
-          </div> 
-          <div class="form-group">
-            <label>Email <span class="text-danger">*</span></label>
-            {{ form.email|add_css:'class:form-control, placeholder:Enter a valid email address' }}
-            {% if form.email.errors %}
-              <small class="text-danger pb-0">{{ form.email.errors }}</small>
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <label>Phone <span class="text-danger">*</span></label>
-            {{ form.phone|add_css:'class:form-control, placeholder:+234XXXXXXXXXX' }}
-            {% if form.phone.errors %}
-              <small class="text-danger pb-0">{{ form.phone.errors }}</small>
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <label>Password <span class="text-danger">*</span></label>
-            {{ form.password|add_css:'class:form-control, placeholder:Password' }}
-          </div>
-          <div class="py-3">
+          {% for field in form %}
+            <div class="form-group">
+              {{ field.label_tag }}<span class="text-danger">*</span>
+              {{ field|add_css:'class:form-control' }}
+              <small class="form-text text-danger">
+                {{ field.errors }}                
+              </small>
+            </div>
+          {% endfor %}
             <button type="submit" class="btn btn-outline-success col-5">Sign up</button>
             <input type="hidden" name="next" value="{% url 'polls:index' %}">
           </div>

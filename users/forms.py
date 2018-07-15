@@ -9,23 +9,17 @@ from django.db import transaction
 
 
 
-class MyUserSignupForm(forms.Form):
-	username = forms.CharField(max_length=30, required=True)
+class MyUserSignupForm(UserCreationForm):
 	email = forms.EmailField(required=True)
-	password = forms.CharField(widget=forms.PasswordInput(), required=True)
-	first_name = forms.CharField(max_length=50, required=True)
-	last_name = forms.CharField(max_length=50, required=True)
-	phone = forms.CharField(max_length=50, required=True)
-	organization = forms.CharField(max_length=100)
 
-	def clean_username(self):
-		username = self.cleaned_data['username']
-		try:
-			User.objects.get(username=username)
-		except ObjectDoesNotExist:
-			return username
-		else:
-			raise forms.ValidationError('Username is already taken.')
+	def __init__(self, *args, **kwargs):
+		super(MyUserSignupForm, self).__init__(*args, **kwargs)
+		self.fields['first_name'].widget = forms.TextInput(attrs={'required': True})
+		self.fields['last_name'].widget = forms.TextInput(attrs={'required': True})
+
+	class Meta:
+		model = User
+		fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
 
 	def clean_email(self):
 		email = self.cleaned_data['email']
@@ -36,14 +30,6 @@ class MyUserSignupForm(forms.Form):
 		else:
 			raise forms.ValidationError('Email is already in use.')
 
-	def clean_phone(self):
-		phone = self.cleaned_data['phone']
-		try:
-			Profile.objects.get(phone=phone)
-		except ObjectDoesNotExist:
-			return phone
-		else:
-			raise forms.ValidationError('Phone number is already in use.')
 
 
 class UserProfileForm(forms.Form):

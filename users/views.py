@@ -33,23 +33,10 @@ def signup(request):
 		form = MyUserSignupForm()
 	else:
 		form = MyUserSignupForm(data=request.POST)
-
 		if form.is_valid():
-			new_user = User.objects.create_user(
-				username=form.cleaned_data['username'],
-				email=form.cleaned_data['email'],
-				password=form.cleaned_data['password'],
-				first_name=form.cleaned_data['first_name'],
-				last_name=form.cleaned_data['last_name']
-			)
-			new_user_profile = Profile.objects.create(
-				user=new_user,
-				phone=form.cleaned_data['phone']
-			)
-			authenticated_user = authenticate(username=new_user.username,
-					   password=request.POST['password'])
-			login(request, authenticated_user)
-			return HttpResponseRedirect(reverse('polls:index'))
+			user = form.save()
+			login(request, user)
+			return HttpResponseRedirect(reverse('polls:ballot'))
 
 	context = {'form': form}
 	return render(request, 'users/signup.html', context)

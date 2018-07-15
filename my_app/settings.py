@@ -102,7 +102,7 @@ PAYANT_AUTH_KEY = 'bdf3961ceb87e00f1ecbaeae56a913551a7a309ac9b614ff312aa30f'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fresh_db',
+        'NAME': 'onefresh_db',
         'USER': 'bunyaminu',
         'PASSWORD': 'donmonte',
         'HOST': 'localhost',
