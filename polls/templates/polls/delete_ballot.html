@@ -1,0 +1,44 @@
+{% extends "polls/ubase.html" %}
+
+{% block title %}Evotche - Are you sure?{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mx-auto py-3">
+        <div class="card">
+          <div class="card-body">
+            <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+            <h4 class="py-3">Are you sure you want to delete the ballot: 
+              <span class="text-danger">{{ ballot.ballot_name }}</span>?
+            </h4>
+              <h5>All of the following related items will be deleted:</h5>
+              <ul>
+                <li class="pl-2"><span class="font-weight-bold">{{ categories }}</span> Categories</li>
+                <li class="pl-2"><span class="font-weight-bold">{{ tokens }}</span> Voter tokens</li>
+                <li class="pl-2"><span class="font-weight-bold">{{ invoices }}</span> Invoices</li>
+              </ul>
+            <form action="{% url 'polls:confirm_ballot' ballot.id %}" method="post">
+              {% csrf_token %}
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <input name="poster" value="Yes" type="hidden">
+                  <input class="btn btn-danger" value="Yes, I'm sure" type="submit">
+                </li>
+                <li class="list-inline-item">
+                  <a class="btn btn-outline-dark" href="{% url 'polls:ballot' %}">Cancel</a>
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

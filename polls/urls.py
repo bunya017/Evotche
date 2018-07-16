@@ -21,9 +21,12 @@ urlpatterns = [
 	url(r'^ballots/$', views.ballot, name='ballot'),
 	url(r'^ballot/(?P<ball_id>[0-9]+)/$', views.category_view, name='category_view'),
 	url(r'^category/(?P<cat_id>[0-9]+)/$', views.choice_view, name='choice_view'),
-	url(r'^delete/(?P<ball_id>[0-9]+)/$', views.delete_ballot, name='delete_ballot'),
+	url(r'^delete/ballot/(?P<ball_id>[0-9]+)/$', views.delete_ballot, name='delete_ballot'),
+	url(r'^delete/ballot/confirm/(?P<ball_id>[0-9]+)/$', views.confirm_ballot, name='confirm_ballot'),
 	url(r'^delete/category/(?P<cat_id>[0-9]+)/$', views.delete_caty, name='delete_caty'),
+	url(r'^delete/category/confirm/(?P<cat_id>[0-9]+)/$', views.confirm_caty, name='confirm_caty'),
 	url(r'^delete/choice/(?P<ch_id>[0-9]+)/$', views.delete_choice, name='delete_choice'),
+	url(r'^delete/choice/confirm/(?P<ch_id>[0-9]+)/$', views.confirm_choice, name='confirm_choice'),
 	url(r'^show-results/(?P<ballot_url>[-\w]+)/$', views.show_results_public, name='show_results'),
 	url(r'^toggle-ballot/(?P<ballot_url>[-\w]+)/$', views.toggle_ballot, name='toggle_ballot')
 

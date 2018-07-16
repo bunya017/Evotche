@@ -16,7 +16,9 @@
         <ul class="list-inline text-right pt-2">
           <li class="list-inline-item">
             {% if ballot.is_paid is False and ballot.has_free_tokens is False %}
-              <a class="px-1" href="{% url 'trxns:buy_tokens' ballot.ballot_url %}"><button class="btn btn-outline-success">Buy voter tokens</button></a>
+              <a class="px-1" href="{% url 'trxns:buy_tokens' ballot.ballot_url %}">
+                <button class="btn btn-outline-success">Buy tokens</button>
+              </a>
             {% endif %}
           </li>
           <li class="list-inline-item">
@@ -46,7 +48,7 @@
             {% endfor %}
             </ul>
             <div class="text-right pt-1">
-              <a href="{% url 'polls:delete_caty' category.id %}" onclick="return confirm('Are you sure you want to delete this category?')">
+              <a href="{% url 'polls:delete_caty' category.id %}">
                 <i class="fa fa-2x text-danger">&#xf014;</i>
               </a>
             </div>

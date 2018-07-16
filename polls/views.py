@@ -17,9 +17,10 @@ from PIL import Image
 from datetime import datetime
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from .snippets import check_start, check_close, result_avialable
 from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
-from .snippets import check_start, check_close, result_avialable
+from transactions.models import PurchaseInvoice
 
 
 
@@ -126,7 +127,7 @@ def vote(request, ballot_url):
 			return render(request, 'polls/display_ballot.html', {
 				'display_ballot': display_ballot,
 				'error_message': 'Please select a choice across all categories.'
-				})
+			})
 		else:
 			try:
 				Token.objects.get(user=user)
@@ -268,36 +269,89 @@ def add_new_choice(request, cat_id):
 @login_required
 def delete_ballot(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
+	categories = len(ballot.category_set.all())
+	invoices = len(PurchaseInvoice.objects.filter(ballot_paper=ballot))
+	tokens = len(Token.objects.filter(ballot_paper=ballot))
+	context = {
+		'ballot': ballot, 
+		'categories': categories, 
+		'invoices': invoices,
+		'tokens': tokens,
+	}
+	return render(request, 'polls/delete_ballot.html', context)
+
+
+@login_required
+def confirm_ballot(request, cat_id):
+	"""Delete is final"""
+	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	categories = ballot.category_set.all()
-	for category in categories:
-		choices = category.choice_set.all()
-		for choice in choices:
-			if choice.photo:
-				choice.photo.delete(save=False)
-	ballot.delete()
-	return HttpResponseRedirect(reverse('polls:ballot'))
+	if request.method != 'POST':
+		return HttpResponseRedirect(reverse('polls:delete_ballot', args=[ballot.id]))
+	else:
+		if 'Yes' == str(request.POST.get('poster')):
+			for category in categories:
+				choices = category.choice_set.all()
+				for choice in choices:
+					if choice.photo:
+						choice.photo.delete(save=False)
+			ballot.delete()
+			return HttpResponseRedirect(reverse('polls:ballot'))
+		else:
+			return HttpResponseRedirect(reverse('polls:delete_ballot', args=[ballot.id]))
 
 
 @login_required
 def delete_caty(request, cat_id):
 	category = get_object_or_404(Category, pk=cat_id)
-	ball_id  = category.ballot_paper_id
+	ballot  = category.ballot_paper
 	choices = category.choice_set.all()
-	for choice in choices:
-		if choice.photo:
-			choice.photo.delete(save=False)
-	category.delete()
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ball_id,]))
+	context = {'ballot': ballot, 'category': category, 'choices': choices}
+	return render(request, 'polls/delete_caty.html', context)
+
+
+@login_required
+def confirm_caty(request, cat_id):
+	"""Delete is final"""
+	category = get_object_or_404(Category, pk=cat_id)
+	ballot  = category.ballot_paper
+	choices = category.choice_set.all()
+	if request.method != 'POST':
+		return HttpResponseRedirect(reverse('polls:delete_caty', args=[category.id]))
+	else:
+		if 'Yes' == str(request.POST.get('poster')):
+			for choice in choices:
+				if choice.photo:
+					choice.photo.delete(save=False)
+			category.delete()
+			return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id,]))
+		else:
+			return HttpResponseRedirect(reverse('polls:delete_caty', args=[category.id]))
 
 
 @login_required
 def delete_choice(request, ch_id):
 	choice = get_object_or_404(Choice, pk=ch_id)
-	cat_id = choice.category_id
-	if choice.photo:
-		choice.photo.delete(save=False)
-	choice.delete()
-	return HttpResponseRedirect(reverse('polls:choice_view', args=[cat_id,]))
+	category = choice.category
+	context = {'choice': choice, 'category': category}
+	return render(request, 'polls/delete_choice.html', context)
+
+
+@login_required
+def confirm_choice(request, ch_id):
+	"""Delete is final"""
+	choice = get_object_or_404(Choice, pk=ch_id)
+	category = choice.category
+	if request.method != 'POST':
+		return HttpResponseRedirect(reverse('polls:delete_choice', args=[choice.id]))
+	else:
+		if 'Yes' == str(request.POST.get('poster')):
+			if choice.photo:
+				choice.photo.delete(save=False)
+			choice.delete()
+			return HttpResponseRedirect(reverse('polls:choice_view', args=[category.id]))
+		else:
+			return HttpResponseRedirect(reverse('polls:delete_choice', args=[choice.id]))
 
 
 def pricing(request):

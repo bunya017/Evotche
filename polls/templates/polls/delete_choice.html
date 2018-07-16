@@ -1,0 +1,38 @@
+{% extends "polls/ubase.html" %}
+
+{% block title %}Evotche - Are you sure?{% endblock title %}
+
+{% block content %}
+{% load extras %}
+
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mx-auto py-3">
+        <div class="card">
+          <div class="card-body">
+            <a href="{% url 'polls:choice_view' category.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+            <h4 class="py-3">Are you sure you want to delete the choice: 
+              <span class="text-danger">{{ choice.choice }}</span>?
+            </h4>
+            <form action="{% url 'polls:confirm_choice' choice.id %}" method="post">
+              {% csrf_token %}
+              <ul class="list-inline">
+                <li class="list-inline-item">
+                  <input name="poster" value="Yes" type="hidden">
+                  <input class="btn btn-danger" value="Yes, I'm sure" type="submit">
+                </li>
+                <li class="list-inline-item">
+                  <a class="btn btn-outline-dark" href="{% url 'polls:choice_view' category.id %}">Cancel</a>
+                </li>
+              </ul>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
