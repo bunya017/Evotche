@@ -85,6 +85,10 @@ def index(request):
 	return render(request, 'polls/index.html', context)
 
 
+def pricing(request):
+	return render(request, 'polls/pricing.html')
+
+
 @login_required
 def ballot(request):
 	user = request.user
@@ -352,10 +356,6 @@ def confirm_choice(request, ch_id):
 			return HttpResponseRedirect(reverse('polls:choice_view', args=[category.id]))
 		else:
 			return HttpResponseRedirect(reverse('polls:delete_choice', args=[choice.id]))
-
-
-def pricing(request):
-	return render(request, 'polls/pricing.html')
 
 
 def toggle_ballot(request, ballot_url):
