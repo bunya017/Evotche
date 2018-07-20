@@ -20,6 +20,9 @@ class BallotPaper(models.Model):
 	open_date = models.DateTimeField(blank=True, null=True)
 	close_date = models.DateTimeField(blank=True, null=True)
 	is_open = models.BooleanField(default=False)
+	email_delivery = models.BooleanField(default=False)
+	text_delivery = models.BooleanField(default=False)
+
 
 	class Meta:
 		verbose_name_plural = 'Ballot Papers'
