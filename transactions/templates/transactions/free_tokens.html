@@ -1,43 +1,59 @@
 {% extends "polls/ubase.html" %}
 
-{% block title %}Evotche - Buy Tokens{% endblock title %}
+{% block title %}Evotche - Free Tokens{% endblock title %}
 
 {% block content %}
 {% load extras %}
 
 <div class="container">
-  <h1 class="pt-2 my-text-purple">Buy voter tokens</h1>
+  <h1 class="pt-2 my-text-purple">Free voter tokens</h1>
   <div class="divider mb-4"></div>
   <div class="row">
     <div class="col-12 col-md-6 mx-auto">
       <div class="card card-body">
         <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
-        <form class="pb-3" method="post">
-        	{% csrf_token %}
-          {{ form.errors }}
-          {% if notex %}
-            <div class="alert alert-danger text-center">
-              {{ notex }}
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <form class="py-3" method="post">
+          {% csrf_token %}
+          {{ form.management_form }}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-danger text-center">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-            </div>
+              </div>
+            {% endfor %}
           {% endif %}
-          {% if yesex %}
+          {% if conn_error %}
             <div class="alert alert-danger text-center">
-              {{ yesex }}
+              {{ conn_error }}
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+              <span aria-hidden="true">&times;</span>
             </div>
           {% endif %}
           {% if not user.profile.phone %}
-            <div class="form-group pt-2">
+            <div class="form-group">
               <label><h4>Phone number:</h4></label>
              {{ form.phone|add_css:'class:form-control text-center, placeholder:+234XXXXXXXXXX' }}
             </div>
           {% endif %}
           	<div class="form-group">
-              <label><h4>Quantity</h4></label>
-          	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
+              <label><h4>Quantity(<small>maximum of 30</small>):</h4></label>
+              {% if above30 %}
+                <div class="alert alert-danger text-center">
+                  {{ above30 }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </div>
+              {% endif %}
+              {% if zero %}
+                <div class="alert alert-danger text-center">
+                  {{ zero }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </div>
+              {% endif %}
+              {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
           	</div>
             <div class="card card-body">
               <h4 class="card-title">Delivery type:</h4>

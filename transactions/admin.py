@@ -11,8 +11,6 @@ class PurchaseInvoiceAdmin(admin.ModelAdmin):
 	list_display = ['date_created', 'user', 'reference_code', 'status']
 
 
-invoice = PurchaseInvoice()
-
 class ItemAdmin(admin.ModelAdmin):
 	readonly_fields = ('unit_cost', 'quantity', 'date_added')
 	list_display = ['date_added', 'item']
