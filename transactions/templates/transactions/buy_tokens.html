@@ -14,29 +14,31 @@
         <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
         <form class="pb-3" method="post">
         	{% csrf_token %}
-          {{ form.errors }}
-          {% if notex %}
+          {% if cant_buy %}
             <div class="alert alert-danger text-center">
-              {{ notex }}
+              {{ cant_buy }}
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </div>
           {% endif %}
-          {% if yesex %}
+          {% if conn_error %}
             <div class="alert alert-danger text-center">
-              {{ yesex }}
+              {{ conn_error }}
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </div>
           {% endif %}
           {% if not user.profile.phone %}
             <div class="form-group pt-2">
-              <label><h4>Phone number:</h4></label>
+              <label><h4>Phone number:</h4><span class="text-danger">*</span></label>
              {{ form.phone|add_css:'class:form-control text-center, placeholder:+234XXXXXXXXXX' }}
+             <small class="form-text text-danger">
+                {{ form.phone.errors }}                
+              </small>
             </div>
           {% endif %}
           	<div class="form-group">
-              <label><h4>Quantity</h4></label>
+              <label><h4>Quantity:<span class="text-danger">*</span></h4></label>
           	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
           	</div>
             <div class="card card-body">

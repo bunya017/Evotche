@@ -39,6 +39,9 @@ class BallotPaper(models.Model):
 	def is_not_open(self):
 		return self.open_date > timezone.now()
 
+	def is_opened(self):
+		return self.open_date >= timezone.now() <= self.close_date
+
 	def is_closed(self):
 		return self.open_date < timezone.now() > self.close_date
 	

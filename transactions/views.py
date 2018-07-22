@@ -16,11 +16,12 @@ from polls.models import BallotPaper
 from users.models import Profile, Token
 from .models import PurchaseInvoice, Item
 from .forms import InvoiceForm, FreeTokenForm
-from .snippets import auth_payant, make_dict, makeRefCode
+from .snippets import auth_payant, gen_token, make_dict, makeRefCode
 from requests import ConnectionError
 
 
 
+@login_required
 def invoice_list(request):
 	user = request.user
 	if user.has_usable_password() == False:
@@ -32,10 +33,12 @@ def invoice_list(request):
 	return render(request, 'transactions/invoice_list.html', context)
 
 
+@login_required
 def pay(request, ref_code):
 	return redirect('https://demo.payant.ng/pay/%s' % (ref_code))
 
 
+@login_required
 def get_invoice(request, ref_code):
 	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
 	item_list =invoice.item_set.all()
@@ -60,73 +63,123 @@ def buy_tokens(request, ballot_url):
 		form = InvoiceForm(request.POST)
 		if form.is_valid():
 			cl_form = form.cleaned_data
+			if cl_form['phone']:
+				update_profile = Profile(user=request.user, phone=cl_form['phone'])
+				update_profile.save()
 			try:
-				Profile.objects.get(user=user)
-			except (Profile.DoesNotExist):
-				messages.success(request, 'You profile details are required before you can make a purchase.')
-				return render(request, 'transactions/buy_tokens.html', {'form': form, 'ballot': ballot})
-			else:
-				try:
-					PurchaseInvoice.objects.get(ballot_paper=ballot)
-				except (PurchaseInvoice.DoesNotExist):
-					if (cl_form['email_delivery'] and cl_form['text_delivery']) == True:
-						contextg = {'form': form, 'error_message': 'Sorry, you can only select one of these two.'}
-						return render(request, 'transactions/buy_tokens.html', contextg)
-					p_invoice = PurchaseInvoice.objects.create(
-						user=user,
-						ballot_paper=ballot,
-						date_created=datetime.datetime.now(),
-						due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
-					)
-					p_invoice.save()
-					token_item = Item.objects.create(
-						invoice=p_invoice,
-						item='Voter Token',
-						description='Voter Tokens for %s.' % (ballot.ballot_name),
-						unit_cost=35.00,
-						quantity=cl_form['quantity']
-					)
-					token_item.save()
-					token_item_dict = make_dict(token_item)
-					item_list=[token_item_dict]
-
-					if (cl_form['email_delivery'] == True) and (cl_form['text_delivery'] == False):
-						email_item = Item.objects.create(
+				iv = PurchaseInvoice.objects.get(
+					ballot_paper=ballot,
+					ballot_paper__has_free_tokens=False,
+					ballot_paper__is_paid=False
+				)
+			except (PurchaseInvoice.DoesNotExist):
+				p_invoice = PurchaseInvoice.objects.create(
+					user=request.user,
+					ballot_paper=ballot,
+					date_created=datetime.datetime.now(),
+					due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
+				)
+				p_invoice.save()
+				token_item = Item.objects.create(
+					invoice=p_invoice,
+					item='Voter Token',
+					description='Voter Tokens for %s.' % (ballot.ballot_name),
+					unit_cost=35.00,
+					quantity=cl_form['quantity']
+				)
+				token_item.save()
+				token_item_dict = make_dict(token_item)
+				item_list=[token_item_dict]
+				if (cl_form['email_delivery'] == True) and (cl_form['text_delivery'] == True):
+					email_item = Item.objects.create(
 						invoice=p_invoice,
 						item='Email Delivery',
 						description='Delivery of Voter Tokens via email.',
 						unit_cost=1.00,
 						quantity=cl_form['quantity']
-						)
-						email_item.save()
-						email_item_dict = make_dict(email_item)
-						item_list=[token_item_dict, email_item_dict]
-					elif (cl_form['text_delivery'] == True) and (cl_form['email_delivery'] == False):
-						text_item = Item.objects.create(
+					)
+					email_item.save()
+					text_item = Item.objects.create(
 						invoice=p_invoice,
 						item='Text Delivery',
 						description='Delivery of Voter Tokens via text.',
 						unit_cost=5.00,
 						quantity=cl_form['quantity']
-						)
-						text_item.save()
-						text_item_dict = make_dict(text_item)
-						item_list=[token_item_dict, text_item_dict]
-					
-					pay_invoice = Invoice(key)
-					new_invoice = pay_invoice.add(
-						client_id=(user.profile.payant_id),
-						due_date=p_invoice.due_date.strftime('%m/%d/%Y'),
-						fee_bearer='account',
-						items=item_list
 					)
+					text_item.save()
+					email_item_dict = make_dict(email_item)
+					text_item_dict = make_dict(text_item)
+					item_list=[token_item_dict, email_item_dict, text_item_dict]
+				elif (cl_form['email_delivery'] == True) and (cl_form['text_delivery'] == False):
+					email_item = Item.objects.create(
+						invoice=p_invoice,
+						item='Email Delivery',
+						description='Delivery of Voter Tokens via email.',
+						unit_cost=1.00,
+						quantity=cl_form['quantity']
+					)
+					email_item.save()
+					email_item_dict = make_dict(email_item)
+					item_list=[token_item_dict, email_item_dict]
+				elif (cl_form['text_delivery'] == True) and (cl_form['email_delivery'] == False):
+					text_item = Item.objects.create(
+						invoice=p_invoice,
+						item='Text Delivery',
+						description='Delivery of Voter Tokens via text.',
+						unit_cost=5.00,
+						quantity=cl_form['quantity']
+					)
+					text_item.save()
+					text_item_dict = make_dict(text_item)
+					item_list=[token_item_dict, text_item_dict]
+				try:
+					auth_payant(key, 'demo')
+				except (ConnectionError):
+					p_invoice.delete()
+					context3 = {'form': form,
+						'ballot': ballot,
+						'conn_error': 'Network connection error, try again.'
+					}
+					return render(request, 'transactions/buy_tokens.html', context3)
+				else:
+					pay_invoice = Invoice(key)
+					if request.user.profile.payant_id:
+						new_invoice = pay_invoice.add(
+							client_id=(request.user.profile.payant_id),
+							due_date=p_invoice.due_date.strftime('%m/%d/%Y'),
+							fee_bearer='account',
+							items=item_list
+						)
+					else:
+						new_client = {
+							"first_name": request.user.first_name,
+							"last_name": request.user.last_name,
+							"email": request.user.email,
+							"phone": request.user.profile.phone
+						}
+						new_invoice = pay_invoice.add(
+							new=True,
+							client=new_client,
+							due_date=p_invoice.due_date.strftime('%m/%d/%Y'),
+							fee_bearer='account',
+							items=item_list
+						)
 					p_invoice.reference_code = new_invoice[2]['reference_code']
 					p_invoice.status = new_invoice[2]['status']
 					p_invoice.save()
-					return HttpResponseRedirect(reverse('trxns:get_invoice', args=[p_invoice.reference_code]))
-				else:
-					context1 = {'form': form, 'cant_buy': 'This box has voter tokens already! You cannot buy more.'}
-					return render(request, 'transactions/buy_tokens.html', context1)
+					if not request.user.profile.payant_id:
+						request.user.profile.payant_id = new_invoice[2]['client_id']
+						request.user.profile.save()
+					return HttpResponseRedirect(reverse(
+						'trxns:get_invoice',
+						args=[p_invoice.reference_code])
+					)
+			else:
+				context = {'form': form,
+					'ballot': ballot,
+					'cant_buy': 'Sorry, you cannot buy more tokens on this ballot'
+				}
+				return render(request, 'transactions/buy_tokens.html', context)
 
 	context = {'form': form, 'ballot': ballot}
 	return render(request, 'transactions/buy_tokens.html', context)
@@ -135,7 +188,9 @@ def buy_tokens(request, ballot_url):
 @login_required
 def get_free_tokens(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
-	if request.method == 'POST':
+	if request.method != 'POST':
+		form = FreeTokenForm()
+	else:
 		form = FreeTokenForm(data=request.POST)
 		if form.is_valid():
 			cl_form = form.cleaned_data
@@ -173,6 +228,8 @@ def get_free_tokens(request, ballot_url):
 						quantity=cl_form['quantity']
 					)
 					token_item.save()
+					ballot.has_free_tokens = True
+					ballot.save()
 					return HttpResponseRedirect(reverse('trxns:get_invoice', args=[f_invoice.reference_code]))
 				else:
 					f_invoice = PurchaseInvoice(
@@ -214,7 +271,6 @@ def get_free_tokens(request, ballot_url):
 						text_item.save()
 						text_item_dict = make_dict(text_item)
 						item_list=[token_item_dict, email_item_dict, text_item_dict]
-					
 					elif (cl_form['email_delivery'] == True) and (cl_form['text_delivery'] == False):
 						email_item = Item.objects.create(
 							invoice=f_invoice,
@@ -270,31 +326,153 @@ def get_free_tokens(request, ballot_url):
 						f_invoice.reference_code = new_invoice[2]['reference_code']
 						f_invoice.status = new_invoice[2]['status']
 						f_invoice.save()
-						return HttpResponseRedirect(reverse('trxns:get_invoice', args=[f_invoice.reference_code]))
+						if not request.user.profile.payant_id:
+							request.user.profile.payant_id = new_invoice[2]['client_id']
+							request.user.profile.save()
+						return HttpResponseRedirect(reverse(
+							'trxns:get_invoice',
+							args=[f_invoice.reference_code])
+						)
 			else:
-				return HttpResponseRedirect(reverse('trxns:get_invoice', args=[iv.reference_code]))
-	else:
-		form = FreeTokenForm()
+				context = {'form': form,
+					'ballot': ballot,
+					'cant_buy': 'Sorry, you cannot get more tokens on this ballot'
+				}
+				return render(request, 'transactions/free_tokens.html', context)
 
 	context = {'form': form, 'ballot': ballot}
 	return render(request, 'transactions/free_tokens.html', context)
 
 
+@login_required
+def buy_email_delivery(request, ballot_url):
+	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	try:
+		tok_len = len(Token.objects.get(ballot_paper=ballot))
+	except (Token.DoesNotExist):
+		messages.error(request, 'Sorry, you do not have voter tokens.')
+		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	else:
+		em_invoice = PurchaseInvoice.objects.create(
+			user=request.user,
+			ballot_paper=ballot,
+			date_created=datetime.datetime.now(),
+			due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
+		)
+		em_invoice.save()
+		em_item = Item.objects.create(
+			invoice=em_invoice,
+			item='Email Delivery',
+			description='Delivery of Voter Tokens via email.',
+			unit_cost=1.00,
+			quantity=tok_len
+		)
+		em_item.save()
+		item_list = [make_dict(em_item)]
+		try:
+			auth_payant(key, 'demo')
+		except (ConnectionError):
+			em_invoice.delete()
+			messages.error(request, 'Network connection error, try again.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			pay_invoice = Invoice(key)
+			new_invoice = pay_invoice.add(
+				client_id=(request.user.profile.payant_id),
+				due_date=em_invoice.due_date.strftime('%m/%d/%Y'),
+				fee_bearer='account',
+				items=item_list
+			)
+			em_invoice.reference_code = new_invoice[2]['reference_code']
+			em_invoice.status = new_invoice[2]['status']
+			em_invoice.save()
+			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[p_invoice.reference_code]))
+
+
+@login_required
+def buy_text_delivery(request, ballot_url):
+	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	try:
+		tok_len = len(Token.objects.get(ballot_paper=ballot))
+	except (Token.DoesNotExist):
+		messages.error(request, 'Sorry, you do not have voter tokens.')
+		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	else:
+		tx_invoice = PurchaseInvoice.objects.create(
+			user=request.user,
+			ballot_paper=ballot,
+			date_created=datetime.datetime.now(),
+			due_date=datetime.datetime.now().date() + datetime.timedelta(days=2)
+		)
+		tx_invoice.save()
+		tx_item = Item.objects.create(
+			invoice=tx_invoice,
+			item='Email Delivery',
+			description='Delivery of Voter Tokens via email.',
+			unit_cost=1.00,
+			quantity=tok_len
+		)
+		tx_item.save()
+		item_list = [make_dict(tx_item)]
+		try:
+			auth_payant(key, 'demo')
+		except (ConnectionError):
+			em_invoice.delete()
+			messages.error(request, 'Network connection error, try again.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			pay_invoice = Invoice(key)
+			new_invoice = pay_invoice.add(
+				client_id=(request.user.profile.payant_id),
+				due_date=tx_invoice.due_date.strftime('%m/%d/%Y'),
+				fee_bearer='account',
+				items=item_list
+			)
+			em_invoice.reference_code = new_invoice[2]['reference_code']
+			em_invoice.status = new_invoice[2]['status']
+			em_invoice.save()
+			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[p_invoice.reference_code]))
+
+
+@login_required
 def refresh_purchase(request, ref_code):
 	invoice = PurchaseInvoice.objects.get(reference_code=ref_code)
 	ballot = invoice.ballot_paper
 	payment = Payment(key)
+	tok_list = Token.objects.filter(ballot_paper=ballot)
+	tok_item = Item.objects.get(invoice=invoice, item='Voter Token')
+	quantity = tok_item.quantity
+	salt = str(request.user.username + invoice.reference_code + ballot.ballot_name)
 
-	# paymentDate = payment[2]['transaction_date']
+	if ballot.has_free_tokens == True:
+		if len(tok_list) != 0:
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			tokens = gen_token(salt=salt, num=quantity)
+			created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
+			Token.objects.bulk_create([
+				Token(user=i, ballot_paper=ballot) for i in created_tokens
+				]
+			)
+			messages.success(request, 'Voter tokens generated successfully.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	else:
+		if invoice.status != 'successful':
+			messages.error(request, 'Your payment was not successful.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		elif invoice.status == 'successful':
+			ballot.is_paid = True
+			ballot.save()
+			if len(tok_list) != 0:
+				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+			else:
+				tokens = gen_token(salt=salt, num=quantity)
+				created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
+				Token.objects.bulk_create([
+					Token(user=i, ballot_paper=ballot) for i in created_tokens
+					]
+				)
+				messages.success(request, 'Voter tokens generated successfully.')
+				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 
-	if (ballot.is_paid) and len(Token.objects.filter(ballot_paper=ballot)):
-		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
-	elif invoice.status != 'successful':
-		messages.success(request, 'Your payment was not successful.')
-		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
-	elif invoice.status == 'successful':
-		ballot.is_paid = True
-		ballot.save()
-		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
-
-
+#iskjsfd

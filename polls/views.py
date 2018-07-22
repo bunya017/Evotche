@@ -38,23 +38,23 @@ def index(request):
 			try:
 				Token.objects.get(user=User.objects.get(username=user_name))
 			except (User.DoesNotExist, Token.DoesNotExist):
-				messages.success(request, 'Please enter a valid token.')
+				messages.error(request, 'Please enter a valid token.')
 				return HttpResponseRedirect(reverse('users:token_login'))
 			else:
 				auth_user = User.objects.get(username=user_name)
 				ballot = auth_user.token.ballot_paper
 				if auth_user.token.is_used == False:
 					if ballot.is_not_open():
-						messages.success(request, 'Sorry, this ballot box is not open for voting yet.')
+						messages.error(request, 'Sorry, this ballot box is not open for voting yet.')
 						return HttpResponseRedirect(reverse('users:token_login'))
 					elif ballot.is_closed():
-						messages.success(request, 'Sorry, this ballot box is closed for voting.')
+						messages.error(request, 'Sorry, this ballot box is closed for voting.')
 						return HttpResponseRedirect(reverse('users:token_login'))
 					else:
 						login(request, auth_user)
 						return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 				else:
-					messages.success(request, 'This token has been used.')
+					messages.error(request, 'This token has been used.')
 					return HttpResponseRedirect(reverse('users:token_login'))
 	# Check Results Form
 	if request.method != 'POST':
@@ -67,7 +67,7 @@ def index(request):
 			try:
 				Token.objects.get(user=User.objects.get(username=user_name))
 			except (User.DoesNotExist, Token.DoesNotExist):
-				messages.success(request, 'Please enter a valid token.')
+				messages.error(request, 'Please enter a valid token.')
 				return HttpResponseRedirect(reverse('users:check_results'))
 			else:
 				ballot_token = User.objects.get(username=user_name)
@@ -76,7 +76,7 @@ def index(request):
 				try:
 					result_avialable(close=close, now=timezone.now())
 				except (UserWarning):
-					messages.success(request, 'Sorry, the results for this campaign is not public yet.')
+					messages.error(request, 'Sorry, the results for this campaign is not public yet.')
 					return HttpResponseRedirect(reverse('users:check_results'))
 				else:
 					return HttpResponseRedirect(reverse('polls:ballot_results', args=[ballot.ballot_url]))

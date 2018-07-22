@@ -1,4 +1,7 @@
 import requests
+import re
+from hashids import Hashids
+
 
 def make_dict(item):
 	a_list = ['item', 'description', 'unit_cost', 'quantity']
@@ -23,3 +26,13 @@ def auth_payant(key, imp='demo'):
 		requests.get(url[imp], headers=headers)
 	except (requests.ConnectionError):
 		raise
+
+
+def gen_token(salt, num):
+	hashid = Hashids(min_length=20, salt=salt, alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+	pattern = re.compile(r'.*(\w{5})(\w{5})(\w{5})(\w{5})')
+	tokens = []
+	for i in range(num):
+		tokens.append(pattern.sub(r'\1-\2-\3-\4', hashid.encode(i)))
+	return tokens
+	
