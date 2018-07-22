@@ -442,7 +442,7 @@ def refresh_purchase(request, ref_code):
 	tok_list = Token.objects.filter(ballot_paper=ballot)
 	tok_item = Item.objects.get(invoice=invoice, item='Voter Token')
 	quantity = tok_item.quantity
-	salt = str(request.user.username + invoice.reference_code + ballot.ballot_name)
+	salt = str(ballot.ballot_url + request.user.username + invoice.reference_code + ballot.ballot_name)
 
 	if ballot.has_free_tokens == True:
 		if len(tok_list) != 0:
