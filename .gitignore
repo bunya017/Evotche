@@ -2,3 +2,5 @@ my_env/
 media/
 *.pyc
 *.sqlite3
+.idea/
+evotche.iml
