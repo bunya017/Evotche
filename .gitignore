@@ -1,4 +1,4 @@
-my_env/
+venv/
 media/
 *.pyc
 *.sqlite3
