@@ -64,6 +64,30 @@
 {% block content %}
 {% endblock content %}
 
+<section id="footer" class="my-bg-purple">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-8 mx-auto text-center">
+        <a href="https://twitter.com/bunyaminu_" target="_blank">
+          <i class="fa fa-2x my-3 mx-1 my-text-light">&#xf099;</i>
+        </a>
+        <a href="https://facebook.com/evotche" target="_blank">
+          <i class="fa fa-2x my-3 mx-1 my-text-light"> &#xf09a;</i>
+        </a>
+        <a href="https://github.com/bunya017" target="_blank">
+          <i class="fa fa-2x my-3 mx-1 my-text-light"> &#xf09b;</i>
+        </a>
+      </div>
+    </div>
+    <div class="row p-2">
+      <div class="mx-auto">
+        <p class="my-text-light text-center"><a class="my-text-light" href="">About Us</a> | <a class="my-text-light" href="{% url 'polls:index' %}">Terms of Service</a> | <a class="my-text-light" href="/legal/privacy/">Privacy Policy</a></p>
+        <p class="my-text-light text-center">© 2018 <a class="my-text-light" href="{% url 'polls:index' %}">Evotche</a>.  All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <script src="{% static 'polls/bootstrap/js/jquery.js' %}"></script>
 <script src="{% static 'polls/bootstrap/js/popper.js' %}"></script>

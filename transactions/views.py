@@ -84,7 +84,7 @@ def buy_tokens(request, ballot_url):
 					invoice=p_invoice,
 					item='Voter Token',
 					description='Voter Tokens for %s.' % (ballot.ballot_name),
-					unit_cost=35.00,
+					unit_cost=25.00,
 					quantity=cl_form['quantity']
 				)
 				token_item.save()
