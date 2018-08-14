@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['evotche.herokuapp.com', '192.168.43.33', '127.0.0.1', 'localho
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'polls.apps.PollsConfig',
     'users.apps.UsersConfig',
     'transactions.apps.TransactionsConfig',
@@ -40,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
-    'django.contrib.flatpages',
     'django_userforeignkey',
 ]
 
