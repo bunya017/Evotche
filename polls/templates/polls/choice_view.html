@@ -56,7 +56,11 @@
               <ul class="list-group list-group-flush">
                 {% for choice in category.choice_set.all %}
                 <li class="list-group-item">
-                  {{ choice.choice|title }}
+                  {% if category.ballot_paper.created_by.profile.is_authorized %}
+                    {{ choice.choice|title }} <span class="text-danger">{{ choice.votes }}</span>
+                  {% else %}
+                    {{ choice.choice|title }}
+                  {% endif %}
                   <div class="float-right">
                     <a href="{% url 'polls:confirm_choice' choice.id %}"><i class="fa text-danger">&#xf014;</i></a>
                   </div>

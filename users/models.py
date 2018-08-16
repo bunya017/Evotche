@@ -24,6 +24,7 @@ class Profile(models.Model):
 	payant_id = models.IntegerField(null=True , blank=True)
 	phone = models.CharField(max_length=50)
 	organization = models.CharField(max_length=75, blank=True)
+	is_authorized = models.BooleanField(default=False)
 
 	class Meta:
 		ordering = ['id']

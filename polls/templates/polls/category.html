@@ -44,7 +44,11 @@
             </div>
             <ul class="list-group list-group-flush">
             {% for choice in category.choice_set.all%}
-              <li class="list-group-item">{{ choice.choice }}</li>
+              {% if category.ballot_paper.created_by.profile.is_authorized %}
+                <li class="list-group-item">{{ choice.choice }} <span class="text-danger">{{ choice.votes }}</span></li>
+              {% else %}
+                <li class="list-group-item">{{ choice.choice }}</li>
+              {% endif %}
             {% endfor %}
             </ul>
             <div class="text-right pt-1">
