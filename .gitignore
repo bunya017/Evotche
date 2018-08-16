@@ -4,3 +4,5 @@ media/
 *.sqlite3
 .idea/
 evotche.iml
+logs.txt
+log.txt
