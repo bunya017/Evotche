@@ -89,6 +89,13 @@ def pricing(request):
 	return render(request, 'polls/pricing.html')
 
 
+def privacy(request):
+	return render(request, 'polls/privacy.html')
+
+def terms(request):
+	return render(request, 'polls/terms.html')
+
+
 @login_required
 def ballot(request):
 	user = request.user

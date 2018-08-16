@@ -24,5 +24,4 @@ urlpatterns = [
     url(r'^', include('users.urls', namespace='users')),
     url(r'^', include('transactions.urls', namespace='trxns')),
     url(r'^', include('django.contrib.auth.urls')),
-    url(r'^', include('django.contrib.flatpages.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

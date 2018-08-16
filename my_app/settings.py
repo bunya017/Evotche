@@ -31,8 +31,6 @@ ALLOWED_HOSTS = ['evotche.herokuapp.com', '192.168.43.33', '127.0.0.1', 'localho
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
-    'django.contrib.flatpages',
     'polls.apps.PollsConfig',
     'users.apps.UsersConfig',
     'transactions.apps.TransactionsConfig',
@@ -54,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'my_app.urls'
@@ -78,17 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'my_app.wsgi.application'
 
-# Site Id
-SITE_ID = 1
 
 # Email config
 
-#ANYMAIL = {
-#    'MAILGUN_API_KEY': 'sandbox14dd7e40687b49a8bbf4cae7c0bbfb96.mailgun.org',
-#    'MAILGUN_SENDER_DOMAIN': 'key-7a6e2d09c6d06d7808cfb75d0e013bc4',
-#    'MAILGUN_API_URL': 'https://api.mailgun.net/v3/sandbox14dd7e40687b49a8bbf4cae7c0bbfb96.mailgun.org'
-#}
-#EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'postmaster@sandbox14dd7e40687b49a8bbf4cae7c0bbfb96.mailgun.org'
