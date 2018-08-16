@@ -11,7 +11,7 @@ class ChoiceInline(admin.TabularInline):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-	readonly_fields = ('ballot_paper', 'category_name', 'created_by')
+	readonly_fields = ('ballot_paper', 'category_name')
 	inlines = [ChoiceInline]
 	list_display = ['category_name', 'ballot_paper', 'created_by']
 
@@ -22,7 +22,6 @@ class CategoryInline(admin.TabularInline):
 
 class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
-	readonly_fields = ('created_by',)
 	list_display = ['ballot_name', 'created_by', 'is_open']
 
 
