@@ -16,11 +16,12 @@ from django.contrib.auth import login
 from PIL import Image
 from datetime import datetime
 from .models import BallotPaper, Category, Choice
-from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm, AddVotes
 from .snippets import check_start, check_close, result_avialable
 from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
 from transactions.models import PurchaseInvoice
+from django.forms.models import modelformset_factory
 
 
 
@@ -379,3 +380,20 @@ def toggle_ballot(request, ballot_url):
 		ballot.save()
 
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
+
+
+def add_votes(request, ch_id):
+	choice = Choice.objects.get(pk=ch_id)
+	
+	if request.method != 'POST':
+		form = AddVotes()
+	else:
+		form = AddVotes(request.POST)
+		if form.is_valid():
+			num = form.cleaned_data['number']
+			choice.votes += num
+			choice.save()
+			return HttpResponseRedirect(reverse('polls:choice_view', args=[choice.category.id]))
+
+	context = {'choice': choice, 'form': form}
+	return render(request, 'polls/add_votes.html', context)

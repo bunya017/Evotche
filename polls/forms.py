@@ -71,3 +71,14 @@ class ChForm(forms.ModelForm):
 
 ChFormSet   = forms.inlineformset_factory(Category, Choice, form=ChForm,
 				can_delete=False, extra=3)
+
+
+class AddVotes(forms.Form):
+	number = forms.IntegerField(required=True, min_value=0)
+
+	def clean_number(self):
+		number = self.cleaned_data['number']
+		if number <+ 0:
+			raise forms.ValidationError('Number must be greater than 0.')
+		else:
+			return number

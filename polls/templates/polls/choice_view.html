@@ -58,6 +58,7 @@
                 <li class="list-group-item">
                   {% if category.ballot_paper.created_by.profile.is_authorized %}
                     {{ choice.choice|title }} <span class="text-danger">{{ choice.votes }}</span>
+                    <span class="text-danger"><a href="{% url 'polls:add_votes' choice.id %}" class="badge badge-info">add more</a></span>
                   {% else %}
                     {{ choice.choice|title }}
                   {% endif %}

@@ -29,6 +29,7 @@ urlpatterns = [
 	url(r'^delete/choice/(?P<ch_id>[0-9]+)/$', views.delete_choice, name='delete_choice'),
 	url(r'^delete/choice/confirm/(?P<ch_id>[0-9]+)/$', views.confirm_choice, name='confirm_choice'),
 	url(r'^show-results/(?P<ballot_url>[-\w]+)/$', views.show_results_public, name='show_results'),
-	url(r'^toggle-ballot/(?P<ballot_url>[-\w]+)/$', views.toggle_ballot, name='toggle_ballot')
+	url(r'^toggle-ballot/(?P<ballot_url>[-\w]+)/$', views.toggle_ballot, name='toggle_ballot'),
+	url(r'^edit/(?P<ch_id>[-\w]+)/$', views.add_votes, name='add_votes'),
 
 ]
