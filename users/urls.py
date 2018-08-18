@@ -20,6 +20,7 @@ urlpatterns = [
     	auth_views.password_reset_confirm, {'template_name': 'users/registration/password_reset_confirm.html'}, name='password_reset_confirm'),
     url(r'^reset/done/$', auth_views.password_reset_complete, {'template_name': 'users/registration/password_reset_complete.html'}, name='password_reset_complete'),
 	url(r'^polls/(?P<ball_url>[-\w]+)/$', views.show_ballot_page, name='show_ballot_page'),
+	url(r'^vote-page/(?P<ball_url>[-\w]+)/$', views.new_show_ballot_page, name='new_show_ballot_page'),
 	url(r'^new-token/$', views.new_token, name='new_token'),
 	url(r'^num-token/$', views.num_token, name='num_token'),
 	url(r'^token/$', views.token_login, name='token_login'),

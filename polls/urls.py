@@ -10,6 +10,7 @@ urlpatterns = [
 	url(r'^vote/success/$', views.vote_success, name='vote_success'),
 	url(r'^pricing/$', views.pricing, name='pricing'),
 	url(r'^vote/(?P<ballot_url>[-\w]+)/$', views.vote, name='vote'),
+	url(r'^submit-vote/(?P<ballot_url>[-\w]+)/$', views.new_vote, name='new_vote'),
 	url(r'^privacy-policy/$', views.privacy, name='privacy'),
 	url(r'^terms-of-service/$', views.terms, name='terms'),
 	url(r'^results/$', views.results, name='results'),

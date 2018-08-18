@@ -35,6 +35,7 @@ def signup(request):
 		form = MyUserSignupForm(data=request.POST)
 		if form.is_valid():
 			user = form.save()
+			Profile.objects.create(user=user, is_authorized=False)
 			login(request, user)
 			return HttpResponseRedirect(reverse('polls:ballot'))
 
@@ -90,8 +91,26 @@ def contact_success(request):
 	return render(request, 'users/contact_success.html', context,)
 
 
-@login_required(login_url='/users/token')
+def new_show_ballot_page(request, ball_url):
+	"""
+	For ballots without tokens.
+	"""
+	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
+	caty_list = Category.objects.filter(ballot_paper=display_ballot)
+	user = request.user
+	if user.is_authenticated() and user.has_usable_password():
+		base_template = 'polls/ubase.html'
+	else:
+		base_template = 'polls/base.html'
+	context = {'display_ballot': display_ballot, 'caty_list': caty_list, 'base_template':base_template}
+	return render(request, 'polls/display_ballot.html', context)
+
+
+@login_required(login_url='/token/')
 def show_ballot_page(request, ball_url):
+	"""
+	For ballots with tokens.
+	"""
 	display_ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	caty_list = Category.objects.filter(ballot_paper=display_ballot)
 	user = request.user
@@ -278,6 +297,7 @@ def update_profile(request):
 	return render(request, 'users/update_profile.html', context)
 
 
+@login_required
 def display_profile(request):
 	user = request.user
 	context = {'user': user}

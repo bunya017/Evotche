@@ -22,7 +22,11 @@
             {% endif %}
           </li>
           <li class="list-inline-item">
-            <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
+            {% if ballot.created_by.profile.is_authorized %}
+              <a class="px-1" href="{% url 'users:new_show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
+            {% else %}
+              <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
+            {% endif %}
           </li>
         </ul>
         <div class="p-0">

@@ -125,8 +125,36 @@ def choice_view(request, cat_id):
 	return render(request, 'polls/choice_view.html', context)
 
 
-@login_required(login_url='/users/token')
+def new_vote(request, ballot_url):
+	"""
+	For ballots without tokens.
+	"""
+	display_ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
+	queryset = Category.objects.filter(ballot_paper=display_ballot)
+	caty = get_list_or_404(queryset)
+
+	for cat in caty:
+		try:
+			selected_choice = cat.choice_set.get(pk=request.POST[cat.category_name])
+		except (KeyError, Choice.DoesNotExist):
+			return render(request, 'polls/display_ballot.html', {
+				'display_ballot': display_ballot,
+				'error_message': 'Please select a valid choice.'
+			})
+		except (MultiValueDictKeyError):
+			pass
+		else:
+			selected_choice.votes += 1
+			selected_choice.save()
+
+	return HttpResponseRedirect(reverse('polls:vote_success'))
+
+
+@login_required(login_url='/token/')
 def vote(request, ballot_url):
+	"""
+	For ballots with tokens.
+	"""
 	display_ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	queryset = Category.objects.filter(ballot_paper=display_ballot)
 	caty = get_list_or_404(queryset)
@@ -157,6 +185,7 @@ def vote(request, ballot_url):
 				user.token.is_used = True
 				user.token.save()
 				logout(request)
+
 	
 	return HttpResponseRedirect(reverse('polls:vote_success'))
 
@@ -382,6 +411,7 @@ def toggle_ballot(request, ballot_url):
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
+@login_required
 def add_votes(request, ch_id):
 	choice = Choice.objects.get(pk=ch_id)
 	

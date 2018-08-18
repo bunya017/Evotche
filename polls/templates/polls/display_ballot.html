@@ -17,47 +17,51 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
           </div>
-        {% endif %}       
-        <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
-          {% csrf_token %}
-          <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
-          {% for cat in display_ballot.category_set.all %}
-          <h3 class="pt-3">{{ cat }}</h3>   
-            {% if display_ballot.is_photo_ballot %}
-            <div class="row">
-              {% for choice in cat.choice_set.all %}
-                <div class="col-6 col-sm-4 col-md-4">
-                  <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-                  <label for="{{ cat }}{{ forloop.counter }}">
-                    <img height="130" width="130" src="{{ choice.photo.url }}" alt="{{ choice.choice }} photo">
-                    <div class="text-center">{{ choice.choice }}</div>
-                  </label>
+        {% endif %}
+        {% if display_ballot.created_by.profile.is_authorized %}
+          <form action="{% url 'polls:new_vote' display_ballot.ballot_url %}" method="post" class="pb-4">
+        {% else %}
+          <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
+        {% endif %}
+            {% csrf_token %}
+            <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
+            {% for cat in display_ballot.category_set.all %}
+            <h3 class="pt-3">{{ cat }}</h3>   
+              {% if display_ballot.is_photo_ballot %}
+                <div class="row">
+                  {% for choice in cat.choice_set.all %}
+                    <div class="col-6 col-sm-4 col-md-4">
+                      <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                      <label for="{{ cat }}{{ forloop.counter }}">
+                        <img height="130" width="130" src="{{ choice.photo.url }}" alt="{{ choice.choice }} photo">
+                        <div class="text-center">{{ choice.choice }}</div>
+                      </label>
+                    </div>
+                  {% endfor %}
                 </div>
-              {% endfor %}
-            </div>
-            {% else %}
-              {% for choice in cat.choice_set.all %}
-              <div class="offset-1">
-                <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-                <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
-                <br>
+              {% else %}
+                {% for choice in cat.choice_set.all %}
+                <div class="offset-1">
+                  <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                  <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
+                  <br>
+                </div>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+            {% if  user.is_authenticated and user.has_usable_password %}
+              <div class="pt-3 pb-5">
+                <p class="text-danger text-uppercase"><b>Note: This is a Preview Page.</b></p>
+                <p>Voting opens on: {{ display_ballot.open_date }}</p>
+                <p>Voting closes on: {{ display_ballot.close_date }}</p>
               </div>
-              {% endfor %}
+            {% else %}
+              <div class="mb-5 pt-5">
+                <input class="btn btn-outline-dark" type="submit" value="Vote" />
+                <p class="pb-5"></p>
+              </div>
             {% endif %}
-          {% endfor %}
-          {% if  user.is_authenticated and user.has_usable_password %}
-            <div class="pt-3 pb-5">
-              <p class="text-danger text-uppercase"><b>Note: This is a Preview Page.</b></p>
-              <p>Voting opens on: {{ display_ballot.open_date }}</p>
-              <p>Voting closes on: {{ display_ballot.close_date }}</p>
-            </div>
-          {% else %}
-            <div class="mb-5 pt-5">
-              <input class="btn btn-outline-dark" type="submit" value="Vote" />
-              <p class="pb-5"></p>
-            </div>
-          {% endif %}
-        </form>
+          </form>
       </div>
     </div>
   </div>

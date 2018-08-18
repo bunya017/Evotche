@@ -1,8 +1,8 @@
 {% extends "polls/base.html" %}
+{% block title %}Evotche - Success{% endblock title %}
 {% block content %}
 {% load extras %}
 
-{% block title %}Evotche - Success{% endblock title %}
 
 <section>
   <div class="container">
@@ -15,7 +15,7 @@
           </div>
           <div class="mb-3">
             <p>Your vote has been submitted successfully.</p>
-            <p>Thank you for using evotvhe.</p>
+            <p>Thank you for using evotche.</p>
             <a class="my-text-purple" href="{% url 'polls:index' %}"><i class="fa fa-2x">&#xf015;</i> Home</a>
           </div>
         </div>
