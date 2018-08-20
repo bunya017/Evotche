@@ -35,4 +35,4 @@ def gen_token(salt, num):
 	for i in range(num):
 		tokens.append(pattern.sub(r'\1-\2-\3-\4', hashid.encode(i)))
 	return tokens
-	
+

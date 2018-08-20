@@ -1,3 +1,4 @@
+from hashids import Hashids
 
 
 
@@ -24,3 +25,8 @@ def result_avialable(close, now):
 		assert now > close
 	except AssertionError:
 		raise UserWarning
+
+
+def gen_url(salt, id):
+	hashid = Hashids(min_length=10, salt=salt, alphabet='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+	return hashid.encode(id)

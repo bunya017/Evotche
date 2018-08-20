@@ -17,7 +17,7 @@ from PIL import Image
 from datetime import datetime
 from .models import BallotPaper, Category, Choice
 from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm, AddVotes
-from .snippets import check_start, check_close, result_avialable
+from .snippets import check_start, check_close, gen_url, result_avialable
 from users.forms import TokenUserForm, ResultCheckForm
 from users.models import Token
 from transactions.models import PurchaseInvoice
@@ -253,9 +253,12 @@ def add_new_ballot(request):
 			try:
 				new_ballot = form.save(commit=False)
 				new_ballot.created_by = request.user
-				new_ballot.ballot_url = slugify(request.user.username +' '+ new_ballot.ballot_name)
+				#new_ballot.ballot_url = slugify(request.user.username +' '+ new_ballot.ballot_name)
 				new_ballot.open_date = check_start(start, now)
 				new_ballot.close_date = check_close(close, start)
+				new_ballot.save()
+				salt = str(request.user) + str(new_ballot.ballot_name) + datetime.now().strftime("%a, %d %b %Y %H:%M:%S")
+				new_ballot.ballot_url = gen_url(salt=salt, id=new_ballot.pk)
 				new_ballot.save()
 			except (IntegrityError):
 				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
@@ -323,7 +326,7 @@ def delete_ballot(request, ball_id):
 
 
 @login_required
-def confirm_ballot(request, cat_id):
+def confirm_ballot(request, ball_id):
 	"""Delete is final"""
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	categories = ballot.category_set.all()
