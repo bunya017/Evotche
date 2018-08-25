@@ -15,13 +15,13 @@ class BallotPaper(models.Model):
 	created_by   = UserForeignKey(auto_user_add=True)
 	ballot_url   = models.SlugField(unique=True)
 	is_photo_ballot = models.BooleanField(default=False)
-	is_paid = models.BooleanField(default=False)
+	has_paid_tokens = models.BooleanField(default=False)
 	has_free_tokens = models.BooleanField(default=False)
 	open_date = models.DateTimeField(blank=True, null=True)
 	close_date = models.DateTimeField(blank=True, null=True)
-	is_open = models.BooleanField(default=False)
-	email_delivery = models.BooleanField(default=False)
-	text_delivery = models.BooleanField(default=False)
+	is_protected_with_tokens = models.BooleanField(default=False)
+	has_email_delivery = models.BooleanField(default=False)
+	has_text_delivery = models.BooleanField(default=False)
 
 
 	class Meta:

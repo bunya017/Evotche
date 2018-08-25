@@ -25,17 +25,6 @@ from users.models import Token
 
 
 
-#def check_usable_password(user):
-#	return user.has_usable_password()
-
-
-def check_login_then_logout(request):
-	if request.user.is_authenticated():
-		logout(request)
-		messages.error(request, 'Access denied, please log into your account.')
-	return HttpResponseRedirect(reverse('users:login'))
-
-
 def index(request):
 	if request.user.is_authenticated() and request.user.has_usable_password():
 		return HttpResponseRedirect(reverse('polls:ballot'))
@@ -106,6 +95,13 @@ def privacy(request):
 
 def terms(request):
 	return render(request, 'polls/terms.html')
+
+
+def check_login_then_logout(request):
+	if request.user.is_authenticated():
+		logout(request)
+		messages.error(request, 'Access denied, please log into your account.')
+	return HttpResponseRedirect(reverse('users:login'))
 
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
