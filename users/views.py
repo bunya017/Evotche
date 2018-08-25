@@ -11,14 +11,14 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from polls.models import BallotPaper, Category, Choice
 from my_app.settings import PAYANT_AUTH_KEY as key
 from pypayant import Client
 from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
 from .models import Token, Profile
 from .snippets import gen_token
-from polls.snippets import result_avialable
+from polls.snippets import check_usable_password, result_avialable
 from transactions.models import PurchaseInvoice
 
 
@@ -122,7 +122,7 @@ def show_ballot_page(request, ball_url):
 	return render(request, 'polls/display_ballot.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def new_token(request):
 	if request.method != 'POST':
 		userToken = TokenUserForm()
@@ -180,7 +180,7 @@ def token_login(request):
 	return render(request, 'users/token_login.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def tokens_view(request):
 	user = request.user
 	if user.has_usable_password() == False:
@@ -192,7 +192,7 @@ def tokens_view(request):
 	return render(request, 'users/tokens_view.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def my_token(request, ball_url):
 	ballot = BallotPaper.objects.get(ballot_url=ball_url)
 	unused_token = Token.objects.filter(ballot_paper=ballot, is_used=False)
@@ -208,7 +208,7 @@ def my_token(request, ball_url):
 	return render(request, 'users/my_token.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def num_token(request):
 	if request.method != 'POST':
 		numToken = TokenNumForm()
@@ -259,7 +259,7 @@ def check_results(request):
 	return render(request, 'users/check_results.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def update_profile(request):
 	user = request.user
 	if request.method != 'POST':
@@ -297,7 +297,7 @@ def update_profile(request):
 	return render(request, 'users/update_profile.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def display_profile(request):
 	user = request.user
 	context = {'user': user}

@@ -21,6 +21,15 @@
               </button>
             </div>
           {% endif %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert {{ message.tags }} text-center">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </div>
+            {% endfor %}
+          {% endif %}
           <form method="post" class="py-2">
             {% csrf_token %}
             <div class="form-group py-2">

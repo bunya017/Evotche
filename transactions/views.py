@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, get_list_or_404
@@ -17,11 +17,12 @@ from users.models import Profile, Token
 from .models import PurchaseInvoice, Item
 from .forms import InvoiceForm, FreeTokenForm
 from .snippets import auth_payant, gen_token, make_dict, makeRefCode
+from polls.snippets import check_usable_password
 from requests import ConnectionError
 
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def invoice_list(request):
 	user = request.user
 	if user.has_usable_password() == False:
@@ -33,12 +34,12 @@ def invoice_list(request):
 	return render(request, 'transactions/invoice_list.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def pay(request, ref_code):
 	return redirect('https://demo.payant.ng/pay/%s' % (ref_code))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def get_invoice(request, ref_code):
 	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
 	item_list =invoice.item_set.all()
@@ -53,7 +54,7 @@ def get_invoice(request, ref_code):
 	return render(request, 'transactions/get_invoice.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_tokens(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	user = ballot.created_by
@@ -185,7 +186,7 @@ def buy_tokens(request, ballot_url):
 	return render(request, 'transactions/buy_tokens.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def get_free_tokens(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	if request.method != 'POST':
@@ -344,7 +345,7 @@ def get_free_tokens(request, ballot_url):
 	return render(request, 'transactions/free_tokens.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_email_delivery(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	try:
@@ -389,7 +390,7 @@ def buy_email_delivery(request, ballot_url):
 			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[p_invoice.reference_code]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_text_delivery(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	try:
@@ -434,7 +435,7 @@ def buy_text_delivery(request, ballot_url):
 			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[p_invoice.reference_code]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def refresh_purchase(request, ref_code):
 	invoice = PurchaseInvoice.objects.get(reference_code=ref_code)
 	ballot = invoice.ballot_paper

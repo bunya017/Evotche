@@ -32,5 +32,7 @@ urlpatterns = [
 	url(r'^show-results/(?P<ballot_url>[-\w]+)/$', views.show_results_public, name='show_results'),
 	url(r'^toggle-ballot/(?P<ballot_url>[-\w]+)/$', views.toggle_ballot, name='toggle_ballot'),
 	url(r'^edit/(?P<ch_id>[-\w]+)/$', views.add_votes, name='add_votes'),
+	url(r'^check-status/$', views.check_login_then_logout, name='check_login_then_logout'),
+	#url(r'^sign-out/$', views.sign_out, name='sign_out')
 
 ]

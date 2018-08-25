@@ -1,28 +1,39 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from django.shortcuts import get_object_or_404, get_list_or_404, render
-from django.utils.text import slugify
-from django.utils import timezone
-from django.http import HttpResponse, HttpResponseRedirect
-from django.utils.datastructures import MultiValueDictKeyError
-from django.db.utils import IntegrityError
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth import login
+from functools import wraps
 from PIL import Image
 from datetime import datetime
-from .models import BallotPaper, Category, Choice
-from .forms import BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm, AddVotes
-from .snippets import check_start, check_close, gen_url, result_avialable
-from users.forms import TokenUserForm, ResultCheckForm
-from users.models import Token
-from transactions.models import PurchaseInvoice
-from django.forms.models import modelformset_factory
 
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.db.utils import IntegrityError
+from django.forms.models import modelformset_factory
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, get_list_or_404, render
+from django.utils import timezone
+from django.utils.datastructures import MultiValueDictKeyError
+from django.utils.text import slugify
+from .forms import AddVotes, BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from .models import BallotPaper, Category, Choice
+from .snippets import check_close, check_start, check_usable_password, gen_url, result_avialable
+from transactions.models import PurchaseInvoice
+from users.forms import ResultCheckForm, TokenUserForm
+from users.models import Token
+
+
+
+#def check_usable_password(user):
+#	return user.has_usable_password()
+
+
+def check_login_then_logout(request):
+	if request.user.is_authenticated():
+		logout(request)
+		messages.error(request, 'Access denied, please log into your account.')
+	return HttpResponseRedirect(reverse('users:login'))
 
 
 def index(request):
@@ -97,19 +108,14 @@ def terms(request):
 	return render(request, 'polls/terms.html')
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def ballot(request):
-	user = request.user
-	if user.has_usable_password() == False:
-		if user.token.is_token:
-			ballot = user.token.ballot_paper
-			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'polls/ballot.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def category_view(request, ball_id):
 	queryset = BallotPaper.objects.filter(created_by=request.user)
 	ballot = get_object_or_404(queryset, pk=ball_id)
@@ -117,7 +123,7 @@ def category_view(request, ball_id):
 	return render(request, 'polls/category.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def choice_view(request, cat_id):
 	queryset = Category.objects.filter(created_by=request.user)
 	category = get_object_or_404(queryset, pk=cat_id)
@@ -136,11 +142,11 @@ def new_vote(request, ballot_url):
 	for cat in caty:
 		try:
 			selected_choice = cat.choice_set.get(pk=request.POST[cat.category_name])
-		except (KeyError, Choice.DoesNotExist):
-			return render(request, 'polls/display_ballot.html', {
-				'display_ballot': display_ballot,
-				'error_message': 'Please select a valid choice.'
-			})
+		#except (KeyError, Choice.DoesNotExist):
+		#	return render(request, 'polls/display_ballot.html', {
+		#		'display_ballot': display_ballot,
+		#		'error_message': 'Please select a valid choice.'
+		#	})
 		except (MultiValueDictKeyError):
 			pass
 		else:
@@ -184,7 +190,7 @@ def vote(request, ballot_url):
 					display_ballot.save() 
 				user.token.is_used = True
 				user.token.save()
-				logout(request)
+				logout(user)
 
 	
 	return HttpResponseRedirect(reverse('polls:vote_success'))
@@ -194,13 +200,13 @@ def vote_success(request):
 	return render(request, 'polls/vote_success.html')
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def results(request):
-	user = request.user
-	if user.has_usable_password() == False:
-		ballot = user.token.ballot_paper
-		if user.token.is_token:
-			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
+	#user = request.user
+	#if user.has_usable_password() == False:
+	#	ballot = user.token.ballot_paper
+	#	if user.token.is_token:
+	#		return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'polls/results.html', context)
@@ -218,7 +224,7 @@ def ballot_results(request, ballot_url):
 	return render(request, 'polls/ballot_result.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def show_results_public(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	if ballot.show_results_to_public == False:
@@ -231,7 +237,7 @@ def show_results_public(request, ballot_url):
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def add_new_ballot(request):
 	user = request.user
 	now = datetime.now()
@@ -272,7 +278,7 @@ def add_new_ballot(request):
 	return render(request, 'polls/new_ballot.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def add_new_caty(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	initial_dict = {'ballot_paper': ballot}
@@ -294,7 +300,7 @@ def add_new_caty(request, ball_id):
 	return render(request, 'polls/new_caty.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def add_new_choice(request, cat_id):
 	category = get_object_or_404(Category, created_by=request.user, pk=cat_id)
 	initial_dict = {'category': category}
@@ -310,7 +316,7 @@ def add_new_choice(request, cat_id):
 	return render(request, 'polls/new_choice.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def delete_ballot(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	categories = len(ballot.category_set.all())
@@ -325,7 +331,7 @@ def delete_ballot(request, ball_id):
 	return render(request, 'polls/delete_ballot.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def confirm_ballot(request, ball_id):
 	"""Delete is final"""
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
@@ -345,7 +351,7 @@ def confirm_ballot(request, ball_id):
 			return HttpResponseRedirect(reverse('polls:delete_ballot', args=[ballot.id]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def delete_caty(request, cat_id):
 	category = get_object_or_404(Category, pk=cat_id)
 	ballot  = category.ballot_paper
@@ -354,7 +360,7 @@ def delete_caty(request, cat_id):
 	return render(request, 'polls/delete_caty.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def confirm_caty(request, cat_id):
 	"""Delete is final"""
 	category = get_object_or_404(Category, pk=cat_id)
@@ -373,7 +379,7 @@ def confirm_caty(request, cat_id):
 			return HttpResponseRedirect(reverse('polls:delete_caty', args=[category.id]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def delete_choice(request, ch_id):
 	choice = get_object_or_404(Choice, pk=ch_id)
 	category = choice.category
@@ -381,7 +387,7 @@ def delete_choice(request, ch_id):
 	return render(request, 'polls/delete_choice.html', context)
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def confirm_choice(request, ch_id):
 	"""Delete is final"""
 	choice = get_object_or_404(Choice, pk=ch_id)
@@ -414,7 +420,7 @@ def toggle_ballot(request, ballot_url):
 	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
-@login_required
+@user_passes_test(check_usable_password, login_url='/check-status/')
 def add_votes(request, ch_id):
 	choice = Choice.objects.get(pk=ch_id)
 	

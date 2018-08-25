@@ -30,3 +30,7 @@ def result_avialable(close, now):
 def gen_url(salt, id):
 	hashid = Hashids(min_length=10, salt=salt, alphabet='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 	return hashid.encode(id)
+
+
+def check_usable_password(user):
+	return user.has_usable_password()
