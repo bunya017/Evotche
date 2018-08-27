@@ -18,7 +18,7 @@
               <span aria-hidden="true">&times;</span>
           </div>
         {% endif %}
-        {% if display_ballot.created_by.profile.is_authorized %}
+        {% if display_ballot.can_add_votes %}
           <form action="{% url 'polls:new_vote' display_ballot.ballot_url %}" method="post" class="pb-4">
         {% else %}
           <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
