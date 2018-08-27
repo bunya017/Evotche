@@ -198,11 +198,6 @@ def vote_success(request):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def results(request):
-	#user = request.user
-	#if user.has_usable_password() == False:
-	#	ballot = user.token.ballot_paper
-	#	if user.token.is_token:
-	#		return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'polls/results.html', context)
@@ -212,10 +207,17 @@ def ballot_results(request, ballot_url):
 	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=ballot)
 	user = request.user 
-	if user.is_authenticated() and user.has_usable_password():
+	if user == ballot.created_by:
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
+		if ballot.is_opened() == False:
+			context = {'base_template': base_template, 'error_message': 'Oops! This voting campaign is not open yet.'}
+			return render(request, 'polls/not_available.html', context)
+		elif ballot.is_closed() == True:
+			context = {'base_template': base_template, 'error_message': 'Oops! This voting campaign is closed.'}
+			return render(request, 'polls/not_available.html', context)
+
 	context = {'caty_list': caty_list, 'ballot': ballot, 'base_template': base_template}
 	return render(request, 'polls/ballot_result.html', context)
 
@@ -237,10 +239,6 @@ def show_results_public(request, ballot_url):
 def add_new_ballot(request):
 	user = request.user
 	now = datetime.now()
-	if user.has_usable_password() == False:
-		ballot = user.token.ballot_paper
-		if user.token.is_token:
-			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	if request.method != 'POST':
 		form = BallotForm()
 	else:
@@ -263,7 +261,7 @@ def add_new_ballot(request):
 				new_ballot.ballot_url = gen_url(salt=salt, id=new_ballot.pk)
 				new_ballot.save()
 			except (IntegrityError):
-				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you have created this box already.'})
+				return render(request, 'polls/new_ballot.html', {'form': form, 'context': 'Sorry, you have created this box already.'})
 			except (AssertionError):
 				return render(request, 'polls/new_ballot.html', {'form': form, 'error_message': 'Sorry, you can\'t set open time less than now.'})
 			except (ZeroDivisionError):
@@ -398,22 +396,6 @@ def confirm_choice(request, ch_id):
 			return HttpResponseRedirect(reverse('polls:choice_view', args=[category.id]))
 		else:
 			return HttpResponseRedirect(reverse('polls:delete_choice', args=[choice.id]))
-
-
-def toggle_ballot(request, ballot_url):
-	ballot = get_object_or_404(BallotPaper, created_by=request.user, ballot_url=ballot_url)
-	if ballot.is_open == False:
-		ballot.is_not_open = False
-		ballot.is_open = True
-		ballot.is_closed = False
-		ballot.save()
-	else:
-		ballot.is_not_open = False
-		ballot.is_open = False
-		ballot.is_closed = True
-		ballot.save()
-
-	return HttpResponseRedirect(reverse('polls:category_view', args=[ballot.id]))
 
 
 @user_passes_test(check_usable_password, login_url='/check-status/')

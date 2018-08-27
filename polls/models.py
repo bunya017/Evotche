@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import StringIO
 from PIL import Image
+import StringIO
 
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils import timezone
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django_userforeignkey.models.fields import UserForeignKey
 
 
@@ -19,7 +19,8 @@ class BallotPaper(models.Model):
 	has_free_tokens = models.BooleanField(default=False)
 	open_date = models.DateTimeField(blank=True, null=True)
 	close_date = models.DateTimeField(blank=True, null=True)
-	is_protected_with_tokens = models.BooleanField(default=False)
+	is_custom = models.BooleanField(default=False) # Not protected with tokens
+	can_add_votes = models.BooleanField(default=False)
 	has_email_delivery = models.BooleanField(default=False)
 	has_text_delivery = models.BooleanField(default=False)
 
@@ -40,10 +41,10 @@ class BallotPaper(models.Model):
 		return self.open_date > timezone.now()
 
 	def is_opened(self):
-		return self.open_date >= timezone.now() <= self.close_date
+		return timezone.now() >= self.open_date
 
 	def is_closed(self):
-		return self.open_date < timezone.now() > self.close_date
+		return timezone.now() >= self.close_date
 	
 	def __str__(self):
 		return self.ballot_name
@@ -88,6 +89,5 @@ class Choice(models.Model):
 			self.photo = InMemoryUploadedFile(output, 'ImageField', '%s.jpg' %self.photo.name, 'image/jpeg', output.len, None)
 
 	def __str__(self):
-
 		return self.choice
 

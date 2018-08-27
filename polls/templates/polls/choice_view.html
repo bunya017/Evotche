@@ -56,7 +56,7 @@
               <ul class="list-group list-group-flush">
                 {% for choice in category.choice_set.all %}
                 <li class="list-group-item">
-                  {% if category.ballot_paper.created_by.profile.is_authorized %}
+                  {% if category.ballot_paper.can_add_votes %}
                     {{ choice.choice|title }} <span class="text-danger">{{ choice.votes }}</span>
                     <span class="text-danger"><a href="{% url 'polls:add_votes' choice.id %}" class="badge badge-info">add more</a></span>
                   {% else %}

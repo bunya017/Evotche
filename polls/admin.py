@@ -23,7 +23,7 @@ class CategoryInline(admin.TabularInline):
 class BallotAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'ballot_url': ('ballot_name',)}
 	readonly_fields = ('created_by',)
-	list_display = ['ballot_name', 'created_by']
+	list_display = ['ballot_name', 'created_by', 'is_custom']
 
 
 admin.site.register(Category, CategoryAdmin)

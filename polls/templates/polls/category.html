@@ -15,14 +15,14 @@
         <a class="my-text-purple float-right" href="{% url 'polls:add_new_caty' ballot.id %}"><h4><i class="fa">&#xf055;</i>New Category</h4></a>
         <ul class="list-inline text-right pt-2">
           <li class="list-inline-item">
-            {% if ballot.is_paid is False and ballot.has_free_tokens is False %}
+            {% if ballot.has_paid_tokens is False and ballot.has_free_tokens is False %}
               <a class="px-1" href="{% url 'trxns:buy_tokens' ballot.ballot_url %}">
                 <button class="btn btn-outline-success">Buy tokens</button>
               </a>
             {% endif %}
           </li>
           <li class="list-inline-item">
-            {% if ballot.created_by.profile.is_authorized %}
+            {% if ballot.is_custom %}
               <a class="px-1" href="{% url 'users:new_show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
             {% else %}
               <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank"><button class="btn btn-outline-dark">Preview</button></a>
@@ -48,7 +48,7 @@
             </div>
             <ul class="list-group list-group-flush">
             {% for choice in category.choice_set.all%}
-              {% if category.ballot_paper.created_by.profile.is_authorized %}
+              {% if category.ballot_paper.can_add_votes %}
                 <li class="list-group-item">{{ choice.choice }} <span class="text-danger">{{ choice.votes }}</span></li>
               {% else %}
                 <li class="list-group-item">{{ choice.choice }}</li>
