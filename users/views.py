@@ -35,7 +35,7 @@ def signup(request):
 		form = MyUserSignupForm(data=request.POST)
 		if form.is_valid():
 			user = form.save()
-			Profile.objects.create(user=user, is_authorized=False)
+			Profile.objects.create(user=user)
 			login(request, user)
 			return HttpResponseRedirect(reverse('polls:ballot'))
 
