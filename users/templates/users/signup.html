@@ -8,27 +8,61 @@
 {% load static %}
 <div class="container">
   <div class="row">
-    <div class="col-12 col-md-8 col-lg-6 mx-auto mt-2">
+    <div class="col-12 col-md-8 col-lg-6 mx-auto my-5">
       <div class="card card-body mb-5 pb-5">
         <div class="text-center card-title">
-          <h2>Create a new account</h2>
+          <h2 class="text-center">Sign up</h2>
         </div>
         <form method="post" action="{% url 'users:signup' %}">
           {% csrf_token %}
-          {% for field in form %}
-            <div class="form-group">
-              {{ field.label_tag }}<span class="text-danger">*</span>
-              {{ field|add_css:'class:form-control' }}
+          <div class="form-row">
+            <div class="form-group col-sm-6">
+              {{ form.first_name.label_tag }}<span class="text-danger">*</span>
+              {{ form.first_name|add_css:'class:form-control' }}
               <small class="form-text text-danger">
-                {{ field.errors }}                
+                {{ form.first_name.errors }}                
               </small>
             </div>
-          {% endfor %}
-            <button type="submit" class="btn btn-outline-success col-5">Sign up</button>
-            <input type="hidden" name="next" value="{% url 'polls:index' %}">
+            <div class="form-group col-sm-6">
+              {{ form.last_name.label_tag }}<span class="text-danger">*</span>
+              {{ form.last_name|add_css:'class:form-control' }}
+              <small class="form-text text-danger">
+                {{ form.last_name.errors }}                
+              </small>
+            </div>
+            <div class="form-group col-sm-6">
+              {{ form.username.label_tag }}<span class="text-danger">*</span>
+              {{ form.username|add_css:'class:form-control' }}
+              <small class="form-text text-danger">
+                {{ form.username.errors }}                
+              </small>
+            </div>
+            <div class="form-group col-sm-6">
+              {{ form.email.label_tag }}<span class="text-danger">*</span>
+              {{ form.email|add_css:'class:form-control' }}
+              <small class="form-text text-danger">
+                {{ form.email.errors }}                
+              </small>
+            </div>
+            <div class="form-group col-sm-6">
+              {{ form.password1.label_tag }}<span class="text-danger">*</span>
+              {{ form.password1|add_css:'class:form-control, placeholder:Choose a strong password' }}
+              <small class="form-text text-danger">
+                {{ form.password1.errors }}                
+              </small>
+            </div>
+            <div class="form-group col-sm-6">
+              {{ form.password2.label_tag }}<span class="text-danger">*</span>
+              {{ form.password2|add_css:'class:form-control, placeholder:Re-enter your password' }}
+              <small class="form-text text-danger">
+                {{ form.password2.errors }}                
+              </small>
+            </div>
           </div>
+          <button type="submit" class="btn my-btn-purple col-5">Sign up</button>
+          <input type="hidden" name="next" value="{% url 'polls:index' %}">
         </form>
-        <small>Already have an account? <a href="{% url 'users:login' %}">Log in</a></small>
+        <small class="pt-3">Already have an account? <a href="{% url 'users:login' %}">Log in</a></small>
       </div>
     </div>
   </div>

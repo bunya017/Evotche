@@ -158,10 +158,6 @@ def token_login(request):
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def tokens_view(request):
 	user = request.user
-	if user.has_usable_password() == False:
-		ballot = user.token.ballot_paper
-		if user.token.is_token:
-			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
 	context = {'ballot_list': ballot_list}
 	return render(request, 'users/tokens_view.html', context)
