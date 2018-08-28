@@ -17,7 +17,6 @@ from my_app.settings import PAYANT_AUTH_KEY as key
 from pypayant import Client
 from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
 from .models import Token, Profile
-from .snippets import gen_token
 from polls.snippets import check_usable_password, result_avialable
 from transactions.models import PurchaseInvoice
 
@@ -122,30 +121,6 @@ def show_ballot_page(request, ball_url):
 	return render(request, 'polls/display_ballot.html', context)
 
 
-@user_passes_test(check_usable_password, login_url='/check-status/')
-def new_token(request):
-	if request.method != 'POST':
-		userToken = TokenUserForm()
-		token = TokenForm(request.user)
-	else:
-		userToken = TokenUserForm(request.POST)
-		token = TokenForm(request.user, request.POST)
-
-		if userToken.is_valid() and token.is_valid():
-			user_name = userToken.cleaned_data['token']
-			new_userToken = User.objects.create_user(username=user_name)
-			new_userToken.set_unusable_password()
-
-			newToken = token.save(commit=False)
-			newToken.user = new_userToken
-			newToken.is_used = False
-			newToken.save()
-			return HttpResponseRedirect(reverse('users:tokens_view'))
-
-	context = {'userToken': userToken, 'token': token}
-	return render(request, 'users/new_token.html', context)
-
-
 def token_login(request):
 	if request.method != 'POST':
 		form = TokenUserForm()
@@ -206,28 +181,6 @@ def my_token(request, ball_url):
 		invoice = PurchaseInvoice.objects.get(ballot_paper=ballot)
 	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list, 'invoice': invoice}
 	return render(request, 'users/my_token.html', context)
-
-
-@user_passes_test(check_usable_password, login_url='/check-status/')
-def num_token(request):
-	if request.method != 'POST':
-		numToken = TokenNumForm()
-		token = TokenForm(request.user)
-	else:
-		numToken = TokenNumForm(request.POST)
-		token = TokenForm(request.user, request.POST)
-
-		if numToken.is_valid() and token.is_valid():
-			num = numToken.cleaned_data['number_of_tokens']
-			ballot = token.cleaned_data['ballot_paper']
-			tokens = gen_token(num, 8)
-			created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
-			Token.objects.bulk_create([Token(user=i, ballot_paper=ballot, is_used=False) for i in created_tokens])
-
-			return HttpResponseRedirect(reverse('users:token', args=[ballot.ballot_url]))
-
-	context = {'numToken': numToken, 'token': token}
-	return render(request, 'users/num_token.html', context)
 
 
 def check_results(request):
