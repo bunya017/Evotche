@@ -45,8 +45,10 @@
               <input type="hidden" name="next" value="{% url 'polls:ballot' %}">
             </div>
           </form>
-          <small><a class="text-dark" href="{% url 'users:password_reset' %}">Forgot your password?</a></small>
-          <small class="py-3">Don't have an account? <a href="{% url 'users:signup' %}">Sign up</a></small>
+          <div class="py-3 text-center">
+            <p><a href="{% url 'users:password_reset' %}">Forgot your password?</a></p>
+            <p>Don't have an account? <a href="{% url 'users:signup' %}">Sign up</a></p>
+          </div>
         <div>
       </div>
     </div>

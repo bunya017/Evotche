@@ -59,10 +59,10 @@
               </small>
             </div>
           </div>
-          <button type="submit" class="btn my-btn-purple col-5">Sign up</button>
+          <button type="submit" class="btn my-btn-purple col">Create Account</button>
           <input type="hidden" name="next" value="{% url 'polls:index' %}">
         </form>
-        <small class="pt-3">Already have an account? <a href="{% url 'users:login' %}">Log in</a></small>
+        <p class="pt-4 text-center">Already have an account? <a href="{% url 'users:login' %}">Log in</a></p>
       </div>
     </div>
   </div>
