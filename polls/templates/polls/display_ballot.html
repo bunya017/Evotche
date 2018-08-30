@@ -7,7 +7,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/display_ballot.css' %}">
 
-<section>
+<section class="fill-viewport">
   <div class="container">
     <div class="row">
       <div class="col-12 col-md-8 mx-auto">
@@ -24,9 +24,9 @@
           <form action="{% url 'polls:vote' display_ballot.ballot_url %}" method="post" class="pb-4">
         {% endif %}
             {% csrf_token %}
-            <h2 class="pt-3 text-center">{{ display_ballot.ballot_name }} Polls Page</h2>
+            <h1 class="pt-5 pb-2 text-center text-uppercase">{{ display_ballot.ballot_name }}</h1>
             {% for cat in display_ballot.category_set.all %}
-            <h3 class="pt-3">{{ cat }}</h3>   
+            <h2 class="pt-3">{{ cat }}</h2>   
               {% if display_ballot.is_photo_ballot %}
                 <div class="row">
                   {% for choice in cat.choice_set.all %}
@@ -42,8 +42,8 @@
               {% else %}
                 {% for choice in cat.choice_set.all %}
                 <div class="offset-1">
-                  <input class="lead" type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
-                  <label class="lead" for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
+                  <input type="radio" name="{{ cat }}" id="{{ cat }}{{ forloop.counter }}" value="{{ choice.id }}" />
+                  <label for="{{ cat }}{{ forloop.counter }}">{{ choice }}</label>
                   <br>
                 </div>
                 {% endfor %}
@@ -57,7 +57,7 @@
               </div>
             {% else %}
               <div class="mb-5 pt-5">
-                <input class="btn btn-outline-dark" type="submit" value="Vote" />
+                <input class="btn btn-outline-dark btn-lg" type="submit" value="Vote" />
                 <p class="pb-5"></p>
               </div>
             {% endif %}

@@ -8,7 +8,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 col-lg-6 my-5 mx-auto" style="padding-bottom: 70px">
+      <div class="col-12 col-md-6 col-lg-5 my-5 mx-auto" style="padding-bottom: 70px">
         <div class="card card-body mb-5">
           <div class="py-3">
             <h2 class="text-center">Log in</h2>
@@ -40,14 +40,14 @@
               {{ form.password.label_tag }}
               {{ form.password|add_css:'class:form-control' }}
             </div>
-            <div class="mb-2">
+            <div class="pb-3">
               <button type="submit" class="btn my-btn-purple col-12"> Log in</button>
               <input type="hidden" name="next" value="{% url 'polls:ballot' %}">
             </div>
           </form>
-          <div class="py-3 text-center">
-            <p><a href="{% url 'users:password_reset' %}">Forgot your password?</a></p>
-            <p>Don't have an account? <a href="{% url 'users:signup' %}">Sign up</a></p>
+          <div class="text-center">
+            <a class="my-text-purple" href="{% url 'users:password_reset' %}">Forgot your password?</a>
+            <p>Don't have an account? <a class="my-text-purple" href="{% url 'users:signup' %}">Sign up</a></p>
           </div>
         <div>
       </div>

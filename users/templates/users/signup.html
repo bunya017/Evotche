@@ -6,67 +6,71 @@
 {% block content %}
 {% load extras %}
 {% load static %}
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-md-8 col-lg-6 mx-auto my-5">
-      <div class="card card-body mb-5 pb-5">
-        <div class="text-center card-title">
-          <h2 class="text-center">Sign up</h2>
-        </div>
-        <form method="post" action="{% url 'users:signup' %}">
-          {% csrf_token %}
-          <div class="form-row">
-            <div class="form-group col-sm-6">
-              {{ form.first_name.label_tag }}<span class="text-danger">*</span>
-              {{ form.first_name|add_css:'class:form-control' }}
-              <small class="form-text text-danger">
-                {{ form.first_name.errors }}                
-              </small>
-            </div>
-            <div class="form-group col-sm-6">
-              {{ form.last_name.label_tag }}<span class="text-danger">*</span>
-              {{ form.last_name|add_css:'class:form-control' }}
-              <small class="form-text text-danger">
-                {{ form.last_name.errors }}                
-              </small>
-            </div>
-            <div class="form-group col-sm-6">
-              {{ form.username.label_tag }}<span class="text-danger">*</span>
-              {{ form.username|add_css:'class:form-control' }}
-              <small class="form-text text-danger">
-                {{ form.username.errors }}                
-              </small>
-            </div>
-            <div class="form-group col-sm-6">
-              {{ form.email.label_tag }}<span class="text-danger">*</span>
-              {{ form.email|add_css:'class:form-control' }}
-              <small class="form-text text-danger">
-                {{ form.email.errors }}                
-              </small>
-            </div>
-            <div class="form-group col-sm-6">
-              {{ form.password1.label_tag }}<span class="text-danger">*</span>
-              {{ form.password1|add_css:'class:form-control, placeholder:Choose a strong password' }}
-              <small class="form-text text-danger">
-                {{ form.password1.errors }}                
-              </small>
-            </div>
-            <div class="form-group col-sm-6">
-              {{ form.password2.label_tag }}<span class="text-danger">*</span>
-              {{ form.password2|add_css:'class:form-control, placeholder:Re-enter your password' }}
-              <small class="form-text text-danger">
-                {{ form.password2.errors }}                
-              </small>
-            </div>
+<section class="fill-viewport">
+  <div class="container">
+    <div class="row">
+      <div class="col-10 col-md-6 mx-auto my-5">
+        <div class="card card-body">
+          <div class="text-center card-title">
+            <h2 class="text-center">Sign up</h2>
           </div>
-          <button type="submit" class="btn my-btn-purple col">Create Account</button>
-          <input type="hidden" name="next" value="{% url 'polls:index' %}">
-        </form>
-        <p class="pt-4 text-center">Already have an account? <a href="{% url 'users:login' %}">Log in</a></p>
+          <form method="post" action="{% url 'users:signup' %}">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-group col-sm-6">
+                {{ form.first_name.label_tag }}<span class="text-danger">*</span>
+                {{ form.first_name|add_css:'class:form-control' }}
+                <small class="form-text text-danger">
+                  {{ form.first_name.errors }}                
+                </small>
+              </div>
+              <div class="form-group col-sm-6">
+                {{ form.last_name.label_tag }}<span class="text-danger">*</span>
+                {{ form.last_name|add_css:'class:form-control' }}
+                <small class="form-text text-danger">
+                  {{ form.last_name.errors }}                
+                </small>
+              </div>
+              <div class="form-group col-sm-6">
+                {{ form.username.label_tag }}<span class="text-danger">*</span>
+                {{ form.username|add_css:'class:form-control' }}
+                <small class="form-text text-danger">
+                  {{ form.username.errors }}                
+                </small>
+              </div>
+              <div class="form-group col-sm-6">
+                {{ form.email.label_tag }}<span class="text-danger">*</span>
+                {{ form.email|add_css:'class:form-control' }}
+                <small class="form-text text-danger">
+                  {{ form.email.errors }}                
+                </small>
+              </div>
+              <div class="form-group col-sm-6">
+                {{ form.password1.label_tag }}<span class="text-danger">*</span>
+                {{ form.password1|add_css:'class:form-control, placeholder:Choose a strong password' }}
+                <small class="form-text text-danger">
+                  {{ form.password1.errors }}                
+                </small>
+              </div>
+              <div class="form-group col-sm-6">
+                <label>Confirm Password:<span class="text-danger">*</span></label>
+                {{ form.password2|add_css:'class:form-control, placeholder:Re-enter your password' }}
+                <small class="form-text text-danger">
+                  {{ form.password2.errors }}                
+                </small>
+              </div>
+            </div>
+            <div class="py-3">
+              <button type="submit" class="btn my-btn-purple col">Create Account</button>
+              <input type="hidden" name="next" value="{% url 'polls:index' %}">
+            </div>
+          </form>
+          <p class="pt-4 text-center">Already have an account? <a class="my-text-purple" href="{% url 'users:login' %}">Log in</a></p>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
 
 
