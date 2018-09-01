@@ -101,6 +101,12 @@ def new_show_ballot_page(request, ball_url):
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
+		if display_ballot.is_opened() == False:
+			context = {'base_template': base_template, 'error_message': 'The voting campaign you were looking for is not open.'}
+			return render(request, 'polls/not_available.html', context)
+		elif display_ballot.is_closed() == True:
+			context = {'base_template': base_template, 'error_message': 'The voting campaign you were looking for is closed.'}
+			return render(request, 'polls/not_available.html', context)
 	context = {'display_ballot': display_ballot, 'caty_list': caty_list, 'base_template':base_template}
 	return render(request, 'polls/display_ballot.html', context)
 

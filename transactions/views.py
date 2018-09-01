@@ -56,7 +56,7 @@ def get_invoice(request, ref_code):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_tokens(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	user = ballot.created_by
 	if request.method != 'POST':
 		form = InvoiceForm()
@@ -188,7 +188,7 @@ def buy_tokens(request, ballot_url):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def get_free_tokens(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot =get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	if request.method != 'POST':
 		form = FreeTokenForm()
 	else:
@@ -347,10 +347,10 @@ def get_free_tokens(request, ballot_url):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_email_delivery(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	try:
-		tok_len = len(Token.objects.get(ballot_paper=ballot))
-	except (Token.DoesNotExist):
+		assert len(Token.objects.filter(ballot_paper=ballot)) != 0
+	except AssertionError:
 		messages.error(request, 'Sorry, you do not have voter tokens.')
 		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 	else:
@@ -392,10 +392,10 @@ def buy_email_delivery(request, ballot_url):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def buy_text_delivery(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	try:
-		tok_len = len(Token.objects.get(ballot_paper=ballot))
-	except (Token.DoesNotExist):
+		assert len(Token.objects.filter(ballot_paper=ballot)) != 0
+	except AssertionError:
 		messages.error(request, 'Sorry, you do not have voter tokens.')
 		return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 	else:
@@ -437,11 +437,11 @@ def buy_text_delivery(request, ballot_url):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def refresh_purchase(request, ref_code):
-	invoice = PurchaseInvoice.objects.get(reference_code=ref_code)
+	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
 	ballot = invoice.ballot_paper
 	payment = Payment(key)
 	tok_list = Token.objects.filter(ballot_paper=ballot)
-	tok_item = Item.objects.get(invoice=invoice, item='Voter Token')
+	tok_item = get_object_or_404(Item, invoice=invoice, item='Voter Token')
 	quantity = tok_item.quantity
 	salt = str(ballot.ballot_url + request.user.username + invoice.reference_code + ballot.ballot_name)
 

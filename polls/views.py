@@ -135,21 +135,27 @@ def new_vote(request, ballot_url):
 	queryset = Category.objects.filter(ballot_paper=display_ballot)
 	caty = get_list_or_404(queryset)
 
-	for cat in caty:
-		try:
-			selected_choice = cat.choice_set.get(pk=request.POST[cat.category_name])
-		#except (KeyError, Choice.DoesNotExist):
-		#	return render(request, 'polls/display_ballot.html', {
-		#		'display_ballot': display_ballot,
-		#		'error_message': 'Please select a valid choice.'
-		#	})
-		except (MultiValueDictKeyError):
-			pass
-		else:
-			selected_choice.votes += 1
-			selected_choice.save()
+	if request.session.get('has_voted', False):
+		context = {'base_template': 'polls/base.html', 'error_message': 'You have voted already, thus you cannot vote again.'}
+		return render(request, 'polls/not_available.html', context)
+	else:
+		for cat in caty:
+			try:
+				selected_choice = cat.choice_set.get(pk=request.POST[cat.category_name])
+			#except (KeyError, Choice.DoesNotExist):
+			#	return render(request, 'polls/display_ballot.html', {
+			#		'display_ballot': display_ballot,
+			#		'error_message': 'Please select a valid choice.'
+			#	})
+			except (MultiValueDictKeyError):
+				pass
+			else:
+				selected_choice.votes += 1
+				selected_choice.save()
 
-	return HttpResponseRedirect(reverse('polls:vote_success'))
+		request.session['has_voted'] = True
+		request.session.set_expiry(display_ballot.close_date)
+		return HttpResponseRedirect(reverse('polls:vote_success'))
 
 
 @login_required(login_url='/token/')
@@ -174,10 +180,15 @@ def vote(request, ballot_url):
 			try:
 				Token.objects.get(user=user)
 			except (Token.DoesNotExist):
-				return render(request, 'polls/display_ballot.html', {
-					'display_ballot': display_ballot,
-					'error_message': 'Sorry, you do not have authorization to vote.'
-					})
+				if ballot.created_by == user:
+					return render(request, 'polls/display_ballot.html', {
+						'display_ballot': display_ballot,
+						'error_message': 'Sorry, you do not have authorization to vote.'
+						})
+				else:
+					logout(request)
+					messages.error(request, 'Sorry, you do not have authorization to vote.')
+					HttpResponseRedirect(reverse('users:token_login'))
 			else:
 				selected_choice.votes += 1
 				selected_choice.save()
@@ -204,17 +215,14 @@ def results(request):
 
 
 def ballot_results(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	caty_list = Category.objects.filter(ballot_paper=ballot)
 	user = request.user 
 	if user == ballot.created_by:
 		base_template = 'polls/ubase.html'
 	else:
 		base_template = 'polls/base.html'
-		if ballot.is_opened() == False:
-			context = {'base_template': base_template, 'error_message': 'Oops! This voting campaign is not open yet.'}
-			return render(request, 'polls/not_available.html', context)
-		elif ballot.is_closed() == True:
+		if ballot.is_closed() == False:
 			context = {'base_template': base_template, 'error_message': 'Oops! This voting campaign is closed.'}
 			return render(request, 'polls/not_available.html', context)
 
@@ -224,7 +232,7 @@ def ballot_results(request, ballot_url):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def show_results_public(request, ballot_url):
-	ballot = BallotPaper.objects.get(ballot_url=ballot_url)
+	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
 	if ballot.show_results_to_public == False:
 		ballot.show_results_to_public = True
 		ballot.save()
@@ -400,7 +408,7 @@ def confirm_choice(request, ch_id):
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def add_votes(request, ch_id):
-	choice = Choice.objects.get(pk=ch_id)
+	choice = get_object_or_404(Choice, pk=ch_id)
 	
 	if request.method != 'POST':
 		form = AddVotes()

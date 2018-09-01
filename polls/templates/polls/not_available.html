@@ -1,1 +1,16 @@
 {% extends base_template %}
+
+{% block content %}
+<section class="fill-viewport">
+  <div class="container">
+    <div class="row fill-viewport align-items-start">
+      <div class="col-12 col-md-6 mx-auto mt-5 text-center">
+        <h1 class="text-dark display-1">Oops!</h1>
+        <p class="lead pb-3">{{ error_message }}</p>
+        <a class="my-text-purple" href="{% url 'polls:index' %}">Back to Home</a>
+      </div>
+    </div>
+  </div>
+	
+</section>
+{% endblock content %}
