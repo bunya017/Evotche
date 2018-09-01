@@ -54,10 +54,12 @@ nav {
 
 @media (min-width: 1080px) {
   #jumbo h1 {font-size: 3rem;}
+  #success  h1 {font-size: 3rem;}
 }
 
 @media (min-width: 1200px) {
   #jumbo h1 {font-size: 4rem;}
+  #success  h1 {font-size: 4rem;}
 }
 
 @media (min-width: 768px) {
