@@ -422,3 +422,11 @@ def add_votes(request, ch_id):
 
 	context = {'choice': choice, 'form': form}
 	return render(request, 'polls/add_votes.html', context)
+
+
+def not_found(request):
+	return render(request, 'polls/404.html')
+
+
+def server_error(request):
+	return render(request, 'polls/500.html')

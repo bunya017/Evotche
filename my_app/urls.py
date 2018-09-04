@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
+handler404 = 'polls.views.not_found'
+handler500 = 'polls.views.server_error'
+
 urlpatterns = [
 	url(r'^admin/', admin.site.urls),
     url(r'^', include('polls.urls')),
