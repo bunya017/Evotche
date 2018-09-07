@@ -9,7 +9,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 mx-auto py-3">
+      <div class="col-12 col-md-6 mx-auto py-5">
         <div class="card">
           <div class="card-body">
             <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
@@ -18,7 +18,7 @@
             </h4>
               <h5>All of the following related items will be deleted:</h5>
               <ul>
-                <span class="font-weight-bold">Choices:</span>
+                <span class="font-weight-bold">Candidates:</span>
                 {% for choice in choices %}
                   <li class="pl-2">{{ choice.choice }}</li>
                 {% endfor %}
@@ -31,7 +31,7 @@
                   <input class="btn btn-danger" value="Yes, I'm sure" type="submit">
                 </li>
                 <li class="list-inline-item">
-                  <a class="btn btn-outline-dark" href="{% url 'polls:category_view' ballot.id %}">Cancel</a>
+                  <a class="btn btn-success" href="{% url 'polls:category_view' ballot.id %}">Cancel</a>
                 </li>
               </ul>
             </form>

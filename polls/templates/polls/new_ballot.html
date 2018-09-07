@@ -7,11 +7,11 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-8 col-xl-6 py-3 mx-auto">
+      <div class="col-12 col-md-8 col-xl-6 py-5 mb-3 mb-md-0 mx-auto">
       <div class="card">
         <div class="card-body">
           <a href="{% url 'polls:ballot' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
-          <h4 class="py-3">New Box:</h4>
+          <h4 class="py-3">Create New Election:</h4>
           <form action="{% url 'polls:add_new_ballot' %}" method="post">
             {% if error_message %}
             <div class="alert alert-danger text-center">
@@ -22,10 +22,10 @@
             {% endif %} 
             {% csrf_token %}
             <div class="form-group">
-              <label>Ballot name:</label>
-              {{ form.ballot_name|add_css:'class:form-control, placeholder:Ballot Name' }}
+              <label>Election Name:</label>
+              {{ form.ballot_name|add_css:'class:form-control, placeholder:E.g NUESA Election 2018' }}
               <div class="card card-body py-2 mt-2">
-                Voting opens on:
+                Voting starts on:
                 <div class="list-inline">
                   <div class="list-inline-item">Date: {{ form.start_date|add_css:'class:form-control' }}</div>
                   <div class="list-inline-item">Time (hh:mm am/pm): {{ form.start_time|add_css:'class:form-control' }}</div>
@@ -39,7 +39,7 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-outline-dark" name="submit">Add box</button>
+            <button class="btn my-btn-purple" name="submit">Add new election</button>
           </form>
         </div>
       </div>

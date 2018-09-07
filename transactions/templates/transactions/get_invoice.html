@@ -25,6 +25,15 @@
     </div>
     <div class="row mx-auto">
       <div class="col-12">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert {{ message.tags }} text-center">
+              {{ message }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </div>
+          {% endfor %}
+        {% endif %}
         <div class="card card-body">
           <table>
             <thead>
@@ -43,7 +52,7 @@
                 <td data-label="Item">{{ item.item }}</td>
                 <td data-label="Description">{{ item.description }}</td>
                 <td data-label="Quantity">{{ item.quantity }} x ₦{{ item.unit_cost }}.00</td>
-                <td data-label="Total">₦{{ item.total }}.00</td>
+                <td data-label="Subtotal">₦{{ item.total }}.00</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -52,9 +61,9 @@
             <div class="col-lg-6 order-first"></div>
             <div class="col-lg-6 order-last">
               <div class="card card-body">
-                <h5 class="card-title">Invoice Summary</h5>
+                <h5 class="card-title font-weight-bold">Invoice Summary</h5>
                 <ul class="list-group">
-                  <li class="list-group-item">Total<span class="float-right">₦{{ total }}.00</span></li>
+                  <li class="list-group-item"><strong>Total</strong><span class="float-right">₦{{ total }}.00</span></li>
                 </ul>
               </div>
               <div class="m-3">

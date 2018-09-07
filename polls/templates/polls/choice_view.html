@@ -10,13 +10,13 @@
   <div class="container">
     {% if category.ballot_paper.is_photo_ballot %}
       <div class="row">
-        <div class="col-lg-6 my-3 ml-3 ml-sm-0">
+        <div class="col-lg-6 py-5 ml-3 ml-sm-0">
           <h1 class="my-text-purple py-3">{{ category.category_name|upper }}</h1>
           <a href="{% url 'polls:category_view' category.ballot_paper_id %}">
             <i class="fa fa-2x my-text-purple">&#xf060;</i>
           </a>
           <a class="my-text-purple float-right" href="{% url 'polls:add_new_choice' category.id %}">
-            <h4><i class="fa my-text-purple">&#xf055;</i>New Choice</h4>
+            <button class="btn my-btn-purple">Add New Candidate</button>
           </a>
         </div>
       </div>
@@ -39,13 +39,13 @@
       </div>
     {% else %}
       <div class="row">
-        <div class="col-sm-8 col-lg-6 my-4 mx-auto">
+        <div class="col-sm-8 col-lg-6 py-5 mx-auto">
           <div class="pb-3">
             <a class="float-left my-text-purple" href="{% url 'polls:category_view' category.ballot_paper_id %}">
               <i class="fa fa-2x my-text-purple">&#xf060;</i>
             </a>
             <a class="float-right my-text-purple" href="{% url 'polls:add_new_choice' category.id %}">
-              <h3><i class="fa">&#xf055;</i> New Choice</h3>
+              <button class="btn my-btn-purple">Add New Candidate</button>
             </a>
           </div>
           <div class="card mt-5">
@@ -58,7 +58,7 @@
                 <li class="list-group-item">
                   {% if category.ballot_paper.can_add_votes %}
                     {{ choice.choice|title }} <span class="text-danger">{{ choice.votes }}</span>
-                    <span class="text-danger"><a href="{% url 'polls:add_votes' choice.id %}" class="badge badge-info">add more</a></span>
+                    <span class="text-danger"><a href="{% url 'polls:add_votes' choice.id %}" class="badge badge-danger">add more</a></span>
                   {% else %}
                     {{ choice.choice|title }}
                   {% endif %}

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '-by^ngusobkt$t8as!c$=sp5n*fwqq+cl!9x_+tv@+dwtaypko'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['evotche.herokuapp.com', '192.168.43.33', '127.0.0.1', 'localhost']
 
@@ -168,7 +168,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-# Django messages
+# Django messages synced with bootstrap alerts
 from django.contrib.messages import constants as messages
 
 MESSAGE_TAGS = {

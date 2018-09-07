@@ -24,18 +24,22 @@ from requests import ConnectionError
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def invoice_list(request):
-	user = request.user
-	if user.has_usable_password() == False:
-		ballot = user.token.ballot_paper
-		if user.token.is_token:
-			return HttpResponseRedirect(reverse('users:show_ballot_page', args=[ballot.ballot_url]))
-	invoice_list = PurchaseInvoice.objects.filter(user=user)
+	invoice_list = PurchaseInvoice.objects.filter(user=request.user)
 	context = {'invoice_list': invoice_list}
 	return render(request, 'transactions/invoice_list.html', context)
 
 
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def pay(request, ref_code):
+	if 'free' in ref_code.lower():
+		messages.error(request, 'This is Election is completely Free.')
+		return HttpResponseRedirect(reverse('trxns:get_invoice', args=[ref_code]))
+	else:
+		invoice = get_object_or_404(PurchaseInvoice)
+		if invoice.status == 'successful':
+			messages.info(request, 'This is Invoice is has already been paid for.')
+			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[ref_code]))
+
 	return redirect('https://demo.payant.ng/pay/%s' % (ref_code))
 
 
@@ -207,8 +211,8 @@ def get_free_tokens(request, ballot_url):
 			try:
 				iv = PurchaseInvoice.objects.get(
 					ballot_paper=ballot,
-					ballot_paper__has_free_tokens=False,
-					ballot_paper__is_paid=False
+					ballot_paper__has_free_tokens=True,
+					ballot_paper__has_paid_tokens=False
 				)
 			except (PurchaseInvoice.DoesNotExist):
 				if (cl_form['email_delivery'] == False) and (cl_form['text_delivery'] == False):

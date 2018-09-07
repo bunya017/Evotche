@@ -10,16 +10,16 @@
     	{% if invoice_list|length > 0 %}
         {% for invoice in invoice_list %}
         <div class="col-sm-6 col-xl-4 my-2">
-          <div class="card" style="height: 12rem;">
-            <div class="card-body">
-              <a class="text-dark" href="{% url 'trxns:get_invoice' invoice.reference_code %}">
+          <a class="my-text-purple" href="{% url 'trxns:get_invoice' invoice.reference_code %}">
+            <div class="card" style="height: 12rem;">
+              <div class="card-body">
                 <h4 class="text-center">Invoice for {{ invoice.ballot_paper.ballot_name|upper }}</h4>
-              </a>
-              <div class="text-center">
-                <i class="fa fa-5x my-text-purple">&#xf0f6;</i>
+                <div class="text-center">
+                  <i class="fa fa-5x my-text-purple">&#xf0f6;</i>
+                </div>
               </div>
             </div>
-          </div>
+          </a>
         </div>
         {% endfor %}
       {% else %}

@@ -7,11 +7,11 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 mx-auto py-3">
+      <div class="col-12 col-md-6 mx-auto py-5 mb-3 mb-md0">
         <div class="card">
           <div class="card-body">
             <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
-            <h4 class="py-3">New Category:</h4>
+            <h4 class="py-3">Create New Post:</h4>
             {% for error in form.non_field_errors %}
             <div class="alert alert-danger text-center" role="alert">
               {{ error }}
@@ -24,24 +24,24 @@
               {{ chForms.management_form }}
               <div class="form-group">
                 {{ form.ballot_paper }}
-                <label>Category name:</label>
-                {{ form.category_name|add_css:'class:form-control, placeholder:Category name' }}
+                <label>Post Title:</label>
+                {{ form.category_name|add_css:'class:form-control, placeholder:Eg. President' }}
               </div>
 
               {% for c in chForms %}
               <div class="form-group offset-1">
-                <label>Choice {{ forloop.counter }}:</label>
-                {{ c.choice|add_css:'class:form-control, placeholder:Choice' }}
+                <label>Candidate {{ forloop.counter }}:</label>
+                {{ c.choice|add_css:'class:form-control, placeholder:Name of candidate' }}
                 {% if ballot.is_photo_ballot %}
-                <div class="pt-1 pb-3">
-                  {{ c.photo.label_tag }}
-                  {{ c.photo|add_css:'class:form-control' }}
-                </div>
+                  <div class="pt-1 pb-3">
+                    {{ c.photo.label_tag }}
+                    {{ c.photo|add_css:'class:form-control' }}
+                  </div>
                 {% endif %}
               </div>
               {% endfor %}
 
-              <button class="btn btn-outline-dark" name="submit">Add category</button>
+              <button class="btn my-btn-purple" name="submit">Add New Post</button>
             </form>
           </div>
         </div>

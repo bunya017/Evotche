@@ -322,11 +322,13 @@ def add_new_choice(request, cat_id):
 def delete_ballot(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	categories = len(ballot.category_set.all())
+	choices = len(Choice.objects.filter(category__ballot_paper=ballot))
 	invoices = len(PurchaseInvoice.objects.filter(ballot_paper=ballot))
 	tokens = len(Token.objects.filter(ballot_paper=ballot))
 	context = {
 		'ballot': ballot, 
 		'categories': categories, 
+		'choices': choices, 
 		'invoices': invoices,
 		'tokens': tokens,
 	}

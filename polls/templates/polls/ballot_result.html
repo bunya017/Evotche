@@ -8,7 +8,7 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-10 bg-white mx-auto my-3 px-0">
+      <div class="col-12 col-md-10 mx-auto py-5">
         <div class="card card-body">
           {% if user.is_authenticated and user.has_usable_password %}
             <a href="{% url 'polls:results' %}">
@@ -17,7 +17,7 @@
           {% endif %}
           <h3 class="py-3">{{ ballot.ballot_name|upper }} Results</h3>
         {% if caty_list|length > 0 %}
-          <table class="table table-bordered table-hover">
+          <table class="table table-responsive-sm table-bordered table-hover">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -38,10 +38,14 @@
                     {% for choice in choices %}
                       <td>{{ choice.choice|title }}</td>
                       <td>{{ choice.votes }}</td>
-                      {% if winner == choice.votes %}
-                        <td class="text-center"><i class="fa my-text-purple">&#xf00c;</i></td>
+                      {% if ballot.is_closed %}
+                        {% if winner == choice.votes %}
+                          <td class="text-center"><i class="fa my-text-purple">&#xf00c;</i></td>
+                        {% else %}
+                          <td></td>
+                        {% endif %}
                       {% else %}
-                        <td></td>
+                        <td><span class="badge badge-warning">Pending</span></td>
                       {% endif %}
               </tr>
                     {% endfor %}
