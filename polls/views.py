@@ -115,7 +115,8 @@ def ballot(request):
 def category_view(request, ball_id):
 	queryset = BallotPaper.objects.filter(created_by=request.user)
 	ballot = get_object_or_404(queryset, pk=ball_id)
-	context = {'ballot': ballot}
+	categories = ballot.category_set.all()
+	context = {'ballot': ballot, 'categories': categories}
 	return render(request, 'polls/category.html', context)
 
 

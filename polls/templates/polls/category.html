@@ -25,17 +25,19 @@
               </a>
             {% endif %}
           </li>
-          <li class="list-inline-item">
-            {% if ballot.is_custom %}
-              <a class="px-1" href="{% url 'users:new_show_ballot_page' ballot.ballot_url %}" target="_blank">
-                <button class="btn my-btn-purple">Preview</button>
-              </a>
-            {% else %}
-              <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank">
-                <button class="btn my-btn-purple">Preview</button>
-              </a>
+          {% if categories|length > 0 %}
+            <li class="list-inline-item">
+              {% if ballot.is_custom %}
+                <a class="px-1" href="{% url 'users:new_show_ballot_page' ballot.ballot_url %}" target="_blank">
+                  <button class="btn my-btn-purple">Preview</button>
+                </a>
+              {% else %}
+                <a class="px-1" href="{% url 'users:show_ballot_page' ballot.ballot_url %}" target="_blank">
+                  <button class="btn my-btn-purple">Preview</button>
+                </a>
+              {% endif %}
+            </li>
             {% endif %}
-          </li>
         </ul>
         <div class="p-y2">
           <p>Opening: {{ ballot.open_date }}</p>
@@ -45,33 +47,39 @@
     </div>
 
     <div class="row">
-      {% for category in ballot.category_set.all %}
-      <div class="col-sm-6 col-xl-4 my-2">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-title">
-              <a class="my-text-purple" href="{% url 'polls:choice_view' category.id %}">
-                <h4 class="text-center">{{ category.category_name|upper }}</h4>
-              </a>
-            </div>
-            <ul class="list-group list-group-flush">
-            {% for choice in category.choice_set.all%}
-              {% if category.ballot_paper.can_add_votes %}
-                <li class="list-group-item">{{ choice.choice }} <span class="text-danger">{{ choice.votes }}</span></li>
-              {% else %}
-                <li class="list-group-item">{{ choice.choice }}</li>
-              {% endif %}
-            {% endfor %}
-            </ul>
-            <div class="text-right pt-1">
-              <a href="{% url 'polls:delete_caty' category.id %}">
-                <i class="fa fa-2x text-danger">&#xf014;</i>
-              </a>
+      {% if categories|length > 0 %}
+        {% for category in categories %}
+        <div class="col-sm-6 col-xl-4 my-2">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title">
+                <a class="my-text-purple" href="{% url 'polls:choice_view' category.id %}">
+                  <h4 class="text-center">{{ category.category_name|upper }}</h4>
+                </a>
+              </div>
+              <ul class="list-group list-group-flush">
+              {% for choice in category.choice_set.all%}
+                {% if category.ballot_paper.can_add_votes %}
+                  <li class="list-group-item">{{ choice.choice }} <span class="text-danger">{{ choice.votes }}</span></li>
+                {% else %}
+                  <li class="list-group-item">{{ choice.choice }}</li>
+                {% endif %}
+              {% endfor %}
+              </ul>
+              <div class="text-right pt-1">
+                <a href="{% url 'polls:delete_caty' category.id %}">
+                  <i class="fa fa-2x text-danger">&#xf014;</i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      {% endfor %}
+        {% endfor %}
+      {% else %}
+        <div class="text-center col-md-8 py-5 mx-auto">
+          <h1 style="font-size: 1.8rem;">Create a new <a class="my-text-purple" href="{% url 'polls:add_new_caty' ballot.id %}"><strong>post/ category</strong></a> for this election. Example: President, Vice President e.t.c.</h1>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
