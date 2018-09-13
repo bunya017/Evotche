@@ -3,8 +3,6 @@
 {% block title %}Evotche - Ballot Boxes{% endblock title %}
 
 {% block content %}
-
-
 <section id="ballot">
   <div class="container">
     <h1 class="pt-2 my-text-purple">Ballot Boxes</h1>
@@ -20,7 +18,6 @@
           </div>
         </a>
       </div>
-
       {% if ballot_list|length > 0 %}
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-xl-4 my-2">
@@ -43,6 +40,4 @@
     </div>
   </div>
 </section>  
-
-
 {% endblock content %}
