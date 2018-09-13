@@ -9,7 +9,7 @@
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-12 col-md-6 mx-auto py-3">
+      <div class="col-12 col-md-6 mx-auto py-5">
         <div class="card">
           <div class="card-body">
             <a href="{% url 'polls:choice_view' choice.category.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
@@ -32,10 +32,10 @@
               </div>
               <ul class="list-inline">
                 <li class="list-inline-item">
-                  <button class="btn btn-outline-success" name="submit">Add Votes</button>
+                  <button class="btn my-btn-purple" name="submit">Add Votes</button>
                 </li>
                 <li class="list-inline-item">
-                  <a class="btn btn-outline-dark" href="{% url 'polls:choice_view' choice.category.id %}">Cancel</a>
+                  <a class="btn btn-danger" href="{% url 'polls:choice_view' choice.category.id %}">Cancel</a>
                 </li>
               </ul>
 
