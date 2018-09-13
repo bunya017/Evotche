@@ -1,4 +1,5 @@
 venv/
+my_app/settings.py
 media/
 *.pyc
 *.sqlite3
