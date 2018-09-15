@@ -6,26 +6,26 @@
 {% load static %}
 {% load extras %}
 
-<section id="pricing">
-  <div class="jumbotron jumbotron-fluid my-bg-purple py-6">
+<section id="pricing" class="fill-viewport">
+  <div class="jumbotron jumbotron-fluid my-bg-purple py-5">
     <div class="col-md-8 mx-auto text-center pb-3">
-      <h2 class="my-text-light">PRICING</h2>
-      <p class="lead my-text-light">Our pricing is based on the number of voter tokens you want. It is so flexible you only pay for what you need.</p>
+      <h1 class="my-text-light display-4">PRICING</h1>
+      <p class="lead my-text-light">Our pricing is based on the number of voters you want on your elections.</p>
     </div>
   </div>
   <div id="tokenForms" class="container">
     <div class="row">
-      <div class="col-md-6 my-2">
+      <div class="col-md-6 my-3">
         <div class="card card-body my-bg-light">
           <div class="row align-items-baseline py-3">
             <div class="col-4"><h3 class="my-text-purple">Free</h3></div>
-            <div class="col-8 text-right"><h3>₦0.00<small>/token</small></h3></div>
+            <div class="col-8 text-right"><h3>₦0.00<small>/voter</small></h3></div>
           </div>
           <ul class="list-group list-group-flush py-3">
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Upto <strong>30 Voter Tokens</strong></li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> No recycle of unused voter tokens</li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Upto 3 free ballot boxes at a time</li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Reports are kept for 7 days</li>
+            <li class="list-group-item py-2 my-bg-light">Maximum of 20 voters per election</li>
+            <li class="list-group-item py-2 my-bg-light">Maximum of 2 free elections</li>
+            <li class="list-group-item py-2 my-bg-light">Reach voters via email</li>
+            <li class="list-group-item py-2 my-bg-light">Reports are kept for 30 days</li>
           </ul>
           <div class="ml-4">
             <a href="{% url 'users:signup' %}"><button class="btn my-bg-purple my-text-light"><h4>Sign up</h4></button></a>
@@ -35,14 +35,14 @@
       <div class="col-md-6 my-2">
         <div class="card card-body my-bg-light">
           <div class="row align-items-baseline py-3">
-            <div class="col-4"><h3 class="my-text-purple">Pro</h3></div>
-            <div class="col-8 text-right"><h3>₦25.00<small>/token</small></h3></div>
+            <div class="col-4"><h3 class="my-text-purple">Paid</h3></div>
+            <div class="col-8 text-right"><h3>₦25.00<small>/voter</small></h3></div>
           </div>
           <ul class="list-group list-group-flush py-3">
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> voter token purchase</li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Unused voter tokens can be recycled</li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> <strong>Unlimited</strong> Pro ballot boxes</li>
-            <li class="list-group-item py-2 my-bg-light"><i class="fa text-success">&#xf058;</i> Reports are kept for 30 days</li>
+            <li class="list-group-item py-2 my-bg-light">Unlimited voters per election</li>
+            <li class="list-group-item py-2 my-bg-light">Unlimited paid elections</li>
+            <li class="list-group-item py-2 my-bg-light">Reach voters via email</li>
+            <li class="list-group-item py-2 my-bg-light">Reports are kept for 30 days</li>
           </ul>
           <div class="ml-4">
             <a href="{% url 'users:signup' %}"><button class="btn my-bg-purple my-text-light"><h4>Sign up</h4></button></a>
@@ -53,31 +53,5 @@
   </div>
 </section>
 
-<section id="add-ons">
-  <div class="container">
-    <div class="row pt-4 align-items-center">
-      <div class="col-12 col-md-8 mx-auto text-center">
-        <h2 class="text-uppercase my-text-purple">add-ons</h2>
-        <p class="lead pt-3">For a little additonal fee per token, we will help deliver voter tokens to your voters.
-      </div>
-    </div>
-    <div class="row pb-5">
-      <div class="col-lg-6">
-        <div class="card card-body border-0 my-bg-purple">
-          <h1 class="display-4 my-text-light">1. <i class="fa"> &#xf0e0;</i> Via E-Mail.</h1>
-          <p class="my-text-light">Provide your voters' email addresses and we will deliver voter token in to their inbox. An extra layer of secuirity is added to make sure only the recipient would be able to use the voter token they recieved.</p>
-          <h3 class="my-text-light">Service fee is ₦1.00/token only.</h3>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card card-body border-0 my-bg-purple">
-          <h1 class="display-4 my-text-light">2. <i class="fa"> &#xf27a;</i> Via Text.</h1>
-          <p class="my-text-light">Provide your voters' phone numbers and we will deliver voter token in to their inbox. An extra layer of secuirity is added to make sure only the recipient would be able to use the voter token they recieved.</p>
-          <h3 class="my-text-light">Service fee is ₦5.00/token only.</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 {% endblock content %}
