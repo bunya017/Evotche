@@ -11,6 +11,4 @@ urlpatterns = [
 	url(r'^buy-tokens/(?P<ballot_url>[-\w]+)/$', views.buy_tokens, name='buy_tokens'),
 	url(r'^free-tokens/(?P<ballot_url>[-\w]+)/$', views.get_free_tokens, name='get_free_tokens'),
 	url(r'^refresh-purchase/(?P<ref_code>[-\w]+)/$', views.refresh_purchase, name='refresh_purchase'),
-	url(r'^email-delivery/(?P<ballot_url>[-\w]+)/$', views.buy_email_delivery, name='buy_email_delivery'),
-	url(r'^text-delivery/(?P<ballot_url>[-\w]+)/$', views.buy_text_delivery, name='buy_text_delivery'),
 ]
