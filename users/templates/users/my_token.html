@@ -44,16 +44,6 @@
             <h4 class="pl-2">{{ unused_token|length }}</h4>
             <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
             <h4 class="pl-2">{{ used_token|length }}</h4>
-            <div class="btn-group">
-              <a class="btn btn-outline-success" 
-                href="{% url 'trxns:buy_email_delivery' ballot.ballot_url %}">
-                  Send via email
-              </a>
-              <a class="btn btn-outline-success" 
-                href="{% url 'trxns:buy_text_delivery' ballot.ballot_url %}">
-                  Send via text
-              </a>
-            </div>
           </div>
         </div>
         <div class="col-lg-8 mx-auto">

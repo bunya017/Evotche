@@ -19,6 +19,10 @@
         {% else %}
           <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
         {% endif %}
+        <div class="py-3">
+          <h4 class="text-center my-text-purple">Buy voter tokens for election: </h4>
+          <h4 class="text-center my-text-purple">{{ ballot.ballot_name }}</h4>
+        </div>
         <form class="pb-3" method="post">
         	{% csrf_token %}
           {% if cant_buy %}
@@ -39,37 +43,22 @@
           {% endif %}
           {% if not user.profile.phone %}
             <div class="form-group pt-2">
-              <label><h4>Phone number:</h4><span class="text-danger">*</span></label>
+              <label><h5>Phone number:</h5><span class="text-danger">*</span></label>
              {{ form.phone|add_css:'class:form-control text-center, placeholder:+234XXXXXXXXXX' }}
              <small class="form-text text-danger">
                 {{ form.phone.errors }}                
               </small>
             </div>
           {% endif %}
-          	<div class="form-group">
-              <label><h4>Quantity:<span class="text-danger">*</span></h4></label>
-          	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
-          	</div>
-            <div class="card card-body">
-              <h4 class="card-title">Delivery type:</h4>
-            	<div class="form-group">
-                <div class="list-inline">
-                  <div class="list-inline-item">{{ form.email_delivery|add_css:'class:form-control text-center' }}</div>
-                  <div class="list-inline-item">Email Delivery at additional ₦1.00/Token</div>
-                </div>
-            	</div>
-            	<div class="form-group">
-                <div class="list-inline">
-                  <div class="list-inline-item">{{ form.text_delivery|add_css:'class:form-control text-center' }}</div>
-                  <div class="list-inline-item">Text Delivery at additional ₦5.00/Token</div>
-                </div>
-            	</div>
-            </div>
-            <div class="text-center pt-4">
-            	<button class="btn my-btn-purple col-6" type="submit">
-                Place Order
-              </button>
-            </div>
+        	<div class="form-group">
+            <label><h5>Quantity:<span class="text-danger">*</span></h5></label>
+        	 {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
+        	</div>
+          <div class="text-center pt-4">
+          	<button class="btn my-btn-purple col-6" type="submit">
+              Place Order
+            </button>
+          </div>
         </form>
       </div>
     </div>
