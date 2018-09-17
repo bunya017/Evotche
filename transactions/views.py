@@ -75,7 +75,7 @@ def buy_tokens(request, ballot_url):
 				iv = PurchaseInvoice.objects.get(
 					ballot_paper=ballot,
 					ballot_paper__has_free_tokens=False,
-					ballot_paper__is_paid=False
+					ballot_paper__has_paid_tokens=False
 				)
 			except (PurchaseInvoice.DoesNotExist):
 				p_invoice = PurchaseInvoice.objects.create(

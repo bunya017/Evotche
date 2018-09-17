@@ -9,6 +9,23 @@ from django.db import transaction
 
 
 
+class ContactForm(forms.Form):
+	contact_name = forms.CharField(max_length=60, required=True, strip=True)
+	contact_email = forms.EmailField(required=True)
+	subject = forms.CharField(max_length=50, required=True)
+	content = forms.CharField(required=True, widget=forms.Textarea)
+
+
+class FreeTokenForm(forms.Form):
+	def __init__(self, *args, **kwargs):
+		user = kwargs.pop('user', None)
+		super(FreeTokenForm, self).__init__(*args, **kwargs)
+		if user:
+			self.fields['ballot_paper'].queryset = BallotPaper.objects.filter(created_by=user)
+
+	ballot_paper = forms.ModelChoiceField(queryset=BallotPaper.objects.all(), empty_label='Choose an election')
+
+
 class MyUserSignupForm(UserCreationForm):
 	email = forms.EmailField(required=True)
 
@@ -31,6 +48,23 @@ class MyUserSignupForm(UserCreationForm):
 			raise forms.ValidationError('Email is already in use.')
 
 
+class PaidTokenForm(forms.Form):
+	def __init__(self, *args, **kwargs):
+		user = kwargs.pop('user', None)
+		super(PaidTokenForm, self).__init__(*args, **kwargs)
+		if user:
+			self.fields['ballot'].queryset = BallotPaper.objects.filter(created_by=user)
+
+	ballot = forms.ModelChoiceField(queryset=BallotPaper.objects.all(), empty_label='Choose an election')
+
+
+class ResultCheckForm(forms.Form):
+	check_result = forms.CharField(min_length=6, max_length=16)
+
+
+class TokenUserForm(forms.Form):
+	token = forms.CharField(min_length=6, max_length=16)
+
 
 class UserProfileForm(forms.Form):
 	first_name = forms.CharField(max_length=50, required=True)
@@ -38,30 +72,3 @@ class UserProfileForm(forms.Form):
 	phone = forms.CharField(max_length=50, required=True)
 	organization = forms.CharField(max_length=100)
 
-
-class TokenUserForm(forms.Form):
-	token = forms.CharField(min_length=6, max_length=16)
-
-
-class ResultCheckForm(forms.Form):
-	check_result = forms.CharField(min_length=6, max_length=16)
-
-class TokenNumForm(forms.Form):
-	number_of_tokens = forms.IntegerField()
-
-
-class TokenForm(forms.ModelForm):
-	def __init__(self, user, *args, **kwargs):
-		super(TokenForm, self).__init__(*args, **kwargs)
-		self.fields['ballot_paper'].queryset = BallotPaper.objects.filter(created_by=user)
-		#self.fields['ballot_paper'].widget = forms.HiddenInput()
-
-	class Meta:
-		model = Token
-		fields = ('ballot_paper',)
-
-class ContactForm(forms.Form):
-	contact_name = forms.CharField(max_length=60, required=True, strip=True)
-	contact_email = forms.EmailField(required=True)
-	subject = forms.CharField(max_length=50, required=True)
-	content = forms.CharField(required=True, widget=forms.Textarea)

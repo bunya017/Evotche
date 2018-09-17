@@ -1,27 +1,46 @@
 {% extends "polls/ubase.html" %}
 {% block title %}Evotche - Tokens{% endblock title %}
 {% block content %}
+{% load extras %}
 
 <section id="tokens">
   <div class="container">
     <h1 class="pt-2 my-text-purple">Voter Tokens</h1>
     <div class="divider mb-4"></div>
+    {% if ballot_list|length > 0 %}
     <div class="row mb-5">
-      <!--
-      <div class="col-sm-6 col-lg-4 my-2">
-        <div class="card" style="height: 12rem;">
+        <div class="col-sm-6 col-lg-4 my-2">
+          <div class="card" style="height: 12rem;">
             <div class="card-body">
-              <a class="text-dark" href="">
-                <h4 class="text-center">New Box</h4>
-                <div class="text-center">
-                  <i class="fa fa-5x">&#xf055;</i>
+              <h4 class="text-center my-text-purple">Get free voter tokens</h4>
+              <form method="post">
+                <div class="text-center py-3">
+                  {% csrf_token %}
+                  {{ free_token.ballot_paper|add_css:'class:form-control text-center' }}
                 </div>
-              </a>
+                <div class="text-center">
+                  <button class="btn my-btn-purple col-12">Proceed</button>
+                </div>
+              </form>
             </div>
           </div>
-      </div>
-    -->
-      {% if ballot_list|length > 0 %}
+        </div>
+        <div class="col-sm-6 col-lg-4 my-2">
+          <div class="card" style="height: 12rem;">
+            <div class="card-body">
+              <h4 class="text-center my-text-purple">Buy voter tokens</h4>
+              <form method="post">
+                <div class="text-center py-3">
+                  {% csrf_token %}
+                  {{ paid_token.ballot|add_css:'class:form-control text-center, name:ballot' }}
+                </div>
+                <div class="text-center">
+                  <button class="btn my-btn-purple col-12">Proceed</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
         {% for ballot in ballot_list %}
         <div class="col-sm-6 col-xl-4 my-2">
           <a class="my-text-purple" href="{% url 'users:my_token' ballot.ballot_url %}">
@@ -36,12 +55,14 @@
           </a>
         </div>
         {% endfor %}
-      {% else %}
-      <div class="col-sm-6 col-lg-4 my-4">
-        <h4 class="text-center">No Ballot Tokens Available.</h4>
-      </div>
-      {% endif %}
     </div>
+    {% else %}
+    <div class="row mb-5">
+      <div class="m-4">
+        <h2 class="text-center">No voter tokens available.</h2>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </section>
 

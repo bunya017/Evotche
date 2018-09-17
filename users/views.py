@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,7 +16,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from polls.models import BallotPaper, Category, Choice
 from my_app.settings import PAYANT_AUTH_KEY as key
 from pypayant import Client
-from .forms import MyUserSignupForm, UserProfileForm, TokenUserForm, ResultCheckForm, TokenForm, TokenNumForm, ContactForm
+from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, ResultCheckForm, TokenUserForm, UserProfileForm
 from .models import Token, Profile
 from polls.snippets import check_usable_password, result_avialable
 from transactions.models import PurchaseInvoice
@@ -164,8 +165,39 @@ def token_login(request):
 @user_passes_test(check_usable_password, login_url='/check-status/')
 def tokens_view(request):
 	user = request.user
+	# get free tokens
+	if request.method != 'POST':
+		free_token = FreeTokenForm(user=user)
+	else:
+		free_token = FreeTokenForm(request.POST, user=user)
+		if free_token.is_valid():
+			ballot = get_object_or_404(
+				BallotPaper,
+				created_by=user,
+				ballot_name=free_token.cleaned_data['ballot_paper']
+			)
+			# Indicates that the request message is coming from tokens_view, so that
+			# the back button on the buy_tokens template will point back to tokens_view
+			messages.info(request, 'from tokens_view')
+			return HttpResponseRedirect(reverse('trxns:get_free_tokens', args=[ballot.ballot_url]))
+	# get paid tokens
+	if request.method != 'POST':
+		paid_token = PaidTokenForm(user=user)
+	else:
+		paid_token = PaidTokenForm(request.POST, user=user)
+		if paid_token.is_valid():
+			ballot = get_object_or_404(
+				BallotPaper,
+				created_by=user,
+				ballot_name=paid_token.cleaned_data['ballot']
+			)
+			# Indicates that the request message is coming from tokens_view, so that
+			# the back button on the buy_tokens template will point back to tokens_view
+			messages.info(request, 'from tokens_view')
+			return HttpResponseRedirect(reverse('trxns:buy_tokens', args=[ballot.ballot_url]))
+
 	ballot_list = BallotPaper.objects.filter(created_by=request.user)
-	context = {'ballot_list': ballot_list}
+	context = { 'ballot_list': ballot_list, 'free_token': free_token, 'paid_token': paid_token }
 	return render(request, 'users/tokens_view.html', context)
 
 
@@ -257,3 +289,5 @@ def display_profile(request):
 	user = request.user
 	context = {'user': user}
 	return render(request, 'users/profile.html', context)
+
+

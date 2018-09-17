@@ -11,18 +11,17 @@
   <div class="row">
     <div class="col-12 col-md-6 mx-auto">
       <div class="card card-body">
-        <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.message == 'from tokens_view' %}
+              <a href="{% url 'users:tokens_view' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+        {% endif %}
         <form class="py-3" method="post">
           {% csrf_token %}
-          {% if messages %}
-            {% for message in messages %}
-              <div class="alert {{ message.tags }} text-center">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </div>
-            {% endfor %}
-          {% endif %}
           {% if cant_buy %}
             <div class="alert alert-danger text-center">
               {{ cant_buy }}
