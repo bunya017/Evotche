@@ -21,8 +21,7 @@ class BallotPaper(models.Model):
 	close_date = models.DateTimeField(blank=True, null=True)
 	is_custom = models.BooleanField(default=False) # Not protected with tokens
 	can_add_votes = models.BooleanField(default=False)
-	has_email_delivery = models.BooleanField(default=False)
-	has_text_delivery = models.BooleanField(default=False)
+	uploaded_emails = models.BooleanField(default=False)
 
 
 	class Meta:
