@@ -63,7 +63,7 @@ class ResultCheckForm(forms.Form):
 
 
 class TokenUserForm(forms.Form):
-	token = forms.CharField(min_length=6, max_length=16)
+	token = forms.CharField(min_length=6, max_length=30)
 
 
 class UserProfileForm(forms.Form):
@@ -72,3 +72,10 @@ class UserProfileForm(forms.Form):
 	phone = forms.CharField(max_length=50, required=True)
 	organization = forms.CharField(max_length=100)
 
+
+class EmailFileUploadForm(forms.Form):
+	def __init__(self, *args, **kwargs):
+		super(EmailFileUploadForm, self).__init__(*args, **kwargs)
+		self.fields['file'].widget = forms.ClearableFileInput(attrs={'accept': '.txt'})
+
+	file = forms.FileField(required=True)

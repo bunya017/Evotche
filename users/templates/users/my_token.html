@@ -44,21 +44,35 @@
             <h4 class="pl-2">{{ unused_token|length }}</h4>
             <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>
             <h4 class="pl-2">{{ used_token|length }}</h4>
+            <h4 class="pt-2 my-text-purple">Voters' email:</h4>
+            <h4 class="pl-2">
+              {% if ballot.uploaded_emails is True %}
+                Uploaded
+              {% else %}
+                Not uploaded
+                <a href="{% url 'users:email_upload' ballot.ballot_url %}">
+                  <button class="btn my-btn-purple">Upload</button>
+                </a>
+              {% endif %}
+              <div>
+                <small>Send status: <span class="badge badge-danger">Not sent</span></small>
+              </div>
+            </h4>
           </div>
         </div>
-        <div class="col-lg-8 mx-auto">
+        <div class="col-lg-8 mx-auto pb-5">
           <div class="card card-default card-body">
             <!--Nav Tabs-->
             <ul id="tabsToken" class="nav nav-tabs nav-justified">
               <li class="nav-item">
-                <a class="nav-link pb-3 text-dark active show" href="" data-target="#unusedToken" data-toggle="tab">Unused</a>
+                <a class="nav-link text-dark active show" href="" data-target="#unusedToken" data-toggle="tab">Unused</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link pb-3 text-dark" href="" data-target="#usedToken" data-toggle="tab">Used</a>
+                <a class="nav-link text-dark" href="" data-target="#usedToken" data-toggle="tab">Used</a>
               </li>
             </ul>
             <!--/tabs-->
-            <div id="tabsTokenContent" class="tab-content">
+            <div id="tabsTokenContent" class="tab-content pt-2">
               <div id="unusedToken" class="tab-pane active show">
               {% if token_list %}
                 <table class="table table-striped display">

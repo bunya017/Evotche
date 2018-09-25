@@ -16,10 +16,12 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from polls.models import BallotPaper, Category, Choice
 from my_app.settings import PAYANT_AUTH_KEY as key
 from pypayant import Client
-from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, ResultCheckForm, TokenUserForm, UserProfileForm
+from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, ResultCheckForm, TokenUserForm, UserProfileForm, EmailFileUploadForm
 from .models import Token, Profile
+from .snippets import handle_email_file
 from polls.snippets import check_usable_password, result_avialable
 from transactions.models import PurchaseInvoice
+from django.db.models import Q
 
 
 
@@ -291,3 +293,47 @@ def display_profile(request):
 	return render(request, 'users/profile.html', context)
 
 
+@user_passes_test(check_usable_password, login_url='/check-status/')
+def email_upload(request, ball_url):
+	"""
+	Handles the assignment of emails to tokens
+	"""
+	ballot = get_object_or_404(BallotPaper, created_by=request.user, ballot_url=ball_url)
+	token_list = [token.user for token in Token.objects.filter(Q(ballot_paper=ballot), Q(user__email__exact=''))]
+
+	if request.method != 'POST':
+		form = EmailFileUploadForm()
+	else:
+		form = EmailFileUploadForm(request.POST, request.FILES)
+		if form.is_valid():
+			processed_txt = handle_email_file(request.FILES['file'].read(), ballot)
+			email_list = processed_txt[0]
+			errors = processed_txt[1]
+			exists = processed_txt[2]
+			diff = len(token_list) - len(email_list)
+
+			for i in range(len(token_list)):
+				try:
+					token_list[i].email = email_list[i]
+					token_list[i].save()
+				except IndexError:
+					pass
+
+			ballot.uploaded_emails = True
+			ballot.save()
+			if (exists != {}) and (errors != {}):
+				for line, email in sorted(errors.iteritems()):
+					messages.error(request, 'Line {0}: {1}'.format(line, email), extra_tags='errors')
+				for line, email in sorted(exists.iteritems()):
+					messages.info(request, 'Line {0}: {1}'.format(line,email), extra_tags='exists')
+			elif (errors != {}) and (exists == {}):
+				for line, email in sorted(errors.iteritems()):
+					messages.error(request, 'Line {0}: {1}'.format(line, email), extra_tags='errors')
+			elif (exists != {}) and (errors == {}):
+				for line, email in sorted(exists.iteritems()):
+					messages.info(request, 'Line {0}: {1}'.format(line,email), extra_tags='exists')
+
+			return HttpResponseRedirect(reverse('users:email_upload', args=[ballot.ballot_url]))
+
+	context = {'form': form, 'ballot': ballot}
+	return render(request, 'users/email_upload.html', context)

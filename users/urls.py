@@ -27,4 +27,5 @@ urlpatterns = [
 	url(r'^check-results/$', views.check_results, name='check_results'),
 	url(r'^profile/$', views.display_profile, name='display_profile'),
 	url(r'^profile/update$', views.update_profile, name='update_profile'),
+	url(r'^my-tokens/(?P<ball_url>[-\w]+)/upload/$', views.email_upload, name='email_upload'),
 ]
