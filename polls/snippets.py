@@ -33,4 +33,7 @@ def gen_url(salt, id):
 
 
 def check_usable_password(user):
-	return user.has_usable_password()
+	if user.is_anonymous:
+		return False
+	else:
+		return user.has_usable_password()

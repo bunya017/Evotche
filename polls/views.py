@@ -193,12 +193,9 @@ def vote(request, ballot_url):
 			else:
 				selected_choice.votes += 1
 				selected_choice.save()
-				if not display_ballot.is_open:
-					display_ballot.is_open = True
-					display_ballot.save() 
 				user.token.is_used = True
 				user.token.save()
-				logout(user)
+				logout(request)
 
 	
 	return HttpResponseRedirect(reverse('polls:vote_success'))
@@ -217,6 +214,7 @@ def results(request):
 
 def ballot_results(request, ballot_url):
 	ballot = get_object_or_404(BallotPaper, ballot_url=ballot_url)
+	name = ballot.ballot_name.title()
 	caty_list = Category.objects.filter(ballot_paper=ballot)
 	user = request.user 
 	if user == ballot.created_by:

@@ -227,7 +227,7 @@ def refresh_purchase(request, ref_code):
 			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 	else:
 		if payment_status[2]['status'] == 'successful':
-			ballot.is_paid = True
+			ballot.has_paid_tokens = True
 			ballot.save()
 			if len(tok_list) != 0:
 				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
