@@ -34,7 +34,7 @@ def pay(request, ref_code):
 		messages.error(request, 'This is Election is completely Free.')
 		return HttpResponseRedirect(reverse('trxns:get_invoice', args=[ref_code]))
 	else:
-		invoice = get_object_or_404(PurchaseInvoice)
+		invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
 		if invoice.status == 'successful':
 			messages.info(request, 'This is Invoice is has already been paid for.')
 			return HttpResponseRedirect(reverse('trxns:get_invoice', args=[ref_code]))
@@ -68,8 +68,7 @@ def buy_tokens(request, ballot_url):
 		if form.is_valid():
 			cl_form = form.cleaned_data
 			if cl_form['phone']:
-				update_profile = Profile(user=request.user, phone=cl_form['phone'])
-				update_profile.save()
+				profile = Profile.objects.filter(user=request.user).update(phone=cl_form['phone'])
 			try:
 				PurchaseInvoice.objects.get(
 					Q(ballot_paper=ballot),
@@ -208,6 +207,7 @@ def refresh_purchase(request, ref_code):
 	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
 	ballot = invoice.ballot_paper
 	payment = Payment(key)
+	payment_status = payment.get(invoice.reference_code)
 	tok_list = Token.objects.filter(ballot_paper=ballot)
 	tok_item = get_object_or_404(Item, invoice=invoice, item='Voter Token')
 	quantity = tok_item.quantity
@@ -226,10 +226,7 @@ def refresh_purchase(request, ref_code):
 			messages.success(request, 'Voter tokens generated successfully.')
 			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 	else:
-		if invoice.status != 'successful':
-			messages.error(request, 'Your payment was not successful.')
-			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
-		elif invoice.status == 'successful':
+		if payment_status[2]['status'] == 'successful':
 			ballot.is_paid = True
 			ballot.save()
 			if len(tok_list) != 0:
@@ -243,5 +240,8 @@ def refresh_purchase(request, ref_code):
 				)
 				messages.success(request, 'Voter tokens generated successfully.')
 				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			messages.error(request, 'Your payment was not successful.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
 
 #iskjsfd

@@ -43,7 +43,7 @@
           {% endif %}
           {% if not user.profile.phone %}
             <div class="form-group pt-2">
-              <label><h5>Phone number:</h5><span class="text-danger">*</span></label>
+              <label><h5>Phone number:<span class="text-danger">*</span></h5></label>
              {{ form.phone|add_css:'class:form-control text-center, placeholder:+234XXXXXXXXXX' }}
              <small class="form-text text-danger">
                 {{ form.phone.errors }}                
