@@ -19,7 +19,6 @@ from django.utils.text import slugify
 from .forms import AddVotes, BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
 from .models import BallotPaper, Category, Choice
 from .snippets import check_close, check_start, check_usable_password, gen_url, result_avialable
-from transactions.models import PurchaseInvoice
 from users.forms import ResultCheckForm, TokenUserForm
 from users.models import Token
 
@@ -322,13 +321,11 @@ def delete_ballot(request, ball_id):
 	ballot = get_object_or_404(BallotPaper, created_by=request.user, pk=ball_id)
 	categories = len(ballot.category_set.all())
 	choices = len(Choice.objects.filter(category__ballot_paper=ballot))
-	invoices = len(PurchaseInvoice.objects.filter(ballot_paper=ballot))
 	tokens = len(Token.objects.filter(ballot_paper=ballot))
 	context = {
 		'ballot': ballot, 
 		'categories': categories, 
-		'choices': choices, 
-		'invoices': invoices,
+		'choices': choices,
 		'tokens': tokens,
 	}
 	return render(request, 'polls/delete_ballot.html', context)
