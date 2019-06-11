@@ -4,6 +4,8 @@ my_app/settings.py
 media/
 static/
 staticfiles/
+polls/static/polls/bootstrap/
+polls/static/polls/font-awesome/
 *.pyc
 *.sqlite3
 .idea/
