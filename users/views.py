@@ -20,7 +20,6 @@ from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, 
 from .models import Token, Profile
 from .snippets import handle_email_file
 from polls.snippets import check_usable_password, result_avialable
-from transactions.models import PurchaseInvoice
 from django.db.models import Q
 
 
@@ -209,13 +208,7 @@ def my_token(request, ball_url):
 	unused_token = Token.objects.filter(ballot_paper=ballot, is_used=False)
 	used_token = Token.objects.filter(ballot_paper=ballot, is_used=True)
 	token_list = Token.objects.filter(ballot_paper=ballot)
-	try:
-		PurchaseInvoice.objects.get(ballot_paper=ballot)
-	except (PurchaseInvoice.DoesNotExist ):
-		invoice = ''
-	else:
-		invoice = PurchaseInvoice.objects.get(ballot_paper=ballot)
-	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list, 'invoice': invoice}
+	context = {'unused_token': unused_token, 'used_token': used_token, 'ballot': ballot, 'token_list': token_list}
 	return render(request, 'users/my_token.html', context)
 
 
