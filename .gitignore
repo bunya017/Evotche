@@ -1,4 +1,5 @@
 venv/
+deprecated/
 my_app/settings.py
 media/
 *.pyc

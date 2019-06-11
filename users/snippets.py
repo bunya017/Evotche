@@ -1,6 +1,8 @@
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from .models import Token
+# import re
+# from hashids import Hashids
 
 
 
@@ -40,3 +42,13 @@ def check_token_email(email_list, ballot):
 
 	return (not_exist, exists)
 
+
+"""
+def gen_token(salt, num):
+	hashid = Hashids(min_length=20, salt=salt, alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890')
+	pattern = re.compile(r'.*(\w{5})(\w{5})(\w{5})(\w{5})')
+	tokens = []
+	for i in range(num):
+		tokens.append(pattern.sub(r'\1-\2-\3-\4', hashid.encode(i)))
+	return tokens
+"""

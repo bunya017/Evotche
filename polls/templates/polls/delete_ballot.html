@@ -21,7 +21,6 @@
                 <li class="pl-2"><span class="font-weight-bold">{{ categories }}</span> Posts</li>
                 <li class="pl-2"><span class="font-weight-bold">{{ choices }}</span> Candidates</li>
                 <li class="pl-2"><span class="font-weight-bold">{{ tokens }}</span> Voter tokens</li>
-                <li class="pl-2"><span class="font-weight-bold">{{ invoices }}</span> Invoices</li>
               </ul>
             <form action="{% url 'polls:confirm_ballot' ballot.id %}" method="post">
               {% csrf_token %}

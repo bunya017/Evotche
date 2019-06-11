@@ -35,11 +35,6 @@
                 Free
               {% endif %}
             </h4>
-            {% if token_list|length is 0 %}
-              {% if invoice %}
-                <a href="{% url 'trxns:refresh_purchase' invoice.reference_code %}">Refresh</a>
-              {% endif %}
-            {% endif %}
             <h4 class="mt-1 my-text-purple">Unused Voter Tokens:</h4>
             <h4 class="pl-2">{{ unused_token|length }}</h4>
             <h4 class="mt-1 my-text-purple">Used Voter Tokens:</h4>

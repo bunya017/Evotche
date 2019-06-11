@@ -20,14 +20,14 @@
         <ul class="list-inline text-right pt-4">
           {% if ballot.has_paid_tokens is False and ballot.has_free_tokens is False %}
             <li class="list-inline-item">
-              <a class="px-1" href="{% url 'trxns:get_free_tokens' ballot.ballot_url %}">
+              <a class="px-1" href="">
                 <button class="btn my-btn-purple">Get free tokens</button>
               </a>
             </li>
           {% endif %}
           <li class="list-inline-item">
             {% if ballot.has_paid_tokens is False and ballot.has_free_tokens is False %}
-              <a class="px-1" href="{% url 'trxns:buy_tokens' ballot.ballot_url %}">
+              <a class="px-1" href="">
                 <button class="btn my-btn-purple">Buy tokens</button>
               </a>
             {% endif %}
