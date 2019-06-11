@@ -1,0 +1,83 @@
+{% extends "polls/ubase.html" %}
+
+{% block title %}Evotche - Free Tokens{% endblock title %}
+
+{% block content %}
+{% load extras %}
+<div class="container">
+  <h1 class="pt-2 my-text-purple">Free voter tokens</h1>
+  <div class="divider mb-4"></div>
+  <div class="row">
+    <div class="col-12 col-md-6 mx-auto">
+      <div class="card card-body">
+        {% if messages %}
+          {% for message in messages %}
+            {% if message.message == 'from tokens_view' %}
+              <a href="{% url 'users:tokens_view' %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <a href="{% url 'polls:category_view' ballot.id %}"><i class="fa fa-2x my-text-purple">&#xf060;</i></a>
+        {% endif %}
+        <div class="pt-3">
+          <h4 class="text-center my-text-purple">Free voter tokens for election: </h4>
+          <h4 class="text-center my-text-purple">{{ ballot.ballot_name }}</h4>
+        </div>
+        <form class="py-3" method="post">
+          {% csrf_token %}
+          {% if cant_buy %}
+            <div class="alert alert-danger text-center">
+              {{ cant_buy }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </div>
+          {% endif %}
+          {% if conn_error %}
+            <div class="alert alert-danger text-center">
+              {{ conn_error }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </div>
+          {% endif %}
+          {% if not user.profile.phone %}
+            <div class="form-group">
+              <label><h5>Phone number:<span class="text-danger">*</span></h5></label>
+              {{ form.phone|add_css:'class:form-control text-center, placeholder:+234XXXXXXXXXX' }}
+              <small class="form-text text-danger">
+                {{ form.phone.errors }}                
+              </small>
+            </div>
+          {% endif %}
+        	<div class="form-group">
+            <label>
+              <h5>Quantity(<small>maximum of 20</small>):<span class="text-danger">*</span></h5>
+            </label>
+            {% if above20 %}
+              <div class="alert alert-danger text-center">
+                {{ above20 }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </div>
+            {% endif %}
+            {% if zero %}
+              <div class="alert alert-danger text-center">
+                {{ zero }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </div>
+            {% endif %}
+            {{ form.quantity|add_css:'class:form-control text-center, placeholder:quantity' }}
+        	</div>
+          <div class="text-center pt-4">
+          	<button class="btn my-btn-purple col-6" type="submit">
+              Place Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

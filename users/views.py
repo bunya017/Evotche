@@ -330,3 +330,74 @@ def email_upload(request, ball_url):
 
 	context = {'form': form, 'ballot': ballot}
 	return render(request, 'users/email_upload.html', context)
+
+
+@user_passes_test(check_usable_password, login_url='/check-status/')
+def get_free_tokens(request, ballot_url):
+	ballot =get_object_or_404(BallotPaper, ballot_url=ballot_url)
+	if request.method != 'POST':
+		form = FreeTokenForm()
+	else:
+		form = FreeTokenForm(data=request.POST)
+		if form.is_valid():
+			cl_form = form.cleaned_data
+			if cl_form['phone']:
+				update_profile = Profile(user=request.user, phone=cl_form['phone'])
+				update_profile.save()
+			if cl_form['quantity'] > 20:
+				context2 = {'form': form, 'ballot': ballot, 'above20': 'Sorry, you cannot get more than 20 FREE tokens.'}
+				return render(request, 'users/free_tokens.html', context2)
+			elif cl_form['quantity'] < 1:
+				context21 = {'form': form, 'ballot': ballot, 'zero': 'Please ensure this value is greater than 0.'}
+				return render(request, 'users/free_tokens.html', context21)
+			ballot.has_free_tokens = True
+			ballot.save()
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+
+	context = {'form': form, 'ballot': ballot}
+	return render(request, 'transactions/free_tokens.html', context)
+
+
+"""
+@user_passes_test(check_usable_password, login_url='/check-status/')
+def refresh_purchase(request, ref_code):
+	invoice = get_object_or_404(PurchaseInvoice, reference_code=ref_code)
+	ballot = invoice.ballot_paper
+	payment = Payment(key)
+	payment_status = payment.get(invoice.reference_code)
+	tok_list = Token.objects.filter(ballot_paper=ballot)
+	tok_item = get_object_or_404(Item, invoice=invoice, item='Voter Token')
+	quantity = tok_item.quantity
+	salt = str(ballot.ballot_url + request.user.username + invoice.reference_code + ballot.ballot_name)
+
+	if ballot.has_free_tokens == True:
+		if len(tok_list) != 0:
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			tokens = gen_token(salt=salt, num=quantity)
+			created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
+			Token.objects.bulk_create([
+				Token(user=i, ballot_paper=ballot) for i in created_tokens
+				]
+			)
+			messages.success(request, 'Voter tokens generated successfully.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+	else:
+		if payment_status[2]['status'] == 'successful':
+			ballot.has_paid_tokens = True
+			ballot.save()
+			if len(tok_list) != 0:
+				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+			else:
+				tokens = gen_token(salt=salt, num=quantity)
+				created_tokens = User.objects.bulk_create([User(username=x) for x in tokens])
+				Token.objects.bulk_create([
+					Token(user=i, ballot_paper=ballot) for i in created_tokens
+					]
+				)
+				messages.success(request, 'Voter tokens generated successfully.')
+				return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+		else:
+			messages.error(request, 'Your payment was not successful.')
+			return HttpResponseRedirect(reverse('users:my_token', args=[ballot.ballot_url]))
+"""

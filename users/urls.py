@@ -28,4 +28,6 @@ urlpatterns = [
 	url(r'^profile/$', views.display_profile, name='display_profile'),
 	url(r'^profile/update$', views.update_profile, name='update_profile'),
 	url(r'^my-tokens/(?P<ball_url>[-\w]+)/upload/$', views.email_upload, name='email_upload'),
+	# url(r'^free-tokens/(?P<ballot_url>[-\w]+)/$', views.get_free_tokens, name='get_free_tokens'),
+	#url(r'^refresh-purchase/(?P<ref_code>[-\w]+)/$', views.refresh_purchase, name='refresh_purchase'),
 ]
