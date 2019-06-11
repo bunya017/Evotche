@@ -15,7 +15,6 @@ olefile==0.45.1
 Pillow==5.0.0
 psycopg2==2.7.3.2
 PyGreSQL==5.0.4
-pypayant==0.0.1
 pytz==2017.3
 reportlab==3.4.0
 requests==2.18.4
