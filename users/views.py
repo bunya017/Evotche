@@ -15,7 +15,6 @@ from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required, user_passes_test
 from polls.models import BallotPaper, Category, Choice
 from my_app.settings import PAYANT_AUTH_KEY as key
-from pypayant import Client
 from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, ResultCheckForm, TokenUserForm, UserProfileForm, EmailFileUploadForm
 from .models import Token, Profile
 from .snippets import handle_email_file
@@ -261,16 +260,6 @@ def update_profile(request):
 			finally:
 				profile.phone = form.cleaned_data['phone']
 				profile.organization = form.cleaned_data['organization']
-				profile.save()
-				client = Client(key)
-				new_client = client.add(
-					first_name=user.first_name,
-					last_name=user.last_name,
-					email=user.email,
-					phone=profile.phone,
-					company_name=(profile.organization if profile.organization else None)
-				)
-				profile.payant_id = int(new_client[2]['id'])
 				profile.save()
 
 				return HttpResponseRedirect(reverse('users:display_profile'))
