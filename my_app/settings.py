@@ -95,14 +95,9 @@ PAYANT_AUTH_KEY = 'bdf3961ceb87e00f1ecbaeae56a913551a7a309ac9b614ff312aa30f'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'onefresh_db',
-        'USER': 'bunyaminu',
-        'PASSWORD': 'donmonte',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }}
 
 # Session Engine config
 
@@ -149,11 +144,6 @@ LOGIN_URL = '/login/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-import dj_database_url
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
