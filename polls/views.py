@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from functools import wraps
 from PIL import Image
 from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -16,9 +15,13 @@ from django.shortcuts import get_object_or_404, get_list_or_404, render
 from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.text import slugify
-from .forms import AddVotes, BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+from .forms import (
+	AddVotes, BallotForm, CategoryForm, ChForm, ChFormSet, ChoiceForm
+)
 from .models import BallotPaper, Category, Choice
-from .snippets import check_close, check_start, check_usable_password, gen_url, result_avialable
+from .snippets import (
+	check_close, check_start, check_usable_password, gen_url, result_avialable
+)
 from users.forms import ResultCheckForm, TokenUserForm
 from users.models import Token
 
