@@ -85,11 +85,6 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Evotche <no-reply@evotche.com>'
 
 
-# Payant Developer Keys
-# demo keys
-PAYANT_AUTH_KEY = 'bdf3961ceb87e00f1ecbaeae56a913551a7a309ac9b614ff312aa30f'
-
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
