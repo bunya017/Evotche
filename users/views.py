@@ -14,7 +14,6 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from django.contrib.auth.decorators import login_required, user_passes_test
 from polls.models import BallotPaper, Category, Choice
-from my_app.settings import PAYANT_AUTH_KEY as key
 from .forms import ContactForm, FreeTokenForm, MyUserSignupForm, PaidTokenForm, ResultCheckForm, TokenUserForm, UserProfileForm, EmailFileUploadForm
 from .models import Token, Profile
 from .snippets import handle_email_file
